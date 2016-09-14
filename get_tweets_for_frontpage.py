@@ -100,6 +100,27 @@ def clear_tweets(engine):
         pass
     
     con.close()
+    
+def clear_tweets_for_day(engine, timestamp):
+    con = engine.connect()
+
+    rs = con.execute("UPDATE frontpage SET all_tweets_collected=FALSE WHERE fp_timestamp='%s';" % timestamp)
+
+    rs = con.execute("DELETE FROM tweets WHERE fp_timestamp='%s';" % timestamp)
+    con.close()
+    #%%
+    
+def check_day(engine, timestamp):
+    sql_query = "SELECT src, headline, article_order, all_tweets_collected FROM frontpage WHERE fp_timestamp='%s' AND article_order<=10 ORDER BY src, article_order;" % timestamp
+    to_check = pd.read_sql_query(sql_query,engine)
+    to_check.columns =['a','b','c','d']
+    prev = pd.options.display.max_rows
+    pd.options.display.max_rows = 999
+    pd.options.display.width = 120
+    pd.options.display.max_colwidth = 50
+    print(to_check)
+    pd.options.display.max_rows = prev
+    
     #%%
 def get_reset_info(ts):
     tso = TwitterSearchOrder() # create a TwitterSearchOrder object
@@ -166,6 +187,8 @@ def get_all_tweets_for_search(searchstr, ts):
         print(e)
         total_num_searches = 0
         print "Current time: " + str(datetime.now().time())
+        in15 = datetime.now() + timedelta(minutes=15)
+        print "Should reset by: " + str(in15.time())
         raise
 
     if len(all_tweets) > 0:
@@ -202,7 +225,7 @@ except TwitterSearchException as e:
 # MAIN 
 total_start_time = time.time()
 total_num_searches = 0
-timestamp = '2016-09-12-0717'
+timestamp = '2016-09-14-0723'
 
 consumer_key = 'QJDuXCCt8y9MySeTXohxYyWD5'
 consumer_secret = 'VQrPaqDmGG0XRYFDeJcuwxrYQxjC9S0X9ZUEFSek6vYGLIsGgj'
@@ -218,7 +241,7 @@ username = 'dsaunder'
 engine = create_engine('postgres://%s@localhost/%s'%(username,dbname))
 #pcon = None
 #con = psycopg2.connect(database = dbname, user = username)
-sql_query = "SELECT * FROM frontpage;"
+sql_query = "SELECT * FROM frontpage WHERE fp_timestamp='%s';" % timestamp
 frontpage_data = pd.read_sql_query(sql_query,engine,index_col='index')
 #%%
 
@@ -226,7 +249,7 @@ tweets_retrieved = 0
 #frontpage_data = pd.read_csv(timestamp + '_frontpage_data.csv')
 fp_tweets = pd.DataFrame()
 try:
-    for src in ['usa']: #np.unique(frontpage_data.src):
+    for src in np.unique(frontpage_data.src):
         articles_for_paper = frontpage_data.loc[(frontpage_data.src ==src) & (frontpage_data.article_order <=10),: ]
         for i in range(0,len(articles_for_paper)):
             if articles_for_paper.iloc[i,:].all_tweets_collected:
@@ -238,22 +261,27 @@ try:
                 url = re.sub('http://','http:/',url)
 
             tweets_for_article = get_all_tweets_for_search(url, ts)
-
+            twitter_search_timestamp =  datetime.now().strftime("%Y-%m-%d-%H%M")
             tweets_retrieved = tweets_retrieved + len(tweets_for_article)
             for j,tweet in enumerate(tweets_for_article):
                 fp_tweets = fp_tweets.append({'src':src,                                         
                 'fp_timestamp':timestamp,
                 'article':i+1,
                 'order':j,  
+                'id':tweet['id'],
                 'created':tweet['created_at'],
                 'user':tweet['user']['screen_name'],
                 'text':tweet['text'],
-                'retweet_count':tweet['retweet_count']
+                'retweet_count':tweet['retweet_count'],
+                'retrieved_at':twitter_search_timestamp
                     },
                     ignore_index=True)
             frontpage_data.loc[(frontpage_data.src ==src) & 
                                (frontpage_data.article_order == articles_for_paper.iloc[i,:].article_order),
                                'all_tweets_collected'] = True
+            # Overwrite the current frontpage table
+            frontpage_data.to_sql('frontpage', engine, if_exists='replace')
+
 
 except TwitterSearchException as e:
     print "Did not complete source %s" % src 
@@ -264,8 +292,6 @@ except TwitterSearchException as e:
 # Add the new tweets to the collection
 fp_tweets.to_sql('tweets', engine, if_exists='append')
 
-# Overwrite the current frontpage table
-frontpage_data.to_sql('frontpage', engine, if_exists='replace')
 
 print "Total time elapsed: %.1f minutes." % ((time.time() - total_start_time ) / 60.)
 print "Total tweets retrieved: %d" % tweets_retrieved

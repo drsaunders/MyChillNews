@@ -41,7 +41,8 @@ def get_contents(tag):
     return contents
     #%%
     #timestamp = '2016-09-08-1518'
-timestamp = '2016-09-12-0717'
+#timestamp = '2016-09-12-0717'
+timestamp = '2016-09-14-0723'
 frontpagedir = '../frontpages/%s/' % timestamp
 
     #%%
@@ -219,28 +220,6 @@ src_rows.loc[:,'article_order'] = range(1,len(src_rows)+1)
 frontpage_data = frontpage_data.append(src_rows, ignore_index=True)
 
 
-#%%
-# The Guardian
-prefix = 'gua'
-url_prefix = None
-
-with open(read_frontpage_by_prefix(prefix,frontpagedir), 'r') as f:
-    soup = BeautifulSoup(f, 'html.parser')
-headline_selectors = ['a.js-headline-text']
-
-src_rows = pd.DataFrame()
-for i,selector in enumerate(headline_selectors):
-    headlines = soup.select(selector)
-    new_rows = pd.DataFrame({'src':[prefix]*len(headlines), 
-     'headline':[get_contents(a) for a in headlines],
-     'url':[get_url(a, url_prefix) for a in headlines]
-    })
-    
-    new_rows = new_rows.loc[new_rows.headline != '', :]
-    src_rows = src_rows.append(new_rows, ignore_index=True)
-
-src_rows.loc[:,'article_order'] = range(1,len(src_rows)+1)
-frontpage_data = frontpage_data.append(src_rows, ignore_index=True)
 
 #%%
 # Wall street journal
@@ -311,7 +290,28 @@ src_rows.loc[:,'article_order'] = range(1,len(src_rows)+1)
 frontpage_data = frontpage_data.append(src_rows, ignore_index=True)
 
 
+#%%
+# Daily Mail (uk)
+prefix = 'dm'
+url_prefix = 'http://www.dailymail.co.uk'
 
+with open(read_frontpage_by_prefix(prefix,frontpagedir), 'r') as f:
+    soup = BeautifulSoup(f, 'html.parser')
+headline_selectors = ['.article h2 a']
+
+src_rows = pd.DataFrame()
+for i,selector in enumerate(headline_selectors):
+    headlines = soup.select(selector)
+    new_rows = pd.DataFrame({'src':[prefix]*len(headlines), 
+     'headline':[re.sub('[ \n]+',' ',a.text) for a in headlines],
+     'url':[get_url(a, url_prefix) for a in headlines]
+    })
+    
+    new_rows = new_rows.loc[new_rows.headline != '', :]
+    src_rows = src_rows.append(new_rows, ignore_index=True)
+
+src_rows.loc[:,'article_order'] = range(1,len(src_rows)+1)
+frontpage_data = frontpage_data.append(src_rows, ignore_index=True)
 
 
 #%%

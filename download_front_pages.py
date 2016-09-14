@@ -44,8 +44,6 @@ def do_screen_capturing(url, screen_path, width, height):
 
 
 def do_crop(params):
-    print "Croping captured image.."
-    print params['crop_path']
     command = [
         'convert',
         params['screen_path'],
@@ -127,17 +125,17 @@ timestamp =  datetime.datetime.now().strftime("%Y-%m-%d-%H%M")
 frontpagedir = '../frontpages/%s/' % timestamp
 if not os.path.exists(frontpagedir):
     os.makedirs(frontpagedir)
-#
-#print "Downloading HTML web pages... "
-## Download front page web pages HTML
-#for (i, src) in srcs.iterrows():
-#    response = requests.get(src['front_page_url'])
-#    if response.status_code == 200:    
-#        outfile = frontpagedir + src['prefix'] + timestamp + '.html'
-#        with open(outfile, 'w') as f:
-#            f.write(response.content)
-#    else:
-#        print "Failed to access URL %s" % src['front_page_url']
+
+print "Downloading HTML web pages... "
+# Download front page web pages HTML
+for (i, src) in srcs.iterrows():
+    response = requests.get(src['front_page_url'])
+    if response.status_code == 200:    
+        outfile = frontpagedir + src['prefix'] + timestamp + '.html'
+        with open(outfile, 'w') as f:
+            f.write(response.content)
+    else:
+        print "Failed to access URL %s" % src['front_page_url']
 #%%
 print "Downloading images of web pages... "
 # Download front page web pages as images

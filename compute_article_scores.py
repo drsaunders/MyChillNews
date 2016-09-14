@@ -85,6 +85,8 @@ def detect_negative_tweets(tweets, headline):
     neg_wordcount = wd_bag[:,neg_cols].sum(1)
     neg_wordcount = np.squeeze(np.asarray(neg_wordcount))
     tweet_negative = neg_wordcount > 0
+    
+    print "\n\n" + headline
     print "Tweets with negative content"
     neg_tweet_indices = np.nonzero([neg_wordcount > 0])[1]
     for row in neg_tweet_indices:
@@ -108,7 +110,7 @@ frontpage_data = pd.read_sql_query(sql_query,engine,index_col='index')
 sql_query = "SELECT * FROM tweets WHERE fp_timestamp = '%s';" % timestamp
 fp_tweets =  pd.read_sql_query(sql_query,engine,index_col='index')
 
-for src in ['nyt']:# np.unique(fp_tweets.src):
+for src in np.unique(fp_tweets.src):
     for article in np.unique(fp_tweets.loc[fp_tweets.src == src,'article']):
         article_indicator= (frontpage_data.article_order == article) & (frontpage_data.src ==src)
         headline = frontpage_data.loc[article_indicator, 'headline'].values[0]
