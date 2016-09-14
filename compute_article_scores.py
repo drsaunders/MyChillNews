@@ -9,14 +9,19 @@ import pandas as pd
 import re
 import numpy as np
 from sklearn.feature_extraction.text import CountVectorizer
-
+from sqlalchemy import create_engine
+from sqlalchemy_utils import database_exists, create_database
+import codecs
 
 def load_negative_words():
     neg_wds = []
-    with open('subjclueslen1-HLTEMNLP05.tff','r') as f:
+    with codecs.open('negative-words.txt','r', encoding='utf-8') as f:
         for line in f:
-            if 'priorpolarity=negative' in line:
-                neg_wds.append(re.search('.*word1=([^\s]+).*', line).groups()[0])
+            if len(line) <= 1:
+                continue
+            if line[0] == ';':
+                continue
+            neg_wds.append(unicode(line.strip()))
 
     return neg_wds
 
@@ -89,11 +94,21 @@ def detect_negative_tweets(tweets, headline):
     return tweet_negative
 #%%
 timestamp = '2016-09-12-0717'
-frontpagedir = 'frontpages/%s/' % timestamp
-frontpage_data = pd.read_csv(timestamp + '_frontpage_data.csv', encoding='utf-8')
-fp_tweets =  pd.read_csv(timestamp + '_fp_tweets.csv', encoding='utf-8')
+frontpagedir = '../frontpages/%s/' % timestamp
+#frontpage_data = pd.read_csv(timestamp + '_frontpage_data.csv', encoding='utf-8')
+#fp_tweets =  pd.read_csv(timestamp + '_fp_tweets.csv', encoding='utf-8')
 
-for src in np.unique(fp_tweets.src):
+dbname = 'frontpage'
+username = 'dsaunder'
+
+engine = create_engine('postgres://%s@localhost/%s'%(username,dbname))
+sql_query = "SELECT * FROM frontpage WHERE fp_timestamp = '%s';" % timestamp
+frontpage_data = pd.read_sql_query(sql_query,engine,index_col='index')
+
+sql_query = "SELECT * FROM tweets WHERE fp_timestamp = '%s';" % timestamp
+fp_tweets =  pd.read_sql_query(sql_query,engine,index_col='index')
+
+for src in ['nyt']:# np.unique(fp_tweets.src):
     for article in np.unique(fp_tweets.loc[fp_tweets.src == src,'article']):
         article_indicator= (frontpage_data.article_order == article) & (frontpage_data.src ==src)
         headline = frontpage_data.loc[article_indicator, 'headline'].values[0]
@@ -104,4 +119,7 @@ for src in np.unique(fp_tweets.src):
         
     print src
     articles_with_tweets = frontpage_data.loc[(frontpage_data.src == src ) & np.invert(np.isnan(frontpage_data.scaled_neg_tweets))]
-    print articles_with_tweets.sort_values('scaled_neg_tweets', ascending=False).loc[:,['headline','scaled_neg_tweets','article_order']]
+    print articles_with_tweets.sort_values('scaled_neg_tweets', ascending=False).loc[:,['headline','scaled_neg_tweets','num_tweets','num_neg_tweets','article_order']]
+
+# Overwrite the current frontpage table
+frontpage_data.to_sql('frontpage', engine, if_exists='replace')

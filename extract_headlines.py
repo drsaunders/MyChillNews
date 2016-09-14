@@ -10,27 +10,9 @@ from bs4 import BeautifulSoup
 import glob
 import pandas as pd
 import re
+from sqlalchemy import create_engine
+from sqlalchemy_utils import database_exists, create_database
 
-srcs = [
-        {'name':'New York Times', 
-         'prefix':'nyt',
-        'front_page':'http://www.nytimes.com/pages/todayspaper/index.html'},
-        
-        {'name':'Yahoo News', 
-         'prefix':'yahoo',
-        'front_page':'https://www.yahoo.com/news/?ref=gs'},
-        
-        {'name':'LA Times', 
-         'prefix':'lat',
-        'front_page':'http://latimes.com/'},
-
-        {'name':'Fox News', 
-         'prefix':'fox',
-        'front_page':'http://foxnews.com'},
-        {'name':'Washington Post', 
-         'prefix':'wap',
-        'front_page':'http://washingtonpost.com/'}
-        ]
 #%%
 
 def read_frontpage_by_prefix(prefix, frontpagedir):
@@ -60,7 +42,7 @@ def get_contents(tag):
     #%%
     #timestamp = '2016-09-08-1518'
 timestamp = '2016-09-12-0717'
-frontpagedir = 'frontpages/%s/' % timestamp
+frontpagedir = '../frontpages/%s/' % timestamp
 
     #%%
 frontpage_data = pd.DataFrame()
@@ -190,9 +172,168 @@ for j in range(len(src_rows)):
 src_rows.loc[:,'article_order'] = range(1,len(src_rows)+1)
 frontpage_data = frontpage_data.append(src_rows, ignore_index=True)
 
+#%%
+# Washington Post
+prefix = 'wap'
+url_prefix = None
+
+with open(read_frontpage_by_prefix(prefix,frontpagedir), 'r') as f:
+    soup = BeautifulSoup(f, 'html.parser')
+headline_selectors = ['.headline a']
+
+src_rows = pd.DataFrame()
+for i,selector in enumerate(headline_selectors):
+    headlines = soup.select(selector)
+    new_rows = pd.DataFrame({'src':[prefix]*len(headlines), 
+     'headline':[get_contents(a) for a in headlines],
+     'url':[get_url(a, url_prefix) for a in headlines]
+    })
+    
+    new_rows = new_rows.loc[new_rows.headline != '', :]
+    src_rows = src_rows.append(new_rows, ignore_index=True)
+
+src_rows.loc[:,'article_order'] = range(1,len(src_rows)+1)
+frontpage_data = frontpage_data.append(src_rows, ignore_index=True)
+
+#%%
+# The Guardian
+prefix = 'gua'
+url_prefix = None
+
+with open(read_frontpage_by_prefix(prefix,frontpagedir), 'r') as f:
+    soup = BeautifulSoup(f, 'html.parser')
+headline_selectors = ['a.js-headline-text']
+
+src_rows = pd.DataFrame()
+for i,selector in enumerate(headline_selectors):
+    headlines = soup.select(selector)
+    new_rows = pd.DataFrame({'src':[prefix]*len(headlines), 
+     'headline':[get_contents(a) for a in headlines],
+     'url':[get_url(a, url_prefix) for a in headlines]
+    })
+    
+    new_rows = new_rows.loc[new_rows.headline != '', :]
+    src_rows = src_rows.append(new_rows, ignore_index=True)
+
+src_rows.loc[:,'article_order'] = range(1,len(src_rows)+1)
+frontpage_data = frontpage_data.append(src_rows, ignore_index=True)
+
+
+#%%
+# The Guardian
+prefix = 'gua'
+url_prefix = None
+
+with open(read_frontpage_by_prefix(prefix,frontpagedir), 'r') as f:
+    soup = BeautifulSoup(f, 'html.parser')
+headline_selectors = ['a.js-headline-text']
+
+src_rows = pd.DataFrame()
+for i,selector in enumerate(headline_selectors):
+    headlines = soup.select(selector)
+    new_rows = pd.DataFrame({'src':[prefix]*len(headlines), 
+     'headline':[get_contents(a) for a in headlines],
+     'url':[get_url(a, url_prefix) for a in headlines]
+    })
+    
+    new_rows = new_rows.loc[new_rows.headline != '', :]
+    src_rows = src_rows.append(new_rows, ignore_index=True)
+
+src_rows.loc[:,'article_order'] = range(1,len(src_rows)+1)
+frontpage_data = frontpage_data.append(src_rows, ignore_index=True)
+
+#%%
+# Wall street journal
+prefix = 'wsj'
+url_prefix = None
+
+with open(read_frontpage_by_prefix(prefix,frontpagedir), 'r') as f:
+    soup = BeautifulSoup(f, 'html.parser')
+headline_selectors = ['.wsj-headline-link']
+
+src_rows = pd.DataFrame()
+for i,selector in enumerate(headline_selectors):
+    headlines = soup.select(selector)
+    new_rows = pd.DataFrame({'src':[prefix]*len(headlines), 
+     'headline':[get_contents(a) for a in headlines],
+     'url':[get_url(a, url_prefix) for a in headlines]
+    })
+    
+    new_rows = new_rows.loc[new_rows.headline != '', :]
+    src_rows = src_rows.append(new_rows, ignore_index=True)
+
+src_rows.loc[:,'article_order'] = range(1,len(src_rows)+1)
+frontpage_data = frontpage_data.append(src_rows, ignore_index=True)
+#%%
+# BBC news
+prefix = 'bbc'
+url_prefix = 'http://www.bbc.com'
+
+with open(read_frontpage_by_prefix(prefix,frontpagedir), 'r') as f:
+    soup = BeautifulSoup(f, 'html.parser')
+headline_selectors = ['.title-link']
+
+src_rows = pd.DataFrame()
+for i,selector in enumerate(headline_selectors):
+    headlines = soup.select(selector)
+    new_rows = pd.DataFrame({'src':[prefix]*len(headlines), 
+     'headline':[re.sub('\n',' ',a.text.strip()) for a in headlines],
+     'url':[get_url(a, url_prefix) for a in headlines]
+    })
+    
+    new_rows = new_rows.loc[new_rows.headline != '', :]
+    src_rows = src_rows.append(new_rows, ignore_index=True)
+
+src_rows.loc[:,'article_order'] = range(1,len(src_rows)+1)
+frontpage_data = frontpage_data.append(src_rows, ignore_index=True)
+
+#%%
+# USA Today
+prefix = 'usa'
+url_prefix = 'http://www.usatoday.com'
+
+with open(read_frontpage_by_prefix(prefix,frontpagedir), 'r') as f:
+    soup = BeautifulSoup(f, 'html.parser')
+headline_selectors = ['.hfwmm-primary-hed-link','.hfwmm-list-link','.hgpfm-link']
+
+src_rows = pd.DataFrame()
+for i,selector in enumerate(headline_selectors):
+    headlines = soup.select(selector)
+    new_rows = pd.DataFrame({'src':[prefix]*len(headlines), 
+     'headline':[re.sub('[ \n]+',' ',a.text) for a in headlines],
+     'url':[get_url(a, url_prefix) for a in headlines]
+    })
+    
+    new_rows = new_rows.loc[new_rows.headline != '', :]
+    src_rows = src_rows.append(new_rows, ignore_index=True)
+
+src_rows.loc[:,'article_order'] = range(1,len(src_rows)+1)
+frontpage_data = frontpage_data.append(src_rows, ignore_index=True)
+
 
 
 
 
 #%%
-frontpage_data.to_csv(timestamp + '_frontpage_data.csv',index=False, encoding='utf-8')
+frontpage_data.loc[:,'fp_timestamp'] = timestamp
+frontpage_data.loc[:,'all_tweets_collected'] = False
+#frontpage_data.to_csv(timestamp + '_frontpage_data.csv',index=False, encoding='utf-8')
+
+
+dbname = 'frontpage'
+username = 'dsaunder'
+
+## 'engine' is a connection to a database
+## Here, we're using postgres, but sqlalchemy can connect to other things too.
+engine = create_engine('postgres://%s@localhost/%s'%(username,dbname))
+print engine.url
+
+## create a database (if it doesn't exist)
+if not database_exists(engine.url):
+    create_database(engine.url)
+print(database_exists(engine.url))
+
+## insert data into database from Python (proof of concept - this won't be useful for big data, of course)
+## df is any pandas dataframe 
+frontpage_data.to_sql('frontpage', engine, if_exists='replace')
+
