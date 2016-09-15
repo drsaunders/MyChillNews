@@ -26,6 +26,9 @@ def load_negative_words():
     return neg_wds
 
 def detect_negative_tweets(tweets, headline):
+    if len(tweets) == 0:
+        return []
+        
     # Make the headline the second to last row
     tweets = tweets.append(pd.Series(headline,index=[np.max(tweets.index.values)+1]))
     
@@ -83,19 +86,22 @@ def detect_negative_tweets(tweets, headline):
     # Find the columns corresponding to the negative words, and use those to 
     # identify negative tweets (having more than 0 negative words)
     neg_wordcount = wd_bag[:,neg_cols].sum(1)
-    neg_wordcount = np.squeeze(np.asarray(neg_wordcount))
-    tweet_negative = neg_wordcount > 0
+    if len(neg_wordcount) == 1:
+        tweet_negative = [neg_wordcount > 0]
+    else:
+        neg_wordcount = np.squeeze(np.asarray(neg_wordcount))
+        tweet_negative = neg_wordcount > 0
     
-    print "\n\n" + headline
-    print "Tweets with negative content"
-    neg_tweet_indices = np.nonzero([neg_wordcount > 0])[1]
-    for row in neg_tweet_indices:
-        neg_words = [inv_vocab[a] for a in np.intersect1d(neg_cols, np.nonzero(wd_bag[row,:])[1])]
-        print "TWEET %d: %s NEGATIVES: %s" % (row, tweets.iloc[row], ' '.join(neg_words))
+#    print "\n\n" + headline
+#    print "Tweets with negative content"
+#    neg_tweet_indices = [i for i, e in enumerate(neg_wordcount) if e >0 ]
+#    for row in neg_tweet_indices:
+#        neg_words = [inv_vocab[a] for a in np.intersect1d(neg_cols, np.nonzero(wd_bag[row,:])[1])]
+#        print "TWEET %d: %s NEGATIVES: %s" % (row, tweets.iloc[row], ' '.join(neg_words))
 
     return tweet_negative
 #%%
-timestamp = '2016-09-12-0717'
+timestamp = '2016-09-15-0722'
 frontpagedir = '../frontpages/%s/' % timestamp
 #frontpage_data = pd.read_csv(timestamp + '_frontpage_data.csv', encoding='utf-8')
 #fp_tweets =  pd.read_csv(timestamp + '_fp_tweets.csv', encoding='utf-8')
@@ -110,14 +116,19 @@ frontpage_data = pd.read_sql_query(sql_query,engine,index_col='index')
 sql_query = "SELECT * FROM tweets WHERE fp_timestamp = '%s';" % timestamp
 fp_tweets =  pd.read_sql_query(sql_query,engine,index_col='index')
 
-for src in np.unique(fp_tweets.src):
-    for article in np.unique(fp_tweets.loc[fp_tweets.src == src,'article']):
+for src in  np.unique(fp_tweets.src):
+    for article in np.unique(frontpage_data.loc[frontpage_data.src == src,'article_order']):
+        if article > 10:
+            continue
         article_indicator= (frontpage_data.article_order == article) & (frontpage_data.src ==src)
         headline = frontpage_data.loc[article_indicator, 'headline'].values[0]
         negative_tweet = detect_negative_tweets(fp_tweets.loc[(fp_tweets.article == article) & (fp_tweets.src ==src),'text'], headline)
         frontpage_data.loc[article_indicator, 'num_tweets'] =  len(negative_tweet)
         frontpage_data.loc[article_indicator, 'num_neg_tweets'] = np.sum(negative_tweet)
-        frontpage_data.loc[article_indicator, 'scaled_neg_tweets'] = float(np.sum(negative_tweet)) / len(negative_tweet)
+        if len(negative_tweet) == 0:
+            frontpage_data.loc[article_indicator, 'scaled_neg_tweets'] = np.nan
+        else:
+            frontpage_data.loc[article_indicator, 'scaled_neg_tweets'] = float(np.sum(negative_tweet)) / len(negative_tweet)
         
     print src
     articles_with_tweets = frontpage_data.loc[(frontpage_data.src == src ) & np.invert(np.isnan(frontpage_data.scaled_neg_tweets))]

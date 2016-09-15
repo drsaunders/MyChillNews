@@ -13,6 +13,12 @@ import re
 from sqlalchemy import create_engine
 from sqlalchemy_utils import database_exists, create_database
 
+
+timestamp = '2016-09-15-0722'
+
+frontpagedir = '../frontpages/%s/' % timestamp
+
+
 #%%
 
 def read_frontpage_by_prefix(prefix, frontpagedir):
@@ -42,11 +48,12 @@ def get_contents(tag):
     #%%
     #timestamp = '2016-09-08-1518'
 #timestamp = '2016-09-12-0717'
-timestamp = '2016-09-14-0723'
-frontpagedir = '../frontpages/%s/' % timestamp
 
     #%%
-frontpage_data = pd.DataFrame()
+    
+sql_query = "SELECT * FROM frontpage WHERE fp_timestamp='%s';" % timestamp
+frontpage_data = pd.read_sql_query(sql_query,engine,index_col='index')
+
 #%%
 # LA TIMES
 prefix = 'lat'

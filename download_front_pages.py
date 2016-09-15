@@ -21,8 +21,75 @@ from sqlalchemy import create_engine
 
 abspath = lambda *p: os.path.abspath(os.path.join(*p))
 ROOT = abspath(os.path.dirname(__file__))
+#%%
+def create_srcs_table(engine):
+    srcs = [
+            {'name':'New York Times', 
+            'prefix':'nyt',
+            'fb_page':'nytimes',
+            'front_page':'http://www.nytimes.com/pages/todayspaper/index.html'},
+            {'name':'Yahoo News',
+            'prefix':'yahoo',
+            'fb_page':'yahoonews',
+            'front_page':'https://www.yahoo.com/news/?ref=gs'},
+            
+            {'name':'LA Times', 
+             'prefix':'lat',
+            'fb_page':'latimes',
+             'front_page':'http://latimes.com/'},
+ 
+            {'name':'Fox News', 
+             'prefix':'fox',
+            'fb_page':'FoxNews',
+            'front_page':'http://foxnews.com'},
+            {'name':'Washington Post', 
+             'prefix':'wap',
+            'fb_page':'washingtonpost',
+            'front_page':'http://washingtonpost.com/'},
+            {'name':'Google News', 
+             'prefix':'goo',
+            'fb_page':'',
+            'front_page':'http://news.google.com'},
+            {'name':'Huffington Post', 
+             'prefix':'huf',
+            'fb_page':'HuffingtonPost',
+            'front_page':'http://www.huffingtonpost.com/'},
+            {'name':'CNN', 
+             'prefix':'cnn',
+            'fb_page':'cnn',
+            'front_page':'http://www.cnn.com/'},
+            {'name':'NBC news', 
+             'prefix':'nbc',
+            'fb_page':'NBCNews',
+            'front_page':'http://www.nbcnews.com/'},
+            {'name':'Daily Mail', 
+             'prefix':'dm',
+            'fb_page':'DailyMail',
+            'front_page':'http://www.dailymail.co.uk/home/index.html'},
+            {'name':'ABC News', 
+             'prefix':'abc',
+            'fb_page':'abcnews',
+            'front_page':'http://abcnews.go.com/'},
+            {'name':'Wall Street Journal', 
+             'prefix':'wsj',
+            'fb_page':'wsj',
+            'front_page':'http://www.wsj.com/'},
+            {'name':'BBC News', 
+             'prefix':'bbc',
+            'fb_page':'bbcnews',
+            'front_page':'http://www.bbc.com/news'},
+            {'name':'USA Today', 
+             'prefix':'usa',
+            'fb_page':'usatoday',
+            'front_page':'http://www.usatoday.com/'},
+            {'name':'The Guardian', 
+             'prefix':'gua',
+            'fb_page':'theguardian',
+            'front_page':'https://www.theguardian.com/uk?INTCMP=CE_UK'}]
+    srcs = pd.DataFrame(srcs)
+    srcs.to_sql('srcs', engine, if_exists='replace')
 
-
+#%%
 def execute_command(command):
     result = Popen(command, shell=True, stdout=PIPE).stdout.read()
     if len(result) > 0 and not result.isspace():
@@ -129,18 +196,18 @@ if not os.path.exists(frontpagedir):
 print "Downloading HTML web pages... "
 # Download front page web pages HTML
 for (i, src) in srcs.iterrows():
-    response = requests.get(src['front_page_url'])
+    response = requests.get(src['front_page'])
     if response.status_code == 200:    
         outfile = frontpagedir + src['prefix'] + timestamp + '.html'
         with open(outfile, 'w') as f:
             f.write(response.content)
     else:
-        print "Failed to access URL %s" % src['front_page_url']
+        print "Failed to access URL %s" % src['front_page']
 #%%
 print "Downloading images of web pages... "
 # Download front page web pages as images
 for (i, src) in srcs.iterrows():
-    url = src['front_page_url']
+    url = src['front_page']
     screen_path, crop_path, thumbnail_path = get_screen_shot(
         url=url, filename=frontpagedir + src['prefix'] + timestamp + '.png',
         crop=True, crop_replace=True, crop_height=2304,
