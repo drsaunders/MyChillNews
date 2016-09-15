@@ -12,6 +12,10 @@ from sklearn.feature_extraction.text import CountVectorizer
 from sqlalchemy import create_engine
 from sqlalchemy_utils import database_exists, create_database
 import codecs
+from scipy.stats import beta
+from scipy.special import gamma as gammaf
+import scipy
+
 
 def load_negative_words():
     neg_wds = []
@@ -100,7 +104,25 @@ def detect_negative_tweets(tweets, headline):
 #        print "TWEET %d: %s NEGATIVES: %s" % (row, tweets.iloc[row], ' '.join(neg_words))
 
     return tweet_negative
-#%%
+
+    #%%
+def add_sis_scores(frontpage_data):
+    a1, b1, loc1, scale1 = beta.fit(frontpage_data.scaled_neg_tweets)  
+#    fitted=lambda x,a,b:gammaf(a+b)/gammaf(a)/gammaf(b)*x**(a-1)*(1-x)**(b-1) #pdf of beta
+#    xx=np.arange(0,0.5,0.001)
+#    plt.plot(xx,fitted(xx,a1,b1),'g')
+    sis = (frontpage_data.num_neg_tweets+a1)/(frontpage_data.num_tweets+ a1 + b1)
+
+    # Deal with all the items with no tweets, which otherwise would be adjusted
+    # up to a nonzero value
+    sis[frontpage_data.num_tweets ==0] = 0
+    frontpage_data.loc[:,'sis'] = sis
+    
+    notnan = np.invert(np.isnan(frontpage_data.loc[:,'sis']))
+    frontpage_data.loc[notnan,'zsis'] = scipy.stats.zscore(frontpage_data.loc[notnan,'sis'])
+
+    return frontpage_data
+    #%%
 timestamp = '2016-09-15-0722'
 frontpagedir = '../frontpages/%s/' % timestamp
 #frontpage_data = pd.read_csv(timestamp + '_frontpage_data.csv', encoding='utf-8')
@@ -116,6 +138,8 @@ frontpage_data = pd.read_sql_query(sql_query,engine,index_col='index')
 sql_query = "SELECT * FROM tweets WHERE fp_timestamp = '%s';" % timestamp
 fp_tweets =  pd.read_sql_query(sql_query,engine,index_col='index')
 
+
+# Go through every news story and score it using the number of negative tweets
 for src in  np.unique(fp_tweets.src):
     for article in np.unique(frontpage_data.loc[frontpage_data.src == src,'article_order']):
         if article > 10:
@@ -134,5 +158,13 @@ for src in  np.unique(fp_tweets.src):
     articles_with_tweets = frontpage_data.loc[(frontpage_data.src == src ) & np.invert(np.isnan(frontpage_data.scaled_neg_tweets))]
     print articles_with_tweets.sort_values('scaled_neg_tweets', ascending=False).loc[:,['headline','scaled_neg_tweets','num_tweets','num_neg_tweets','article_order']]
 
+
+frontpage_data = add_sis_scores(frontpage_data)
+
+by_src = frontpage_data.loc[frontpage_data.num_tweets > 5,:].groupby('src')
+ordered_by_zsis = by_src.mean().sort_values('zsis', ascending=False)
+
+
 # Overwrite the current frontpage table
 frontpage_data.to_sql('frontpage', engine, if_exists='replace')
+
