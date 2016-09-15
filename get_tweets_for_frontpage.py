@@ -21,6 +21,11 @@ import pycurl
 import json
 #%%
 
+total_start_time = time.time()
+total_num_searches = 0
+timestamp = '2016-09-15-0722'
+
+
 # obtains the bearer token
 def get_bearer_token(consumer_key,consumer_secret):
     # enconde consumer key
@@ -116,7 +121,7 @@ def check_day(engine, timestamp):
     to_check.columns =['a','b','c','d']
     prev = pd.options.display.max_rows
     pd.options.display.max_rows = 999
-    pd.options.display.width = 120
+    pd.options.display.width = 100
     pd.options.display.max_colwidth = 50
     print(to_check)
     pd.options.display.max_rows = prev
@@ -223,16 +228,13 @@ except TwitterSearchException as e:
 
 #%%
 # MAIN 
-total_start_time = time.time()
-total_num_searches = 0
-timestamp = '2016-09-14-0723'
-
-consumer_key = 'QJDuXCCt8y9MySeTXohxYyWD5'
-consumer_secret = 'VQrPaqDmGG0XRYFDeJcuwxrYQxjC9S0X9ZUEFSek6vYGLIsGgj'
+ 
+with open('../twitter_app_keys.dat','r') as f:
+    consumer_key = next(f).strip()
+    consumer_secret = next(f).strip()
 
 # obtains the bearer token
 bearer_token = get_bearer_token(consumer_key,consumer_secret)
- 
 
 #%%
 dbname = 'frontpage'
