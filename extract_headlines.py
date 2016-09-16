@@ -17,6 +17,11 @@ from sqlalchemy_utils import database_exists, create_database
 timestamp = '2016-09-15-0722'
 
 frontpagedir = '../frontpages/%s/' % timestamp
+dbname = 'frontpage'
+username = 'dsaunder'
+   
+# prepare for database
+engine = create_engine('postgres://%s@localhost/%s'%(username,dbname))
 
 
 #%%
