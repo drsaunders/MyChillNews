@@ -23,7 +23,7 @@ import json
 
 total_start_time = time.time()
 total_num_searches = 0
-timestamp = '2016-09-15-0722'
+timestamp = '2016-09-16-0725'
 
 
 # obtains the bearer token
@@ -121,7 +121,7 @@ def check_day(engine, timestamp):
     to_check.columns =['a','b','c','d']
     prev = pd.options.display.max_rows
     pd.options.display.max_rows = 999
-    pd.options.display.width = 100
+    pd.options.display.width = 1
     pd.options.display.max_colwidth = 50
     print(to_check)
     pd.options.display.max_rows = prev

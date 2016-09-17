@@ -168,7 +168,7 @@ def get_screen_shot(**kwargs):
 
         if thumbnail:
             if not thumbnail_replace:
-                thumbnail_path = abspath(path, 'thumbnail_'+filename)
+                thumbnail_path = abspath(path, filename + "_thumbnail")
             params = {
                 'width': thumbnail_width, 'height': thumbnail_height,
                 'thumbnail_path': thumbnail_path, 'crop_path': crop_path}

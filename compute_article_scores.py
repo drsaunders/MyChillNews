@@ -16,6 +16,9 @@ from scipy.stats import beta
 from scipy.special import gamma as gammaf
 import scipy
 
+timestamp = '2016-09-15-0722'
+frontpagedir = '../frontpages/%s/' % timestamp
+
 
 def load_negative_words():
     neg_wds = []
@@ -59,7 +62,7 @@ def detect_negative_tweets(tweets, headline):
     tweets = tweets.apply(lambda x: re.sub('&amp;',u'and',x))
     
     # Make lowercase
-    tweets = tweets.apply(lambda x: x.lower())
+#    tweets = tweets.apply(lambda x: x.lower())
     
     # Remove special characters
     tweets = tweets.apply(lambda x: re.sub(u'(\u2018|\u2019|‘|’|“|”)',u'',x))
@@ -101,7 +104,8 @@ def detect_negative_tweets(tweets, headline):
 #    neg_tweet_indices = [i for i, e in enumerate(neg_wordcount) if e >0 ]
 #    for row in neg_tweet_indices:
 #        neg_words = [inv_vocab[a] for a in np.intersect1d(neg_cols, np.nonzero(wd_bag[row,:])[1])]
-#        print "TWEET %d: %s NEGATIVES: %s" % (row, tweets.iloc[row], ' '.join(neg_words))
+##        print "%s NEGATIVES: %s" % (row, tweets.iloc[row] )#, ' '.join(neg_words))
+#        print "TWEET %d:  %s" % (row, tweets.iloc[row] )#, ' '.join(neg_words))
 
     return tweet_negative
 
@@ -118,13 +122,12 @@ def add_sis_scores(frontpage_data):
     sis[frontpage_data.num_tweets ==0] = 0
     frontpage_data.loc[:,'sis'] = sis
     
-    notnan = np.invert(np.isnan(frontpage_data.loc[:,'sis']))
-    frontpage_data.loc[notnan,'zsis'] = scipy.stats.zscore(frontpage_data.loc[notnan,'sis'])
+#    notnan = np.array([((not np.isnan(a)) and (a != 0)) for a in frontpage_data.loc[:,'sis']])
+#    notnan = np.invert(np.isnan(frontpage_data.loc[:,'sis']))
+#    frontpage_data.loc[notnan,'zsis'] = scipy.stats.zscore(frontpage_data.loc[notnan,'sis'])
 
     return frontpage_data
     #%%
-timestamp = '2016-09-15-0722'
-frontpagedir = '../frontpages/%s/' % timestamp
 #frontpage_data = pd.read_csv(timestamp + '_frontpage_data.csv', encoding='utf-8')
 #fp_tweets =  pd.read_csv(timestamp + '_fp_tweets.csv', encoding='utf-8')
 
@@ -134,13 +137,14 @@ username = 'dsaunder'
 engine = create_engine('postgres://%s@localhost/%s'%(username,dbname))
 sql_query = "SELECT * FROM frontpage WHERE fp_timestamp = '%s';" % timestamp
 frontpage_data = pd.read_sql_query(sql_query,engine,index_col='index')
-
+frontpage_data.loc[:,'scaled_neg_tweets'] = np.nan
+frontpage_data.loc[:,'sis'] = np.nan
 sql_query = "SELECT * FROM tweets WHERE fp_timestamp = '%s';" % timestamp
 fp_tweets =  pd.read_sql_query(sql_query,engine,index_col='index')
 
 
 # Go through every news story and score it using the number of negative tweets
-for src in  np.unique(fp_tweets.src):
+for src in np.unique(fp_tweets.src):
     for article in np.unique(frontpage_data.loc[frontpage_data.src == src,'article_order']):
         if article > 10:
             continue
@@ -162,7 +166,7 @@ for src in  np.unique(fp_tweets.src):
 frontpage_data = add_sis_scores(frontpage_data)
 
 by_src = frontpage_data.loc[frontpage_data.num_tweets > 5,:].groupby('src')
-ordered_by_zsis = by_src.mean().sort_values('zsis', ascending=False)
+#ordered_by_zsis = by_src.mean().sort_values('zsis', ascending=False)
 
 
 # Overwrite the current frontpage table

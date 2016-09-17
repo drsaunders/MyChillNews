@@ -8,6 +8,7 @@ from flask import request
 import datetime
 import seaborn as sns
 import numpy as np
+import re
 def RGBToHTMLColor(rgb_tuple):
     """ convert an (R, G, B) tuple to #RRGGBB """
     hexcolor = '#%02x%02x%02x' % rgb_tuple
@@ -24,7 +25,8 @@ db = create_engine('postgres://%s%s/%s'%(user,host,dbname))
 con = None
 con = psycopg2.connect(database = dbname, user = user)
 
-todays_date = datetime.datetime.now().strftime("%Y-%m-%d")
+#todays_date = datetime.datetime.now().strftime("%Y-%m-%d")
+todays_date = '2016-09-15'
 #%%
 
 @app.route('/')
@@ -39,11 +41,13 @@ def index():
     by_name = frontpage_for_render.loc[frontpage_for_render.num_tweets > 5,:].groupby('name')
     mean_by_zsis = by_name.mean() #.sort_values('zsis', ascending=False)
     total_by_zsis = by_name.sum()#.sort_values('zsis', ascending=False)
-    row_colors = hex_colors[np.round(mean_by_zsis.sis.values*1000).astype(int)]
+    row_colors = hex_colors[np.round(mean_by_zsis.scaled_neg_tweets.values*1000).astype(int)]
 
     src_names_string = ','.join(['"%s"' % a for a in mean_by_zsis.index.values])
-    sis_values_string = ','.join(['%.1f' % (a*1000) for a in mean_by_zsis.sis.values])
+    sis_values_string = ','.join(['%.1f' % (a*1000) for a in mean_by_zsis.scaled_neg_tweets.values])
     return render_template("index.html",
+       todays_date = todays_date,
+       total_num_tweets = np.sum(frontpage_for_render.num_tweets),
        mean_by_zsis = mean_by_zsis,
        total_by_zsis = total_by_zsis,
        src_names_string=src_names_string,

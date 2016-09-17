@@ -43,7 +43,7 @@
             <span class="icon-bar"></span>
             <span class="icon-bar"></span>
           </button>
-          <a class="navbar-brand" href="#">Project name</a>
+          <a class="navbar-brand" href="#">MyChillNews</a>
         </div>
         <div id="navbar" class="collapse navbar-collapse">
           <ul class="nav navbar-nav">
@@ -55,117 +55,111 @@
       </div>
     </nav>
 
-<br/><br/>
- <div class="container">
-    <div class="starter-template">
-        <h2>Output Page</h2>
-        <p>Enter some user input</p>
-    </div>
-
-    <div class = "container">
-
-      <form  action="/output" method="GET">
-        <div class="form-group">
-          <label for="birth_month">Birth Month:</label>
-          <input type="text" id="birth_month" name='birth_month' placeholder="e.g. ">
-        </div>
-        <div>
-          <button type="submit" class="btn btn-default btn-lg">Find these Cesareans!</button>
-        </div>
-      </form>
-    </div>
-    <script src="https://code.jquery.com/jquery-1.10.2.min.js"></script>
-    <script src="static/js/bootstrap.min.js"></script>
-
-  </div> <!-- /.container-->
+<br/><br/><br/>
 
     <div class="container">
       <div class="starter-template">
-        <h3>Results:</h3>
-        <p class="lead"> Ranking of newspapers: </p>
+        <p class="lead"> Put this list in order of your favourites: </p>
       </div>
     
-
-      <table class="table table-hover">
-      <tr><th>Rank</th><th>Name</th><th>Number of tweets</th><th>Number of negative tweets</th><th>neg/total</th><th>Mean SIS</th><th>Mean of Z-scored SIS</th></tr> 
+    <style>
       {% for i in range(10) %}
-      <tr bgcolor={{ row_colors[i] }}><td>{{ i+1 }}</td><td>{{ mean_by_zsis.iloc[i]['name'] }}</td><td> {{ total_by_zsis.iloc[i]['num_tweets']  }}</td><td> {{ total_by_zsis.iloc[i]['num_neg_tweets']  }}</td><td> {{ '%.2f' % mean_by_zsis.iloc[i]['scaled_neg_tweets']  }}</td><td> {{ mean_by_zsis.iloc[i]['sis']  }}</td><td> {{ mean_by_zsis.iloc[i]['zsis']  }}</td></tr>
+      .d{{i}} {
+      	background-color:{{ row_colors[i] }};
+      }
       {% endfor %}
-      </table>
-
-
-     </div><!-- /.container -->
-     <div class="container">
-     	<form oninput="result.value=pick_src([{{ src_names_string }}], [{{ sis_values_string }}], sis_tolerance.value)">
-	      <input type="range" name="sis_tolerance" id="points" value="75" min="0" max="150" data-show-value="false">
-	       <output name="result"></output>
-	    </form>
-     </div>
-     <div class="container">
-     	<ul id="items">
-   		   <li>item 1</li>
-  		   <li>item 2</li>
- 		   <li>item 3</li>
-		</ul>
-     </div>
-     
-
+     .src-name {
+      	font-weight: bold;
+      	font-size: large;
+      }
+     .recommended {
+      	font-weight: bold;
+      	font-size: xx-large;
+      	margin: auto; 
+      	 text-align: center;
+      }
+      img.scaling {
+	      max-width:100%;
+	      
+	 } 
+    </style>
+    
+    <div class="container-fluid">
+    <div class="row">
+    	<div class="col-sm-5">
+			<ul id="news_srcs" class="list-group">
+			  {% for i in range(10) %}
+				<li class="d{{i}} list-group-item" data-id="{{i}}"> <span class="src-name"> {{ mean_by_zsis.iloc[i]['name'] }}</span>  {{ '%d' % total_by_zsis.iloc[i]['num_tweets'] }} tweets</li>
+			  {% endfor %}
+			</ul>
+		</div> <!-- span6 -->
+	
+		<div class="col-sm-5">
+			<p class="lead"> And choose your stress impact tolerance for today: </p>
+			<img src="/static/coolwarm.png" class="scaling">
+			  <input type="range" id="sis_tolerance" onInput="update_recommendation(sortable.toArray())" value="75" min="0" max="150" data-show-value="false">
+	  		Today I recommend you read:
+			<div class="recommended">
+				<a id="recommendation"  href="http://nytimes.com"></a>
+			</div>
+		</div> <!-- span6 -->
+		<div class="col-sm-2">
+		</div>
+      <script src="https://code.jquery.com/jquery-1.10.2.min.js"></script>
+      <script src="static/js/bootstrap.min.js"></script>
+	</div> <!-- /row -->
+    </div>
 
 
     <!-- Bootstrap core JavaScript
     ================================================== -->
     <!-- Placed at the end of the document so the pages load faster -->
-    <script src="caesarians_files/jquery.js"></script>
     <script>window.jQuery || document.write('<script src="../../assets/js/vendor/jquery.min.js"><\/script>')</script>
     <script src="caesarians_files/bootstrap.js"></script>
-    <!-- IE10 viewport hack for Surface/desktop Windows 8 bug -->
+    <script src="static/bootstrap.js"></script>
+     <script src="../static/bootstrap.js"></script>
+   <!-- IE10 viewport hack for Surface/desktop Windows 8 bug -->
     <script src="caesarians_files/ie10-viewport-bug-workaround.js"></script>
-  <script src="../static/js/bootstrap.min.js"></script>
+  <script src="static/js/bootstrap.min.js"></script>
 
 <script src="../static/js/Sortable.js"></script>
 <script type="text/javascript">
-    function pick_src(name_list, sis_list, sis_tolerance){
+    function pick_src(preference_order, name_list, sis_list, sis_tolerance){
     	var i=0;
-    	// Find the first one on the list that is below the user's maximum threshold
-    	while ((sis_tolerance < sis_list[i]) && (i < sis_list.length)) {
+    	cur_item = parseInt(preference_order[i]);
+    	// Find the first one on the list that is below the user's maximum sis threshold
+    	while ((sis_list[cur_item] > sis_tolerance) && (i < sis_list.length)) {
     		i++;
+    		cur_item = parseInt(preference_order[i]);
     	}
-    	
+	    	
     	// If none found, just make it the lowest sis score on the list
     	if (i == sis_list.length) {
-    		i = list.indexOf(Collections.min(sis_list));
-    		
+    		cur_item = sis_list.indexOf(Math.min.apply(null, sis_list));
     	}
-    	return name_list[i];
+    	return name_list[cur_item];
     	
-      //  document.getElementById("myspan").innerHTML="newtext";  
+    }
+    
+    function update_recommendation(preference_order) {
+    	sis_list = [{{ sis_values_string }}];
+    	name_list = [{{ src_names_string | safe}}];
+    	tolerance_slider = document.getElementById('sis_tolerance');
+    	sis_tolerance = tolerance_slider.value;
+    	
+    	recommendation = pick_src(preference_order, name_list, sis_list, sis_tolerance);
+        document.getElementById("recommendation").innerHTML=recommendation;  
     }
     // Simple list
-	var el = document.getElementById('items');
-	var sortable = Sortable.create(el);
-</script>
+	var el = document.getElementById('news_srcs');
+	var sortable = Sortable.create(el, {
+		onUpdate: function (/**Event*/evt) {
+			update_recommendation(this.toArray());
+		}
+	 }
+	);
+	//update_recommendation(sortable.toArray());
 
-<!-- Latest Sortable -->
-<script src="http://rubaxa.github.io/Sortable/Sortable.js"></script>
-
-
-<!-- Simple List -->
-<ul id="simpleList" class="list-group">
-    <li class="list-group-item" data-id="cheese">This is <a href="http://rubaxa.github.io/Sortable/">Sortable</a></li>
-    <li class="list-group-item">It works with Bootstrap...</li>
-    <li class="list-group-item">...out of the box.</li>
-    <li class="list-group-item">It has support for touch devices.</li>
-    <li class="list-group-item">Just drag some elements around.</li>
-</ul>
-
-<script>
-    // Simple list
-   sorty = Sortable.create(simpleList, {
-   		onUpdate: function (/**Event*/evt) {
-   			console.log(this.toArray());
-   		} 
-    });
-   console.log(sorty.toArray());
 </script>
 
 </body></html>
