@@ -6,6 +6,8 @@ Created on Thu Sep  8 14:36:36 2016
 @author: dsaunder
 """
 
+# Download the front pages and extract the titles and URLs of all their top headlines
+
 import requests
 import os
 import datetime
@@ -13,7 +15,7 @@ import pandas as pd
 from sqlalchemy import create_engine
 from subprocess import Popen, PIPE
 from selenium import webdriver
-
+import extract_headlines  # LOCAL MODULE
 
 from subprocess import Popen, PIPE
 from selenium import webdriver
@@ -22,6 +24,61 @@ from sqlalchemy import create_engine
 abspath = lambda *p: os.path.abspath(os.path.join(*p))
 ROOT = abspath(os.path.dirname(__file__))
 #%%
+
+
+
+frontpagedir = '../frontpages/%s/' % timestamp
+dbname = 'frontpage'
+username = 'dsaunder'
+   
+# prepare for database
+engine = create_engine('postgres://%s@localhost/%s'%(username,dbname))
+
+
+def clean_df_db_dups(df, tablename, engine, dup_cols=[],
+                         filter_continuous_col=None, filter_categorical_col=None):
+    """
+    Remove rows from a dataframe that already exist in a database
+    Required:
+        df : dataframe to remove duplicate rows from
+        engine: SQLAlchemy engine object
+        tablename: tablename to check duplicates in
+        dup_cols: list or tuple of column names to check for duplicate row values
+    Optional:
+        filter_continuous_col: the name of the continuous data column for BETWEEEN min/max filter
+                               can be either a datetime, int, or float data type
+                               useful for restricting the database table size to check
+        filter_categorical_col : the name of the categorical data column for Where = value check
+                                 Creates an "IN ()" check on the unique values in this column
+    Returns
+        Unique list of values from dataframe compared to database table
+    """
+    args = 'SELECT %s FROM %s' %(', '.join(['"{0}"'.format(col) for col in dup_cols]), tablename)
+    args_contin_filter, args_cat_filter = None, None
+    if filter_continuous_col is not None:
+        if df[filter_continuous_col].dtype == 'datetime64[ns]':
+            args_contin_filter = """ "%s" BETWEEN Convert(datetime, '%s')
+                                          AND Convert(datetime, '%s')""" %(filter_continuous_col,
+                              df[filter_continuous_col].min(), df[filter_continuous_col].max())
+
+
+    if filter_categorical_col is not None:
+        args_cat_filter = ' "%s" in(%s)' %(filter_categorical_col,
+                          ', '.join(["'{0}'".format(value) for value in df[filter_categorical_col].unique()]))
+
+    if args_contin_filter and args_cat_filter:
+        args += ' Where ' + args_contin_filter + ' AND' + args_cat_filter
+    elif args_contin_filter:
+        args += ' Where ' + args_contin_filter
+    elif args_cat_filter:
+        args += ' Where ' + args_cat_filter
+
+    df.drop_duplicates(dup_cols, keep='last', inplace=True)
+    df = pd.merge(df, pd.read_sql(args, engine), how='left', on=dup_cols, indicator=True)
+    df = df[df['_merge'] == 'left_only']
+    df.drop(['_merge'], axis=1, inplace=True)
+    return df
+
 def create_srcs_table(engine):
     srcs = [
             {'name':'New York Times', 
@@ -122,7 +179,7 @@ def do_crop(params):
 
 
 def do_thumbnail(params):
-    print "Generating thumbnail from croped captured image.."
+    print "Generating thumbnail from cropped captured image.."
     command = [
         'convert',
         params['crop_path'],
@@ -188,31 +245,39 @@ sql_query = "SELECT * FROM srcs;"
 srcs = pd.read_sql_query(sql_query,engine,index_col='index')
 
 # Get the timestamp and setup directories
-timestamp =  datetime.datetime.now().strftime("%Y-%m-%d-%H%M")
-frontpagedir = '../frontpages/%s/' % timestamp
+fp_timestamp =  datetime.datetime.now().strftime("%Y-%m-%d-%H%M")
+frontpagedir = '../frontpages/%s/' % fp_timestamp
 if not os.path.exists(frontpagedir):
     os.makedirs(frontpagedir)
 
-print "Downloading HTML web pages... "
 # Download front page web pages HTML
+print "Downloading HTML web pages... "
 for (i, src) in srcs.iterrows():
     response = requests.get(src['front_page'])
     if response.status_code == 200:    
-        outfile = frontpagedir + src['prefix'] + timestamp + '.html'
+        outfile = frontpagedir + src['prefix'] + fp_timestamp + '.html'
         with open(outfile, 'w') as f:
             f.write(response.content)
     else:
         print "Failed to access URL %s" % src['front_page']
 #%%
-print "Downloading images of web pages... "
 # Download front page web pages as images
+
+print "Downloading images of web pages... "
 for (i, src) in srcs.iterrows():
     url = src['front_page']
     screen_path, crop_path, thumbnail_path = get_screen_shot(
-        url=url, filename=frontpagedir + src['prefix'] + timestamp + '.png',
+        url=url, filename=frontpagedir + src['prefix'] + fp_timestamp + '.png',
         crop=True, crop_replace=True, crop_height=2304,
         thumbnail=True, thumbnail_replace=False, 
         thumbnail_width=200, thumbnail_height=150,
     )
-#%%
 
+#%%
+new_headlines = extract_headlines.extract_all_headlines(fp_timestamp)
+sql_query = "SELECT url FROM frontpage;"
+existing_ids = pd.read_sql_query(sql_query,engine)
+existing_ids = set(existing_ids.values.flat)
+use_row = np.invert(new_headlines.url.isin(existing_ids))
+new_headlines.loc[use_row,:].to_sql('frontpage', engine, if_exists='append')
+print("Wrote %d new headlines to database" % np.sum(use_row))

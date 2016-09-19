@@ -19,11 +19,14 @@ import base64
 import cStringIO
 import pycurl
 import json
+from sqlalchemy import create_engine
+import sqlalchemy
+
 #%%
 
 total_start_time = time.time()
 total_num_searches = 0
-timestamp = '2016-09-16-0725'
+timestamp = '2016-09-19-0722'
 
 
 # obtains the bearer token
@@ -95,16 +98,7 @@ def search_tweets(bearer_token, query):
     return json.loads(results)
 
 #%%
-def clear_tweets(engine):
-    con = engine.connect()
 
-    rs = con.execute("UPDATE frontpage SET all_tweets_collected=FALSE;")
-    try:
-        rs = con.execute("DROP TABLE tweets;")
-    except psycopg2.ProgrammingError as e:
-        pass
-    
-    con.close()
     
 def clear_tweets_for_day(engine, timestamp):
     con = engine.connect()
@@ -205,13 +199,7 @@ def get_all_tweets_for_search(searchstr, ts):
     print "Time taken for twitter search: %.1f seconds" % ((time.time() - start_time)/1.)
     print "Number of searches left this time slice: " + response['meta']['x-rate-limit-remaining']
     return all_tweets
-#%%
-def score_negative_words(tweets):
-    reactions = []
-    for t in tweets:
-        reactions.append(any(a in t for a in ['sad','awful','terrible','bad','sucks','unhappy','upset','angry','depressing']))
 
-    return reactions
 #%%
 global total_num_searches 
 
@@ -243,57 +231,76 @@ username = 'dsaunder'
 engine = create_engine('postgres://%s@localhost/%s'%(username,dbname))
 #pcon = None
 #con = psycopg2.connect(database = dbname, user = username)
-sql_query = "SELECT * FROM frontpage WHERE fp_timestamp='%s';" % timestamp
+
+# Select all the headlines for this timestamp that did not already have their 
+# tweets downloaded
+sql_query = '''
+    SELECT * 
+    FROM frontpage 
+    WHERE url NOT IN (
+       SELECT frontpage.url 
+       FROM frontpage 
+           JOIN tweet_download_log ON frontpage.url = tweet_download_log.url)
+     AND fp_timestamp='%s';
+    '''  % timestamp
+
+    
 frontpage_data = pd.read_sql_query(sql_query,engine,index_col='index')
 #%%
 
 tweets_retrieved = 0
 #frontpage_data = pd.read_csv(timestamp + '_frontpage_data.csv')
-fp_tweets = pd.DataFrame()
+new_tweet_list = []
 try:
     for src in np.unique(frontpage_data.src):
         articles_for_paper = frontpage_data.loc[(frontpage_data.src ==src) & (frontpage_data.article_order <=10),: ]
         for i in range(0,len(articles_for_paper)):
-            if articles_for_paper.iloc[i,:].all_tweets_collected:
-                continue
-            print '\n\nSearches so far: %d. Article %d for source %s. ' % (total_num_searches, i+1, src)
 
             url = articles_for_paper.iloc[i,:].url
             if src == 'lat':
-                url = re.sub('http://','http:/',url)
-
-            tweets_for_article = get_all_tweets_for_search(url, ts)
+                search_url = re.sub('http://','http:/',url)
+            else:
+                search_url = url
+                
+            tweets_for_article = get_all_tweets_for_search(search_url, ts)
             twitter_search_timestamp =  datetime.now().strftime("%Y-%m-%d-%H%M")
             tweets_retrieved = tweets_retrieved + len(tweets_for_article)
             for j,tweet in enumerate(tweets_for_article):
-                fp_tweets = fp_tweets.append({'src':src,                                         
+                new_tweet_list.append({'src':src,                                         
                 'fp_timestamp':timestamp,
                 'article':i+1,
                 'order':j,  
-                'id':tweet['id'],
+                'id':str(tweet['id']),
                 'created':tweet['created_at'],
                 'user':tweet['user']['screen_name'],
                 'text':tweet['text'],
                 'retweet_count':tweet['retweet_count'],
                 'retrieved_at':twitter_search_timestamp
-                    },
-                    ignore_index=True)
-            frontpage_data.loc[(frontpage_data.src ==src) & 
-                               (frontpage_data.article_order == articles_for_paper.iloc[i,:].article_order),
-                               'all_tweets_collected'] = True
+                    })
+            
+            tweet_download_record = pd.DataFrame({'retrieved_at':twitter_search_timestamp, 'url':url, 'src':src, 'article':i+1}, index=[0])
+           
             # Overwrite the current frontpage table
-            frontpage_data.to_sql('frontpage', engine, if_exists='replace')
+            tweet_download_record.to_sql('tweet_download_log', engine, if_exists='append')
 
 
 except TwitterSearchException as e:
     print "Did not complete source %s" % src 
                 #%%
+new_tweets = pd.DataFrame(new_tweet_list)
 
-#fp_tweets.to_csv(timestamp + '_fp_tweets.csv',index=False, encoding='utf-8')
-
-# Add the new tweets to the collection
-fp_tweets.to_sql('tweets', engine, if_exists='append')
-
-
+#%%
+if len(new_tweets) > 0:
+    
+    sql_query = "SELECT id FROM tweets WHERE fp_timestamp = '%s';" % fp_timestamp
+    
+    existing_ids = pd.read_sql_query(sql_query,engine)
+    existing_ids = set(existing_ids.values.flat)
+    use_row = np.invert(new_tweets.id.isin(existing_ids))
+    if np.sum(use_row) > 0:
+        # Add the new tweets to the collection
+        new_tweets.loc[use_row,:].to_sql('tweets', engine, if_exists='append')
+        
 print "Total time elapsed: %.1f minutes." % ((time.time() - total_start_time ) / 60.)
 print "Total tweets retrieved: %d" % tweets_retrieved
+print("Wrote %d new tweets to database" % np.sum(use_row))
