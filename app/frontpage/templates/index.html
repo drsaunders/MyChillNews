@@ -89,7 +89,7 @@
     	<div class="col-sm-5">
 			<ul id="news_srcs" class="list-group">
 			  {% for i in range(10) %}
-				<li class="d{{i}} list-group-item" data-id="{{i}}"> <span class="src-name"> {{ mean_by_zsis.iloc[i]['name'] }}</span>  {{ '%d' % total_by_zsis.iloc[i]['num_tweets'] }} tweets</li>
+				<li class="d{{i}} list-group-item" data-id="{{i}}"> <span class="src-name"> {{ mean_by_name.iloc[i]['name'] }}</span>  {{ '%d' % total_by_name.iloc[i]['num_neg'] }} negative tweets (out of {{ '%d' % total_by_name.iloc[i]['num_tweets'] }})</li>
 			  {% endfor %}
 			</ul>
 		</div> <!-- span6 -->
