@@ -20,10 +20,6 @@ dbname = 'frontpage'
 username = 'dsaunder'
 
 engine = create_engine('postgres://%s@localhost/%s'%(username,dbname))
-#pcon = None
-#con = psycopg2.connect(database = dbname, user = username)
-sql_query = "SELECT * FROM frontpage WHERE fp_timestamp='%s';" % timestamp
-frontpage_data = pd.read_sql_query(sql_query,engine,index_col='index')
 
 #Get your app id and key here on facebook. Help here: https://goldplugins.com/documentation/wp-social-pro-documentation/how-to-get-an-app-id-and-secret-key-from-facebook/
 
@@ -141,8 +137,6 @@ def scrapeFacebookPageFeedStatus(page_id, access_token):
        "status_published", "num_reactions", "num_comments", "num_shares", "num_likes",
                 "num_loves","num_wows","num_hahas","num_sads","num_angries","num_thankfuls"]
     
-    out_statuses = pd.DataFrame(columns=columns)
-    
     has_next_page = True
     num_processed = 0   # keep a count on how many we've processed
     scrape_starttime = datetime.datetime.now()
@@ -178,28 +172,39 @@ def scrapeFacebookPageFeedStatus(page_id, access_token):
     
     print "\nDone!\n%s Statuses Processed in %s" % (num_processed, datetime.datetime.now() - scrape_starttime)
 
-    out_statuses = pd.DataFrame(new_rows)
-    return out_statuses
+    new_statuses = pd.DataFrame(new_rows)
+    return new_statuses
     
 if __name__ == '__main__':
     dbname = 'frontpage'
     username = 'dsaunder'
     timestamp =  datetime.datetime.now().strftime("%Y-%m-%d-%H%M")
    
-    # prepare for database
-    engine = create_engine('postgres://%s@localhost/%s'%(username,dbname))
     sql_query = "SELECT * FROM srcs;"
     srcs = pd.read_sql_query(sql_query,engine,index_col='index')
 
-    for i,src in srcs.iterrows():
-        if src.fb_page == '':
+    sql_query = "SELECT status_link FROM fb_statuses;"
+    existing_ids = pd.read_sql_query(sql_query,engine)
+    existing_ids = set(existing_ids.values.flat)
+
+    total_written = 0
+    for i,src_row in srcs.iterrows():
+        if src_row.fb_page == '':
             continue
-        src_statuses = scrapeFacebookPageFeedStatus(src.fb_page, access_token)
-        src_statuses.loc[:,'src'] = src
+        src_statuses = scrapeFacebookPageFeedStatus(src_row.fb_page, access_token)
+        src_statuses.loc[:,'src'] = src_row.prefix
         src_statuses.loc[:,'retrieved_time'] = timestamp
 
-        src_statuses.to_sql('fb_statuses', engine, if_exists='append')
+        use_row = np.invert(src_statuses.status_link.isin(existing_ids))
+
+        src_statuses.loc[use_row,:].to_sql('fb_statuses', engine, if_exists='append')
+
+        total_written = total_written + np.sum(use_row)
+        print ("Earliest for %s is " % src_row.prefix)
+        print src_statuses.status_published.sort_values().iloc[0]
+    print("Wrote %d new headlines to database" % np.sum(use_row))
 
     
-    
+
+ 
 # The CSV can be opened in all major statistical programs. Have fun! :)
