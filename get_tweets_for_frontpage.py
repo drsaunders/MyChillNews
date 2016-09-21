@@ -26,7 +26,7 @@ import sqlalchemy
 
 total_start_time = time.time()
 total_num_searches = 0
-timestamp = '2016-09-19-0722'
+timestamp = '2016-09-20-0741i'
 
 
 # obtains the bearer token

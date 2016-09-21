@@ -16,25 +16,21 @@ from sqlalchemy import create_engine
 from subprocess import Popen, PIPE
 from selenium import webdriver
 import extract_headlines  # LOCAL MODULE
+import numpy as np
 
 from subprocess import Popen, PIPE
 from selenium import webdriver
 from sqlalchemy import create_engine
 
 abspath = lambda *p: os.path.abspath(os.path.join(*p))
-ROOT = abspath(os.path.dirname(__file__))
-#%%
 
-
-
-frontpagedir = '../frontpages/%s/' % timestamp
 dbname = 'frontpage'
 username = 'dsaunder'
    
 # prepare for database
 engine = create_engine('postgres://%s@localhost/%s'%(username,dbname))
 
-
+#%%
 def clean_df_db_dups(df, tablename, engine, dup_cols=[],
                          filter_continuous_col=None, filter_categorical_col=None):
     """
@@ -232,15 +228,19 @@ def get_screen_shot(**kwargs):
             do_thumbnail(params)
     return screen_path, crop_path, thumbnail_path
 
+#%%
 
-
-   
-        #%%
-dbname = 'frontpage'
-username = 'dsaunder'
-
-# prepare for database
-engine = create_engine('postgres://%s@localhost/%s'%(username,dbname))
+def extract_headlines_to_db(fp_timestamp, engine):
+    new_headlines = extract_headlines.extract_all_headlines(fp_timestamp)
+    sql_query = "SELECT url FROM frontpage;"
+    existing_ids = pd.read_sql_query(sql_query,engine)
+    existing_ids = set(existing_ids.values.flat)
+    use_row = np.invert(new_headlines.url.isin(existing_ids))
+    new_headlines.loc[use_row,:].to_sql('frontpage', engine, if_exists='append')
+    print("Wrote %d new headlines to database" % np.sum(use_row))
+    
+  
+#%%
 sql_query = "SELECT * FROM srcs;"
 srcs = pd.read_sql_query(sql_query,engine,index_col='index')
 
@@ -274,10 +274,4 @@ for (i, src) in srcs.iterrows():
     )
 
 #%%
-new_headlines = extract_headlines.extract_all_headlines(fp_timestamp)
-sql_query = "SELECT url FROM frontpage;"
-existing_ids = pd.read_sql_query(sql_query,engine)
-existing_ids = set(existing_ids.values.flat)
-use_row = np.invert(new_headlines.url.isin(existing_ids))
-new_headlines.loc[use_row,:].to_sql('frontpage', engine, if_exists='append')
-print("Wrote %d new headlines to database" % np.sum(use_row))
+extract_headlines_to_db(fp_timestamp, engine)
