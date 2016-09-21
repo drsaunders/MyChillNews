@@ -47,7 +47,9 @@ def index():
     row_colors = hex_colors[np.round(mean_by_name.sis.values*1000).astype(int)]
 
     src_names_string = ','.join(['"%s"' % a for a in mean_by_name.index.values])
-    sis_values_string = ','.join(['%.1f' % (a*1000) for a in mean_by_name.prop_neg.values])
+    sis_values_string = ','.join(['%.1f' % (a*1000) for a in mean_by_name.sis.values])
+    url_list = [frontpage_for_render.loc[frontpage_for_render.name ==a,'front_page'].iloc[0] for a in mean_by_name.index.values]
+    url_string = ','.join('"%s"' % a for a in url_list)
     return render_template("index.html",
        todays_date = todays_date,
        total_num_tweets = np.sum(frontpage_for_render.num_tweets),
@@ -55,5 +57,6 @@ def index():
        total_by_name = total_by_name,
        src_names_string=src_names_string,
        sis_values_string=sis_values_string,
+       url_string = url_string,
        row_colors=row_colors,
        )

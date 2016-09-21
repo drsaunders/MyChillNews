@@ -18,7 +18,7 @@
     <link href="caesarians_files/ie10-viewport-bug-workaround.css" rel="stylesheet">
 
     <!-- Custom styles for this template -->
-    <link href="starter-template.css" rel="stylesheet">
+    <link href="../starter-template.css" rel="stylesheet">
 
     <!-- Just for debugging purposes. Don't actually copy these 2 lines! -->
     <!--[if lt IE 9]><script src="../../assets/js/ie8-responsive-file-warning.js"></script><![endif]-->
@@ -82,6 +82,9 @@
 	      max-width:100%;
 	      
 	 } 
+	 a {
+		text-decoration: underline;
+	}
     </style>
     
     <div class="container-fluid">
@@ -124,7 +127,7 @@
 
 <script src="../static/js/Sortable.js"></script>
 <script type="text/javascript">
-    function pick_src(preference_order, name_list, sis_list, sis_tolerance){
+    function pick_src(preference_order, sis_list, sis_tolerance){
     	var i=0;
     	cur_item = parseInt(preference_order[i]);
     	// Find the first one on the list that is below the user's maximum sis threshold
@@ -137,18 +140,21 @@
     	if (i == sis_list.length) {
     		cur_item = sis_list.indexOf(Math.min.apply(null, sis_list));
     	}
-    	return name_list[cur_item];
+    	return cur_item;
     	
     }
     
     function update_recommendation(preference_order) {
     	sis_list = [{{ sis_values_string }}];
     	name_list = [{{ src_names_string | safe}}];
+    	url_list = [{{ url_string | safe}}];
     	tolerance_slider = document.getElementById('sis_tolerance');
     	sis_tolerance = tolerance_slider.value;
     	
-    	recommendation = pick_src(preference_order, name_list, sis_list, sis_tolerance);
-        document.getElementById("recommendation").innerHTML=recommendation;  
+    	recommendation = pick_src(preference_order, sis_list, sis_tolerance);
+    	
+        document.getElementById("recommendation").innerHTML = name_list[recommendation];  
+        document.getElementById("recommendation").href = url_list[recommendation];  
     }
     // Simple list
 	var el = document.getElementById('news_srcs');
