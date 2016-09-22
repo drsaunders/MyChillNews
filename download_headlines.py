@@ -23,6 +23,7 @@ from selenium import webdriver
 from sqlalchemy import create_engine
 
 abspath = lambda *p: os.path.abspath(os.path.join(*p))
+ROOT = abspath(os.path.dirname(__file__))
 
 dbname = 'frontpage'
 username = 'dsaunder'
@@ -138,7 +139,12 @@ def create_srcs_table(engine):
             {'name':'The Guardian', 
              'prefix':'gua',
             'fb_page':'theguardian',
-            'front_page':'https://www.theguardian.com/uk?INTCMP=CE_UK'}]
+            'front_page':'https://www.theguardian.com/uk?INTCMP=CE_UK'},
+             {'name':'The Boston Globe', 
+             'prefix':'bos',
+            'fb_page':'globe',
+            'front_page':'http://www.bostonglobe.com'}
+           ]
     srcs = pd.DataFrame(srcs)
     srcs.to_sql('srcs', engine, if_exists='replace')
 

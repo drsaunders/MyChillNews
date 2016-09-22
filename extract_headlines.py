@@ -314,6 +314,28 @@ def extract_all_headlines(fp_timestamp):
     src_rows.loc[:,'article_order'] = range(1,len(src_rows)+1)
     frontpage_data = frontpage_data.append(src_rows, ignore_index=True)
 
+#    #%%
+#    # Boston Globe
+#    prefix = 'bos'
+#    url_prefix = 'http://www.dailymail.co.uk'
+#    
+#    with open(read_frontpage_by_prefix(prefix,frontpagedir), 'r') as f:
+#        soup = BeautifulSoup(f, 'html.parser')
+#    headline_selectors = ['.story-title a']
+#    
+#    src_rows = pd.DataFrame()
+#    for i,selector in enumerate(headline_selectors):
+#        headlines = soup.select(selector)
+#        new_rows = pd.DataFrame({'src':[prefix]*len(headlines), 
+#         'headline':[re.sub('[ \n]+',' ',a.text) for a in headlines],
+#         'url':[get_url(a, url_prefix) for a in headlines]
+#        })
+#        print new_rows.headline + " " + new_rows.url
+#        new_rows = new_rows.loc[new_rows.headline != '', :]
+#        src_rows = src_rows.append(new_rows, ignore_index=True)
+#    
+#    src_rows.loc[:,'article_order'] = range(1,len(src_rows)+1)
+#    frontpage_data = frontpage_data.append(src_rows, ignore_index=True)
 
     #%%
     frontpage_data.loc[:,'fp_timestamp'] = fp_timestamp

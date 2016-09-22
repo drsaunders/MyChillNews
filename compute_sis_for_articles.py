@@ -38,7 +38,7 @@ if __name__ == "__main__":
     mean=np.mean(summarized_negativity.prop_neg)
     var=np.var(summarized_negativity.prop_neg,ddof=1)
     a1=mean**2*(1-mean)/var-mean
-    b1=alpha1*(1-mean)/mean
+    b1=a1*(1-mean)/mean
 
     fitted=lambda x,a,b:gammaf(a+b)/gammaf(a)/gammaf(b)*x**(a-1)*(1-x)**(b-1) #pdf of beta
     xx=np.arange(0,0.5,0.001)

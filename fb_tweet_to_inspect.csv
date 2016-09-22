@@ -1,0 +1,412 @@
+,headline,link_name,num_tweets,num_neg,prop_neg,sis,num_reactions,prop_angry_fb
+0,How Samsung Botched Its Galaxy Note 7 Recall,How Samsung Botched Its Galaxy Note 7 Recall,508,52,0.102362204724,0.102004000882,208,0.0
+1,"Philippine President Duterte Ordered Killings as Mayor, Witness Says","Philippine President Duterte Ordered Killings as Mayor, Senate Witness Says",91,9,0.0989010989011,0.0973304630897,245,0.102040816327
+2,Inmate-Trained Dogs Give Veterans Some Love,Inmate-Trained Dogs Give Veterans Some Love,40,1,0.025,0.0345396444012,143,0.0
+3,Bayer-Monsanto Deal Would Forge New Agricultural Force,Bayer-Monsanto Deal Would Forge New Agricultural Force,771,53,0.0687418936446,0.0688649218511,741,0.211875843455
+4,Inside the Smithsonian’s New African-American Museum,Inside America's New African-American Museum,97,4,0.0412371134021,0.0443280400905,988,0.00101214574899
+5,Philippine leader 'killed man with Uzi','Duterte ordered us to kill',181,27,0.149171270718,0.146129485452,1003,0.0667996011964
+6,Manhattan Bombs Provide Trove of Clues; F.B.I. Questions 5 People,Bombs Filled With Shrapnel Give Clues Into New York Explosions,1605,83,0.0517133956386,0.0518609934572,670,0.25671641791
+7,Airstrike on Syrian Troops Weakens U.S. Effort to Curb Violence,"How a U.S. Airstrike Missed ISIS, but Damaged U.S. Policy in Syria",371,32,0.0862533692722,0.0861205194471,198,0.151515151515
+8,Obama Sees ‘Personal Insult’ if Blacks Don’t Rally for Hillary Clinton,Obama Sees 'Personal Insult' if Blacks Don't Rally for Hillary Clinton,373,15,0.0402144772118,0.0410907823935,4372,0.00846294602013
+9,‘We Built an App’: Keeping Track of Louisiana’s Flood-Tossed Tombs,'We Built an App': Keeping Track of Louisiana's Flood-Tossed Tombs,285,4,0.0140350877193,0.0159197346806,355,0.00281690140845
+10,Emmy Awards 2016: Emmys Welcome Surprises Along With the Favorites,Emmy Awards 2016: 13 Best and Worst Moments,172,7,0.0406976744186,0.0425282231853,114,0.00877192982456
+11,"After Blast, New Yorkers Examine Themselves for Psychological Shrapnel","After Blast, New Yorkers Are Feeling Around for Psychological Shrapnel",150,23,0.153333333333,0.149476519486,568,0.00176056338028
+12,F.B.I. Treats Minnesota Mall Stabbing Attack as ‘Potential Act of Terrorism’,F.B.I. Treats Minnesota Mall Stabbing Attack as 'Potential Act of Terrorism',331,7,0.0211480362538,0.0226021269719,127,0.11811023622
+13,Award Canceled for Children’s Group With Ties to Malaysia’s First Lady,Award Canceled for Children's Group With Ties to Malaysia's First Lady,394,8,0.0203045685279,0.0215484909078,132,0.0
+14,"Following Its Country Music, Nashville May Loosen Up on Marijuana","Following Its Country Music, Nashville May Loosen Up on Marijuana",258,8,0.031007751938,0.0325511487391,150,0.00666666666667
+15,"An Appraisal: A Playwright Intent on Naming, and Goading, the Beast Within",Edward Albee: A Playwright Who Saw the Minotaur Inside All of Us,148,11,0.0743243243243,0.0746393188684,237,0.0042194092827
+16,Pro-Putin Parties Show Strength in Russian Parliament Elections,Pro-Putin Parties Show Strength in Russian Parliament Elections,309,2,0.00647249190939,0.00841367357122,104,0.0288461538462
+17,How Healthy Is Hillary Clinton? Doctors Weigh In,How Healthy Is Hillary Clinton? Doctors Weigh In,521,44,0.084452975048,0.0843861809028,367,0.0735694822888
+18,A Doctor’s Assessment of Whether Donald Trump’s Health Is ‘Excellent’,A Doctor's Assessment of Whether Donald Trump's Health Is 'Excellent',182,11,0.0604395604396,0.0613076026038,289,0.152249134948
+19,Editorial: Reason and Vigilance After the Blast,Reason and Vigilance After the Blast,165,15,0.0909090909091,0.0903940279172,443,0.0
+20,"Op-Ed Columnist: Trump, Grand Wizard of Birtherism","Trump, Grand Wizard of Birtherism",697,48,0.0688665710187,0.0690010298275,11304,0.0697098372258
+21,Op-Ed Columnist: Vote as if It Matters,Paul Krugman: Vote as if It Matters,679,55,0.0810014727541,0.0809919782189,2332,0.00600343053173
+22,"Chelsea Bomb Rattles Nerves at Selis Manor, a Building for the Blind","Chelsea Bomb Rattles Nerves at Selis Manor, a Building for the Blind",76,5,0.0657894736842,0.067218522333,204,0.078431372549
+23,"How Police Found Second Bomb, and a ‘Total Containment Vessel’ Hauled It Away","How Police Found Second Bomb, and a 'Total Containment Vessel' Hauled It Away",166,2,0.0120481927711,0.0153143458338,256,0.02734375
+24,"A Routine Night, Until an Explosion Lifted Her Off Her Feet","A Routine Night, Until an Explosion Lifted Her Off Her Feet",112,2,0.0178571428571,0.0221855686168,195,0.0410256410256
+25,How Tech Companies Disrupted Silicon Valley’s Restaurant Scene,How Tech Companies Disrupted Silicon Valley's Restaurant Scene,1151,64,0.0556038227628,0.0557811883078,347,0.00576368876081
+26,Review: Emmy Awards Showcase TV’s Cultural Dominance and Trump Jokes,Emmy Awards Showcase TV's Cultural Dominance and Trump Jokes,172,2,0.0116279069767,0.0148048677708,176,0.0
+27,Red Carpet Review: Tuxes Are Easy. It’s the Emmy Gowns That Demand Effort.,"At the Emmys, Tuxes Are Easy. It's the Gowns That Demand Effort.",171,0,0.0,0.00373624183702,87,0.0
+28,Emmy Awards 2016: The Winners List,Emmy Awards 2016: The Winners List,200,5,0.025,0.0272139013302,368,0.0163043478261
+29,Probe into weekend blasts leads to signs of  terror cell,New York explosion leaves dozens injured,3812,79,0.0207240293809,0.0208541200786,9177,0.0412988994225
+30,ISIS claims responsibility in Minnesota stabbings,ISIS wing claims responsibility for Minnesota mall attack,1169,21,0.0179640718563,0.0184057806449,1340,0.329850746269
+31,<b>BIAS ALERT:</b>,"BIAS ALERT: Trump, Clinton Quickly Refer To New York Blast As Bomb; Trump Takes Brunt Of Criticism",365,26,0.0712328767123,0.0714339580567,6893,0.260264035979
+32,AND THE WINNER IS...: Complete list of Emmys winners,Emmys 2016 List Of Winners,83,1,0.0120481927711,0.018281841898,677,0.0723781388479
+33,‘Multiple’ explosive devices found at N.J. train station amid rising terrorism fears,"Suspect in New York, N.J. bombings taken into custody",518,29,0.0559845559846,0.0563691815244,161,0.00621118012422
+34,Clinton’s lagging Hispanic support stokes concerns about her strategy,"Among Democrats, deep concern about Clinton's Hispanic strategy",433,55,0.127020785219,0.126135006312,264,0.0416666666667
+35,The verdict? Diversity is a big winner.,2016 Emmys: Let's hear it for diversity! Now how about actually watching some of it?,35,0,0.0,0.0154568793251,205,0.00975609756098
+36,"Matt Damon, Jeb Bush and 8 other highlights","Emmy Awards: 10 things you missed, including Matt Damon, surprise winners and Leslie Jones",36,0,0.0,0.0151083852518,114,0.0
+37,Photos: Stunning red carpet gowns,See what celebrities are wearing on the Emmy Awards red carpet,16,0,0.0,0.0275160299905,80,0.0125
+38,Democrats seize moment to focus on Trump’s role in birtherism,"For Democrats, a fresh chance to remind voters of Trump's role in 'birtherism'",103,10,0.0970873786408,0.0958220616066,1515,0.0138613861386
+39,Book Review: Hillary Clinton and Tim Kaine have written a deplorable campaign book,Hillary Clinton and Tim Kaine have written a deplorable campaign book,80,22,0.275,0.256584585563,673,0.0237741456166
+40,‘I am truly sorry’: Former Kansas State student apologizes for Snapchat image that went viral,'I am truly sorry': Former Kansas State student apologizes for Snapchat image that had racial slur,34,1,0.0294117647059,0.0394327135524,159,0.207547169811
+41,Scientists published climate research under fake names. Then they were caught.,Scientists published climate research under fake names. Then they were caught.,85,8,0.0941176470588,0.0928740914111,108,0.0185185185185
+42,Husband in real-life ‘Fault in our Stars’ couple dies from cystic fibrosis complications,Husband in real-life 'Fault in our Stars' couple dies from cystic fibrosis complications,14,1,0.0714285714286,0.0747139711434,819,0.002442002442
+43,US study charts rise of hardcore super-owners,'More guns in fewer hands' - US study charts rise of hardcore super owners,211,12,0.0568720379147,0.0577611763543,614,0.169381107492
+44,Five more devices found at train station in New Jersey,New York bombing: five more explosive devices found at railway station,102,5,0.0490196078431,0.0513813810648,652,0.194785276074
+45,Embassies report rise in alleged hate crimes in UK since Brexit vote,Embassies report rise in alleged hate crimes in UK since Brexit vote,76,13,0.171052631579,0.162057673074,776,0.30412371134
+46,Finally an awards show that didn’t suck,Finally an awards show that didn't suck: 2016 Emmys broke more than one trend,27,0,0.0,0.0189545687211,226,0.0
+47,Momentum Kids isn’t weird and sinister. It’s helping women engage,Momentum Kids isn't weird and sinister. It's helping women engage,64,9,0.140625,0.133651138395,321,0.0
+48,Wiggins faces a fight for his reputation in wake of scandal,Bradley Wiggins faces a fight for his reputation in wake of Wada hack,76,11,0.144736842105,0.138347885389,259,0.023166023166
+49,Alistair Brownlee gives up chance to win to help 'dazed' Jonny,Alistair Brownlee gives up chance to win to help stricken Jonny over line,108,15,0.138888888889,0.134676892371,17803,0.00011234061675
+50,Ten talking points from the weekend’s action,Premier League: 10 talking points from the weekend's action,79,0,0.0,0.00767122832769,74,0.027027027027
+51,The idea of a 'post-truth society' is elitist and obnoxious,The idea of a 'post-truth society' is elitist and obnoxious,89,12,0.134831460674,0.130145573741,642,0.0700934579439
+52,Here’s how the left unites to oppose the Tories – without forming a new party,First job for a re-elected Corbyn? Stop the infighting that's hurting the left | Shirley Williams,28,3,0.107142857143,0.100956516192,125,0.008
+53,Why do we steer so many 18-year-olds towards university before they are ready?,Why do we steer so many 18-year-olds towards university before they are ready?,112,6,0.0535714285714,0.0554210375646,7694,0.000779828437744
+54,A world without work is coming – it could be utopia or it could be hell,A world without work is coming – it could be utopia or it could be hell,470,29,0.0617021276596,0.0620255038178,524,0.00381679389313
+55,"City of London may lose hub status, warns Bundesbank boss","Hard Brexit will cost City of London its hub status, warns Bundesbank boss",219,14,0.0639269406393,0.0645255833647,493,0.0304259634888
+56,Home button is useless with gloves or in sports armbands,iPhone 7 home button is useless with gloves or in sports armbands,61,7,0.114754098361,0.110594622692,142,0.0
+57,Who wants a din with their dinner?,Who wants a din with their dinner?,39,14,0.358974358974,0.309800842719,128,0.046875
+58,Are faces special?,The Thatcher illusion: Are faces special?,29,5,0.172413793103,0.15179649506,219,0.00456621004566
+59,The plucky underdog does it again,Pro Evolution Soccer 2017 review: the plucky underdog does it again,40,4,0.1,0.0965829164766,384,0.0
+60,Can cannabis relieve pain and other ailments?,Can cannabis relieve pain and other ailments?,67,5,0.0746268656716,0.0752469206384,1343,0.00297840655249
+61,"You can hurt us, but you can't hurt the books",World's oldest library reopens in Fez,166,7,0.0421686746988,0.0439917416109,3678,0.000271886895052
+62,"In Mel and Sue, the true spirit of punk lives on","In Mel and Sue, the true spirit of punk lives on | Stewart Lee",50,6,0.12,0.11430547824,3538,0.00197851893725
+63,The best images from the Emmy awards 2016,The best images from the Emmy awards 2016,13,0,0.0,0.031381844632,150,0.0
+64,The best looks on the red carpet,Emmys 2016 fashion: the best looks on the red carpet - in pictures,50,0,0.0,0.011483616555,343,0.0
+65,"New York Bombs Filled With Explosives, Shrapnel","New York Explosion Caused by Bomb, Authorities Say",176,19,0.107954545455,0.106697858067,218,0.146788990826
+66,Missing From 2016 Race:  Budget-Deficit Hawks,"Donald Trump Faces Pressure on Debt, Deficit",182,11,0.0604395604396,0.0613076026038,259,0.0579150579151
+67,Banks Are Now too Scared to Even Make Money,Banks Are Now Too Scared To Even Make Money,124,8,0.0645161290323,0.0655072768424,509,0.00589390962672
+68,"Syria Truce Hangs in Balance Amid Attacks, Lack of Aid",U.N. Aid Convoys Hit by Airstrikes in Syria,31,3,0.0967741935484,0.0932603593277,17,0.0
+69,Veteran Winners Dominate the Emmys,'American Crime Story' Dominates at Emmys,23,3,0.130434782609,0.117056313946,47,0.0
+70,North Korean Leader Adopts Grandfather’s Folksy Image,"To Secure His Brutal Grip on Power, North Korean Leader Adopts Grandfather's Folksy Image",54,7,0.12962962963,0.123010352862,625,0.0544
+71,Iraqi Families Return to Ravaged Homes in Fallujah,Iraqi Families Return to Ravaged Homes in Fallujah,18,2,0.111111111111,0.101319474307,48,0.0
+72,FAA Poised to Take On Role as Traffic Cop for Space,FAA Poised to Take On Role as Traffic Cop for Space,89,2,0.0224719101124,0.0274269710174,42,0.0
+73,Why the Paperless Office Is Finally on Its Way,Why the Paperless Office Is Finally on  Its Way,272,15,0.0551470588235,0.0558941333562,136,0.0
+74,"In India, Old Gold Is the New Black","In India's Bazaars, Old Gold Is the New Black",44,0,0.0,0.0127997061727,93,0.0
+75,Putin’s Party Shores Up Power in Parliamentary Elections,Putin's Party Shores Up Power in Parliamentary Elections Amid Weak Turnout,94,2,0.0212765957447,0.0260871530616,57,0.0526315789474
+76,"At Oktoberfest, the Beer Flows but Anxieties Linger","At Oktoberfest, the Beer Flows but Anxieties Linger",42,4,0.0952380952381,0.0927467102255,163,0.0
+77,"After New Jersey Bridge Scandal, Two Lives Veer Off Course","After New Jersey Bridge Scandal, Two Lives Veer Off Course",15,2,0.133333333333,0.114335098762,153,0.0
+78,Baltimore Park’s Confederate Monument Presents Dilemma,Confederate Monument in Baltimore Park Presents a Dilemma,28,7,0.25,0.210987643677,164,0.0426829268293
+79,Coalition Misfire Threatens to Upend Syria Truce,Coalition Misfire Threatens to Upend Syria Truce,45,7,0.155555555556,0.143760562407,72,0.0555555555556
+80,NATO’s Baltic Force to Be in Place by May 2017,NATO's Baltic Deterrent Force to Be in Place by May 2017,80,2,0.025,0.0302207840579,198,0.010101010101
+81,Two Former Albuquerque Police to Stand Trial Over Fatal 2014 Shooting,Two Former Albuquerque Police to Stand Trial Over Fatal 2014 Shooting,12,0,0.0,0.0329236962618,66,0.030303030303
+82,Explosion Near New Jersey Train Station After Police Find Five Devices,Explosion at New Jersey Train Station as Police Discover Five Devices,76,5,0.0657894736842,0.067218522333,466,0.0836909871245
+83,Minnesota City Grapples With Stabbings at Mall,Islamic State Outlet Claims Minnesota Mall Attacker as Soldier,21,3,0.142857142857,0.12503198399,297,0.306397306397
+84,"Trump Trade Plan Could Push U.S. into Recession, Study Says","Trump Trade Plan Could Push U.S. into Recession, Study Says",145,27,0.186206896552,0.180433669246,1120,0.0294642857143
+85,"White, Working Class Voters Vex Hillary Clinton","White, Working Class Voters Vex Hillary Clinton",148,14,0.0945945945946,0.0938266277135,360,0.0194444444444
+86,"Hanjin Unloads More Cargo, Easing Supply-Chain Fears","Hanjin Unloads More Cargo, Easing Supply-Chain Fears",52,4,0.0769230769231,0.0773794254834,80,0.0125
+87,Who’s Ready for Information Storage Under Their Skin?,When Information Storage Gets Under Your Skin,393,30,0.0763358778626,0.0764167224423,1242,0.0966183574879
+88,Samsung Unloads Tech Shares as Recall Starts to Burn,Samsung Unloads Tech Shares as Galaxy Note 7 Recall Starts to Burn,166,5,0.0301204819277,0.0325207833,137,0.0
+89,A Fed Insider Warns of the Risk of Low Rates,A Fed Insider Warns of the Risk of Low Rates,152,17,0.111842105263,0.110194813986,87,0.0
+90,Rio’s Paralympic Games Hit Their Stride at the Finish Line,Rio's Paralympic Games Hit Their Stride at the Finish Line,11,2,0.181818181818,0.137966171109,84,0.0
+91,Recipes That Take Advantage of Fall’s Windfall of Nuts,Recipes That Take Advantage of Fall's Windfall of Nuts,18,3,0.166666666667,0.139265315365,71,0.0
+92,Fall: The New Beach Season,Beach Getaways in the Fall—When the Crowds are Gone,23,1,0.0434782608696,0.0532672754153,194,0.0
+93,The New Trend in Office Wear: Comfort,The New Trend in Office Wear: Comfort,34,1,0.0294117647059,0.0394327135524,823,0.00121506682868
+94,New Jersey bomb squad detonates device,Suspicious devices found near New Jersey station,88,3,0.0340909090909,0.0380900873447,1984,0.0952620967742
+95,Australian faces burkini anger in France,'I was forced to leave French beach for wearing a burkini',34,7,0.205882352941,0.181098015441,17641,0.13400600873
+96,China ship to pay for Barrier Reef damage,Chinese ship to pay $29m for Great Barrier Reef disaster,16,3,0.1875,0.150702371865,4039,0.164644714038
+97,"Haze 'may have caused 100,000' early deaths","Indonesia haze may have led to 100,000 premature deaths",33,3,0.0909090909091,0.0887499454851,2663,0.0251595944424
+98,Sound of Music 'Liesl' actress dies,Sound of Music 'Liesl' actress Charmian Carr dies,150,7,0.0466666666667,0.0484366609596,26322,0.000379910341159
+99,"Schumacher 'cannot walk', court hears","Michael Schumacher ""cannot walk"" following ski accident",33,2,0.0606060606061,0.0645681072685,3162,0.00189753320683
+100,'Saddest' polar bear offered new home,'World's saddest' polar bear offered new UK home,50,6,0.12,0.11430547824,18030,0.0077648363838
+101,How Trump 'Rick-rolled' the media,How Trump 'Rick-rolled' the media,41,1,0.0243902439024,0.0338398004197,4134,0.0125786163522
+102, Device explodes near N.J. train station as robot tries to disarm it ,Suspect Ahmad Rahami nabbed in N.Y.-area bombings,718,29,0.0403899721448,0.0408480356285,1454,0.0144429160935
+103,Nation FBI: Traffic stop made in connection to NYC explosion ,FBI: Traffic stop made in connection to NYC bombing,187,3,0.0160427807487,0.018787021067,3339,0.000598981731057
+104,TV 9 things you might have missed at the Emmys ,9 things you might have missed at the Emmys,28,0,0.0,0.0184331705793,4099,0.000243961941937
+105,"Vikings Bradford-led Vikings edge Packers, but AP injured ","Despite Adrian Peterson injury, Sam Bradford gives Vikings reason for hope",128,9,0.0703125,0.0709194716801,2155,0.00046403712297
+106, Winners: Who took home an Emmy Award ,And the winner is ...: Here's who took home an Emmy Award,99,1,0.010101010101,0.0155571065027,2440,0.000819672131148
+107, Off-duty cop hailed as hero in mall stabbing ,Off-duty cop hailed as hero for stopping Minn. mall stabbing suspect,153,12,0.078431372549,0.078523981993,3807,0.0013133701077
+108,PeoplePhotos: Stars come out for 68th annual Emmys red carpet,Photos: Stars come out for 68th annual Emmys red carpet,44,1,0.0227272727273,0.0319006809018,1608,0.00248756218905
+109,"Entertain ThisRanked: The 10 best Emmys jokes, from O.J. to Long Duk Dong","Ranked: The 10 best Emmys jokes, from O.J. to Long Duk Dong",12,3,0.25,0.180319585308,3324,0.000300842358604
+110,WorldU.S. airstrike could upend Syria's cease-fire,U.S. airstrike threatens to derail week-old Syrian cease-fire,60,3,0.05,0.0536931625148,1645,0.00911854103343
+111,'Now THAT's how you shut down London': West End is brought to a standstill by showboating drivers posing next to their vehicles for selfies with passers-by in 'secret supercar' meet ,London's West End brought to a standstill by showboating supercar drivers,52,2,0.0384615384615,0.0442412479572,1326,0.00301659125189
+112,'I was scared': Driver who filmed a Met policeman smashing his car windscreen in a case of mistaken identity reveals his 'terror' ,Driver who filmed Met officer smashing his car reveals his 'terror',22,6,0.272727272727,0.219748649269,389,0.0411311053985
+113,Businessman jailed for living the high life in executive airport lounges for THREE WEEKS after forging fake boarding passes on his laptop,Businessman jailed for living in executive airport lounges for THREE WEEKS,36,1,0.0277777777778,0.0376545969382,365,0.0
+114,Merkel's party makes historic losses in Berlin state elections as mayor warns of 'resurgence of Nazis in Germany' after anti-Islam party makes big wins,Merkel's party suffers HISTORIC losses in Berlin state elections,365,39,0.106849315068,0.106253519815,901,0.00776914539401
+115,'We won't take migrants posing as refugees':Theresa May to tell UN that Britain has a right to control border ,Theresa May to tell UN that Britain has a right to control border,124,4,0.0322580645161,0.0352851477897,1407,0.00284292821606
+116,"Store bedding in a pillowcase, clean radiators with fabric softener and wet wipe the carpet: Women reveal their VERY clever life hacks",Women reveal their VERY clever life hacks for busy mothers,29,0,0.0,0.0179396895133,361,0.0
+117,"Amazing secrets of Europe's oldest mummy finally revealed: Scientists continue to learn details of 5,300-year-old corpse... including how he was killed with an arrow in the back",The amazing secrets of Europe's oldest mummy finally revealed,32,1,0.03125,0.0413870848419,414,0.0024154589372
+118,"Michael Schumacher cannot walk or stand, his lawyer reveals, as the Formula 1 driver's devastating injuries are laid bare in court fight ",Michael Schumacher's lawyer reveals extent of star's injuries,67,3,0.044776119403,0.0487053001091,928,0.00323275862069
+119,'He was as close to death as you can be': Jonny Brownlee helped over the line by his brother Alistair to come second after being hit by heat stroke during triathlon in Mexico ,Jonny Brownlee helped over line by brother Alistair before collapsing,83,6,0.0722891566265,0.0730143727131,15429,6.48130144533e-05
+120,Olivia Colman channels Hollywood glamour in red gown as she cosies up to her Night Manager co-stars Tom Hiddleston and Hugh Laurie at Emmys ,Olivia Colman channels Hollywood glamour in red gown at Emmys,4,0,0.0,0.0542450048308,111,0.0
+121,Harry Potter and the sale of the half-a-million pound house: Iconic 'Privet Drive' on the market in suburban Berkshire complete with cupboard under stairs for one magical boy ,"Harry Potter and the £500,000 house: 'Privet Drive' on the market",252,10,0.0396825396825,0.0409831773618,3693,0.000270782561603
+122,'Breastfeeding is NOT indecent exposure': Mother reveals she was shamed by her own PARENTS for feeding her child in public ,Mother was shamed by her PARENTS for breastfeeding feeding in public,9,0,0.0,0.0386154556832,529,0.0396975425331
+123,'She told him that she loved him': Real life Fault in Our Stars husband dies as his wife bids him farewell on FaceTime because she's too sick to be by his side,Husband from real life 'Fault in our Stars' couple passes away,43,9,0.209302325581,0.188305293385,8891,0.000562366437971
+124,Will he EVER get justice? Revealed: Disgraceful delays and stonewalling mean 'Marine A' is STILL behind bars a year after Mail readers rallied to help,'Marine A' is STILL behind bars a year after Mail readers rallied to his cause,106,17,0.160377358491,0.154521993548,264,0.166666666667
+125,"'I'm not the party girl people think I am': PIPPA MIDDLETON on wooing her fiance, the trials of being a royal in-law and the inspiration behind her new book in her first ever major interview",PIPPA MIDDLETON'S first interview on wooing fiance and being a royal-in-law,48,2,0.0416666666667,0.0473815225699,175,0.0114285714286
+126,Putin's party sweeps to victory in Russian elections amid evidence of vote-rigging with CCTV catching one woman stuffing multiple vote slips into the same ballot box ,CCTV captures the moment 'an election official stuffs a ballot box' in Russia,89,3,0.0337078651685,0.0376988312898,234,0.128205128205
+127,"'We will miss her very much': Sound of Music actress Charmian Carr, who played Liesl in the beloved movie, dies at 73 from complications from dementia",'Sound of Music' actress Charmian Carr dies at 73,61,6,0.0983606557377,0.0961757083701,10343,0.00125688871701
+128,Sickening ISIS video shows 'spy' shackled to a pole before he is riddled with bullets from a machine gun and beheaded ,Sickening ISIS video shows 'spy' tied to a pole before he is shot and beheaded,43,4,0.093023255814,0.0909406603442,430,0.306976744186
+129,Five terror suspects questioned as bombs explode at New Jersey train station: FBI stops men in SUV 'packed with weapons' on New York bridge while cops blow up FIVE IEDs hidden in a trashcan,Suspected terrorists seen on video planting IEDs from a duffel bag,445,40,0.0898876404494,0.0897095114857,70,0.0428571428571
+130,United in the face of terror: Touching video shows passer-by hand over a huge Starbucks order to police who are guarding the scene of Manhattan bomb explosion ,Passer-by hands over huge Starbucks order to cops in Manhattan,139,9,0.0647482014388,0.0656252982342,1253,0.000798084596967
+131,"Pictured: The Somali Minnesota mall knifeman, 22, who called himself 'a soldier of the Islamic State' during rampage and stabbed nine people after checking they weren't Muslim",Minnesota mall knifeman called himself 'soldier of the Islamic State',120,11,0.0916666666667,0.0909217216369,1271,0.44846577498
+132,PICTURED: The hero cop who shot dead rampaging Minnesota mall knifeman who stabbed nine after asking if they were Muslim and talking about Allah,Stabbing spree suspect who injured 9 in Minnesota mall is identified,57,3,0.0526315789474,0.0561579097623,310,0.103225806452
+133,America under attack: Unprecedented trio of terror strikes erupt on US soil within 12 hours - are they linked and are more coming?,Unprecedented trio of terror strikes erupt on US soil within 12 hours,59,4,0.0677966101695,0.0693374203739,478,0.169456066946
+134,"'We will NEVER send them to school': British couple take a break from their hammock business and take their breast-fed son Henry, four, and Winston, six, on an indefinite world trip as part of controversial 'global unschooling' trend",Couple take sons travelling around the world nstead of sending them to school,13,0,0.0,0.031381844632,5869,0.00528199011757
+135,From VERY packed public swimming pools to queues that stretch for miles: Astonishing photos reveal the daily crush in China,Astonishing photos reveal how densely populated China is,196,19,0.0969387755102,0.0962553712193,1522,0.00591327201051
+136,Does your iPhone 7 HISS? Users are startled by strange sounds coming from their handsets,iPhone 7 users are reporting HISSING sounds coming from their handsets,23,1,0.0434782608696,0.0532672754153,674,0.00148367952522
+137,'Dad doesn't mind. He's happy that I'm happy': Students defend charging 'sugar daddies' £800 a month for their company,Students defend charging 'sugar daddies' £800-a-month to spend time with them,3,0,0.0,0.0590228905356,304,0.0526315789474
+138,How Pablo Escobar is still terrorising Colombia 23 years after his death: Narco kingpin's runaway hippos can't stop breeding and have forced children to flee their village as beasts roam free,Escobar's hippos terrorise village as children run for their lives,43,3,0.0697674418605,0.071467733736,762,0.00262467191601
+139,XL babies are more likely to excel! Children born with big heads have a better chance of a successful future,Children born with big heads have a better chance of a successful future,115,5,0.0434782608696,0.0459663845674,13163,0.000455823140621
+140,'Definition of a supermum right there!' Mother pumps breastmilk DURING a US half-marathon - before carrying on to finish the race,Mother pumps breast milk DURING a half-marathon - before finishing race,4,1,0.25,0.135194711994,302,0.0
+141,"Teenager, 15, is horrifically beaten by an 'animal' all-girl gang who lured her into a trap and set upon her - then uploaded the footage to Snapchat",Teenager is horrifically beaten by 'animal' all-girl gang,104,33,0.317307692308,0.299680496643,2711,0.513463666544
+142,The dolls which became a tragic memento of two lost girls butchered by the Nazis: Family give away toys dropped by Jewish sisters as they were abducted in France before being killed in Auschwitz,Dolls snatched from Jewish sisters sent to Auschwitz donated to Holocaust museum,33,1,0.030303030303,0.040386269052,2077,0.0101107366394
+143,'No wonder my pizza was late': Domino's delivery driver sent toppling off his bike after doing a wheelie in the middle of a street,Domino's driver sent toppling off his bike after doing a wheelie,3,1,0.333333333333,0.147102626535,722,0.00277008310249
+144,The golf club cat burglar: Merlin is ruining players' rounds by running on the fairway and stealing all the balls ,This golf club cat burglar is causes fury on the fairway,30,2,0.0666666666667,0.069618626346,190,0.0
+145,Did fertility doctor use own sperm?,"Fertility doctor used own sperm 'around 50 times,' papers say",1237,13,0.0105092966855,0.0109768906116,1517,0.18391562294
+146,"Two girls... and two very different worlds: The worse place in Britain to be a girl is Middlesbrough - and the best is Surrey, a study reveals. So what does that mean in raw human terms? ",Two girls... and two VERY different worlds,27,11,0.407407407407,0.330099064215,185,0.0432432432432
+147,Capturing disappearing cultures: Stunning images show the lives of Kenyan tribe as their customs die out ,Stunning images show the lives of Kenyan tribe as customs die out,78,2,0.025641025641,0.0309207171662,485,0.0
+148,The RIGHT way to peel garlic revealed with a very simple 20-second hack (and we've all been doing it wrong),The RIGHT way to peel garlic revealed with a very simple 20-second hack,5,0,0.0,0.0501827277174,67,0.0
+149,Do not adjust your screen! New cafe in Germany where everything is upside down becomes a huge hit with visitors,There is a cafe in Germany where everything is upside down,33,0,0.0,0.0162044308354,956,0.0
+150,New Doctor’s Note Describes Donald Trump’s Health as ‘Excellent’,A Doctor's Assessment of Whether Donald Trump's Health Is 'Excellent',167,7,0.0419161676647,0.0437408667812,289,0.152249134948
+151,Sacked chancellor positions himself as May's centrist pro-EU rival,George Osborne poses as centrist pro-European rival to Theresa May,121,22,0.181818181818,0.175257213111,817,0.0220318237454
+152,A Political Backlash Where Social Fabric Frays,"In Places With Fraying Social Fabric, a Political Backlash Rises",295,55,0.186440677966,0.183515717345,91,0.0
+153,Get Your Children Good and Dirty,Get Your Children Good and Dirty,878,43,0.0489749430524,0.0492694110384,2215,0.0
+154,How Menswear is Elevating the L.L.Bean Look,How Menswear is Elevating the L.L.Bean Look,16,8,0.5,0.356012941656,48,0.0
+155,Travel Back to an Early Clinton Scandal,Travel Back to an Early Clinton Scandal,761,64,0.084099868594,0.0840577447987,2300,0.0334782608696
+156,Brazil soap legend drowns on set,Brazil TV star Domingos Montagner drowns on set,87,14,0.16091954023,0.153849944552,973,0.00411099691675
+157,US regulators order Samsung recall,US regulators order recall of 1m Galaxy Note 7 phones,40,3,0.075,0.0759018257848,2436,0.00246305418719
+158,Sport Swimmer's remarkable family story,Ahmed Kelly's remarkable journey to the Paralympics,23,0,0.0,0.0213727561501,9606,0.000104101603165
+159,Saris not skirts,Why did a boys' school tell women what to wear?,68,12,0.176470588235,0.165940428548,2500,0.094
+160,Revealed: The four key Alzheimer's symptoms we often overlook,Four key symptoms of Alzheimer's we often overlook,92,1,0.0108695652174,0.016642269543,238,0.0
+161,"Have YOU been saying Alnwick, Llanelli and Bicester wrong? The 20 British place names most commonly mispronounced",The 20 British place names most commonly mispronounced,59,3,0.0508474576271,0.0544903487447,57,0.0
+162,How today's digitally-equipped supertanks which can take out targets TWO MILES away owe it all to their ancestors which first rolled into battle at walking pace 100 years ago,How today's supertanks owe it all to ancestors which served 100 years ago,17,2,0.117647058824,0.105315769767,185,0.0
+163,"The jaw-dropping images taken by a 16-year-old: Teenager has 329,000 Instagram followers and is already earning money from his photographs",The jaw-dropping images taken by a 16-year-old,47,2,0.0425531914894,0.0482375055097,2123,0.0
+164,Ahmad Khan Rahami Is Arrested in Manhattan and New Jersey Bombings,Ahmad Khan Rahami Is Arrested in Manhattan and New Jersey Bombings,1618,103,0.0636588380717,0.0637439013718,284,0.0528169014085
+165,"After Bombings, Hillary Clinton and Donald Trump Clash Over Terrorism","After Bombings, Hillary Clinton and Donald Trump Clash Over Terrorism",443,25,0.0564334085779,0.0568736390957,397,0.0100755667506
+166,"Chris Christie Knew About Bridge Lane Closings as They Happened, Prosecutors Say","Chris Christie Knew About Bridge Lane Closings as They Happened, Prosecutors Say",1462,125,0.0854993160055,0.0854693244692,5741,0.198920048772
+167,"Ahmad Rahami: Fixture in Family’s Business and, Lately, a ‘Completely Different Person’","Ahmad Rahami: Fixture in Family's Business and, Lately, a 'Completely Different Person'",279,14,0.0501792114695,0.0510525021819,199,0.100502512563
+168,U.S. Signals Backing for Self-Driving Cars,U.S. Signals Backing for Self-Driving Cars,1485,20,0.013468013468,0.013841404312,50,0.0
+169,Aid Convoy Is Hit in Syria as Cease-Fire Falters and Bombings Resume,Aid Convoy Is Hit in Syria as Cease-Fire Falters and Bombings Resume,450,19,0.0422222222222,0.0429147240253,262,0.251908396947
+170,Cellphone Alerts Used in New York to Search for Bombing Suspect,Cellphone Alerts Used in Search of Manhattan Bombing Suspect,460,15,0.0326086956522,0.0334578743031,1218,0.00574712643678
+171,Laser Scans Unveil a Network of Ancient Cities in Cambodia,Laser Scans Unveil a Network of Ancient Cities in Cambodia,401,7,0.0174563591022,0.0187371313852,1078,0.0
+172,Friends Say Minnesota Attacker Was ‘Normal American Kid’,"Minnesota Attacker Worked as a Security Guard, Officials Say",165,11,0.0666666666667,0.0673197693666,172,0.0813953488372
+173,Video Released in Terence Crutcher’s Killing by Tulsa Police,Video Released in Terence Crutcher's Killing by Tulsa Police,672,113,0.168154761905,0.167075105342,3506,0.480319452367
+174,White Voters Keep Trump’s Hopes Alive in Must-Win Florida,White Voters Keep Trump's Hopes Alive in Must-Win Florida,344,41,0.119186046512,0.118262271614,957,0.334378265413
+175,"Blazes in Southeast Asia May Have Led to Deaths of Over 100,000, Study Says","Indonesian Fires and Haze in 2015 May Have Killed Over 100,000, Study Says",357,18,0.0504201680672,0.0511015090676,149,0.10067114094
+176,Rome Mayor’s Troubled First 3 Months Raise Doubts on Her Five Star Movement,Rome Mayor's Troubled First 3 Months Raise Doubts on Her Five Star Movement,429,16,0.037296037296,0.0381158793398,213,0.0
+177,Flaws in Fingerprint Records Allowed Hundreds to Become U.S. Citizens,Flaws in Fingerprint Records Allowed Hundreds to Become U.S. Citizens,341,26,0.0762463343109,0.0763413533838,232,0.0818965517241
+178,"Hillary Clinton Tells College Students, ‘I Need You’","Hillary Clinton Tells College Students, 'I Need You'",177,10,0.0564971751412,0.0575663052925,3748,0.00533617929562
+179,"Another Slip for the Libertarian Nominee, Gary Johnson: ‘Nobody Got Hurt’","Another Slip for the Libertarian Nominee, Gary Johnson: 'Nobody Got Hurt'",169,13,0.0769230769231,0.0770783723496,1084,0.0664206642066
+180,Op-Ed Columnist: Dignity and Sadness in the Working Class,Dignity and Sadness in the Working Class,211,23,0.109004739336,0.1079085757,114,0.0
+181,"Op-Ed Contributors: Our Immigrants, Our Strength","Our Immigrants, Our Strength",690,52,0.0753623188406,0.0754204265612,946,0.00317124735729
+182,"Pipe Bombs Found Near Train Station in Elizabeth, N.J.","Pipe Bombs Found Near Train Station in Elizabeth, N.J.",246,14,0.0569105691057,0.0576760932505,556,0.104316546763
+183,Race wage gap worst in nearly 40 years,Wage gap between blacks and whites is worst in nearly 40 years,387,17,0.0439276485788,0.0446944676775,951,0.181913774974
+184,Could It Be Sepsis? C.D.C. Wants More People to Ask,Could It Be Sepsis? C.D.C. Wants More People to Ask,212,10,0.0471698113208,0.0484227152696,608,0.00493421052632
+185,What we know about Rahami,Who is Ahmad Khan Rahami?,1184,24,0.0202702702703,0.0206902656025,1220,0.359016393443
+186,Bar owner spotted Rahami,Bar owner found bombing suspect after seeing him on CNN,817,6,0.00734394124847,0.00808151744143,2431,0.00987248046072
+187,UN stops aid to Syria after attack,UN aid convoy hit by warplanes in Syria,836,23,0.0275119617225,0.0280334145762,1148,0.172473867596
+188,George H.W. Bush for Hillary? ,George H.W. Bush for Hillary?,660,18,0.0272727272727,0.0279344863152,8762,0.0126683405615
+189,Trump Jr. likens refugees to Skittles,Trump Jr. likens Syrian refugees to Skittles,950,50,0.0526315789474,0.0528720513465,4981,0.447299739008
+190,"White, working class and worried","White, working class, and worried",801,27,0.0337078651685,0.034187919917,1714,0.00758459743291
+191,"BOMB SUSPECT GETS $5.2M BAIL<br/>Man eyed in NY/NJ blasts charged<br/>in gunfight, awaits federal charges",Bomb Suspect in NY/NJ Blasts Gets $5.2M Bail,327,10,0.0305810397554,0.0318175068549,3171,0.338063702302
+192,"WRONG MESSAGE?<br/> Trump Jr draws outrage for refugees, Skittles tweet",Trump Jr. Draws Outrage After Likening Syrian Refugees To Poisoned Skittles,288,34,0.118055555556,0.116989086105,1866,0.0953912111468
+193,Suspect’s family life shadowed by financial troubles and violence,Bomb suspect's family life shadowed by financial troubles and violence,32,6,0.1875,0.165292537536,76,0.0789473684211
+194,An unassuming life before a rampage in a Minnesota mall,An unassuming life before a suspect's rampage in a Minnesota mall,78,16,0.205128205128,0.193045291721,80,0.075
+195,Trump claims ‘open immigration system’ made attacks possible,Trump's claim linking New York bombing to an 'extremely open immigration system',125,8,0.064,0.0650160460091,195,0.415384615385
+196,"Black man fatally shot by Tulsa police was unarmed, chief says, as ‘disturbing’ video is released","Man fatally shot by Tulsa police was unarmed, chief says as 'disturbing' video is released",282,83,0.294326241135,0.28816649685,5588,0.392627057981
+197,"For $805 a night at the Trump hotel, you deserve what you get","For $805 a night at the Trump Hotel, you deserve what you get",55,7,0.127272727273,0.121068697773,228,0.0526315789474
+198,U.N. suspends aid convoys in Syria after bombing,U.N. suspends aid convoys in Syria after deadly attack on relief shipment,182,18,0.0989010989011,0.0980813185879,215,0.153488372093
+199,Wells Fargo CEO to apologize when he takes hot seat before Senate committee,Wells Fargo CEO pummeled on Capitol Hill over multiyear scam,135,19,0.140740740741,0.137214146701,4386,0.0946192430461
+200,You’re at the final exam and never attended class. It’s that dream again.,You're at the final exam and never attended class. It's that dream again.,62,13,0.209677419355,0.194306420986,2486,0.000804505229284
+201,The top 36 must-see items at the African American museum,The top 36 must-see items at the African American museum,18,1,0.0555555555556,0.0633736332479,194,0.0
+202,‘You can sleep tonight knowing the Klan is awake.’ Fliers like these are showing up on lawns across the U.S.,'You can sleep tonight knowing the Klan is awake.' Fliers like these are showing up on lawns across the U.S.,412,52,0.126213592233,0.125299602317,2150,0.58
+203,UN suspends all aid convoy movements in Syria after airstrike,"Syrian ceasefire not dead, says US after aid convoy bombing",135,22,0.162962962963,0.158141456854,54,0.166666666667
+204,Theresa May dismisses threat of veto,Theresa May dismisses threat of Brexit deal veto,81,5,0.0617283950617,0.0634571343752,827,0.0858524788392
+205,"Incentivised reviews are warping product star ratings, report says","Incentivised reviews are warping Amazon's product star ratings, report says",62,7,0.112903225806,0.109022634663,40,0.0
+206,Gun nut? I kind of take it as a term of endearment,Meet America's gun super-owners – with an average of 17 firearms each,37,2,0.0540540540541,0.058873435681,86,0.046511627907
+207,"With Facebook's flaws exposed, his silence is deafening","With Facebook's flaws in the spotlight, Mark Zuckerberg's silence is deafening",107,6,0.0560747663551,0.0578232667998,283,0.0247349823322
+208,Could the long war soon be over?,Man v rat: could the long war soon be over?,295,47,0.159322033898,0.157143831156,307,0.0
+209,The secrets of Europe’s top education system,The secrets of Europe's top education system,316,19,0.0601265822785,0.060644070843,6648,0.000150421179302
+210,If someone is looking for conflict I won’t shy away from it – ever,Joey Barton: 'If someone is looking for conflict I won't shy away from it – ever' | Donald McRae,78,14,0.179487179487,0.169884638213,63,0.0
+211,Baron's daughter killed in Philippines,British Baron's daughter killed amid Philippines drug war,15,3,0.2,0.157155509297,5381,0.0135662516261
+212,"Get serious, Labour rebels, and deal with the Brexit catastrophe","Get serious, Labour rebels, and deal with the Brexit catastrophe",68,8,0.117647058824,0.113552418827,201,0.0
+213,"Yes, I'll get gender surgery. But I may still be punished for my suicide attempt","Yes, I'll get gender surgery. But I may still be punished for my suicide attempt",82,12,0.146341463415,0.140228420966,66,0.0151515151515
+214,Corbyn victory? It’s a strangely liberating feeling,Corbyn victory? It's a strangely liberating feeling,54,15,0.277777777778,0.251311400087,1240,0.113709677419
+215,Loneliness will be the next great moneyspinner,Loneliness will be the next great moneyspinner,88,15,0.170454545455,0.162631684497,354,0.00282485875706
+216,"Allow failing schools, not grammars, first choice of the brightest pupils","Allow failing schools, not grammars, first choice of the brightest pupils",23,0,0.0,0.0213727561501,223,0.0538116591928
+217,French hitchhiker 'goes berserk' after four days stuck without a lift,French hitchhiker 'goes berserk' in New Zealand after four days stuck without a lift,142,36,0.253521126761,0.243892854284,5122,0.00136665365092
+218,Inside houseboats on the river Thames,Inside houseboats on the river Thames – in pictures,68,2,0.0294117647059,0.0349704042449,1142,0.0
+219,"George H W Bush backing Clinton, claims Kennedy","George H W Bush 'voting for Hillary', claims member of Kennedy family",353,29,0.0821529745042,0.0821082952539,533,0.00375234521576
+220,Animal portraits,'Ordinary Creatures' – animal portraits,33,2,0.0606060606061,0.0645681072685,527,0.0
+221,2016 Woodland Trust tree of the year shortlist,2016 Woodland Trust tree of the year shortlist - in pictures,44,2,0.0454545454545,0.0510016556309,152,0.0
+222,How Police Tracked Down Bombing Suspect,Manhunt Snares New York City Bomb Suspect,77,6,0.0779220779221,0.0781469918827,126,0.015873015873
+223,"Suspect Ahmad Khan Rahami Known as Quiet, Reserved","Ahmad Khan Rahami, Suspect in New York Bombing, Known as Reserved",20,2,0.1,0.0941725602964,86,0.0697674418605
+224,Death Toll Rises in Syria Aid Convoy Attack,Death Toll Rises in Syria Aid Convoy Attack,30,1,0.0333333333333,0.0435452840974,69,0.0
+225,Refugee Crisis Spurs Companies to Act,Refugee Crisis Spurs Companies to Act,49,4,0.0816326530612,0.0814269358677,105,0.00952380952381
+226,Is China Building a Road to Ruin?,Is China Building a Road to Ruin?,109,15,0.137614678899,0.13352927372,308,0.00649350649351
+227,"Trump, Clinton Will Face ‘Captain Crunch’ This Fall—if Only He Fills Out His Paperwork","Trump and Clinton May Face 'Satan' This Fall, if Only He Completes His Paperwork",72,7,0.0972222222222,0.0954547329204,145,0.00689655172414
+228,Suburban Women May Be Clinton’s Lifeline,Suburban Women May Be Hillary Clinton's Lifeline,49,1,0.0204081632653,0.0291196156852,29,0.0
+229,U.S. to Issue Driverless Car Guidelines,Obama Administration Rolls Out Recommendations for Driverless Cars,117,6,0.0512820512821,0.053210444951,84,0.0
+230,Freddie Mac Starts Pilot Program With Looser Standards,Freddie Mac Starts Pilot Program With Looser Standards,75,7,0.0933333333333,0.0920191877201,739,0.236806495264
+231,"For Obama in Final U.N. Address, Some Unfinished Business","For Obama in Final U.N. Address, Some Unfinished Business",13,1,0.0769230769231,0.0782129056877,105,0.0190476190476
+232,Florida Declares Miami’s Wynwood Neighborhood Zika Free,Florida Declares Miami's Wynwood Neighborhood Zika Free,14,1,0.0714285714286,0.0747139711434,39,0.0
+233,Prosecutors Say Christie Was Told of Traffic Jams,Prosecutors: Bridge Plotters 'Bragged' to Chris Christie About Closures and Ensuing Havoc,16,5,0.3125,0.232826599781,64,0.078125
+234,"U.S., China Target Firm Over North Korea Arms Program","U.S., China Move Against Firm Suspected of Aiding North Korean Nuclear Program",147,4,0.0272108843537,0.0300611960477,91,0.0
+235,"Clinton, Trump Clash Over National Security","Donald Trump, Hillary Clinton Clash Over National Security",24,3,0.125,0.113438255326,46,0.0217391304348
+236,"Billionaires Adelson, Ricketts Plan Donations to Trump Campaign","Billionaires Sheldon Adelson, Joe Ricketts Plan Donations to Back Donald Trump",37,6,0.162162162162,0.14706978878,156,0.0576923076923
+237,Markets Tighten Ahead of Fed,Markets Tighten Ahead of Fed,89,2,0.0224719101124,0.0274269710174,120,0.0
+238,GoPro Offers New Cameras and a Drone,"GoPro Introduces New Cameras, Debuts Drone",52,1,0.0192307692308,0.0276721591941,142,0.0
+239,Samsung Says New Explosions Not Due to Batteries,Samsung Says Phone Explosions in China Not Caused by Batteries,102,5,0.0490196078431,0.0513813810648,61,0.0
+240,Should Wells Fargo Bankers Give Back Their Pay?,Should Wells Fargo Bankers Give Back Their Pay?,26,2,0.0769230769231,0.0777248084765,243,0.0123456790123
+241,Hollywood Under Pressure to Put More Chinese Actors in the Spotlight,Hollywood Under Pressure to Put More Chinese Actors in the Spotlight,100,5,0.05,0.0523297851787,1817,0.010456796918
+242,Emmy Awards Viewership Hits New Low,Emmy Awards Viewership Hits New Low,18,0,0.0,0.0254277921893,70,0.0
+243,UN suspends all aid convoys in Syria,UN suspends all aid to Syria after convoy hit,234,33,0.141025641026,0.138929821265,8799,0.232185475622
+244,N Korea rocket engine test 'a success',North Korea completes 'successful' rocket engine test,50,0,0.0,0.011483616555,2829,0.0491339696006
+245,Why Trump Jr Skittles tweet sparked storm,Donald Trump's son compares Syrian refugees to Skittles,125,35,0.28,0.267485651479,8822,0.205282248923
+246,George HW Bush 'to vote for Clinton',Former President George HW Bush 'to vote for Clinton',107,7,0.0654205607477,0.0664922825411,18133,0.00827221088623
+247,Jim Carrey slates 'heartless' legal case,Jim Carrey sued over ex-girlfriend's death,55,4,0.0727272727273,0.0737152423046,1617,0.0105132962276
+248,British activist found guilty in Thailand,Thailand court finds UK activist guilty of defamation,41,10,0.243902439024,0.216198245113,988,0.0374493927126
+249,Will NYC blasts affect race for White House?,Could New York blasts affect race for White House?,32,3,0.09375,0.0909492659195,1653,0.00665456745312
+250,Video 2:53  Divided sidewalk,The only abortion clinic in North Dakota,24,2,0.0833333333333,0.0825295542234,2157,0.220213259156
+251,Be-all-and-end-all?,Why many Chinese no longer believe in marriage,13,2,0.153846153846,0.125043966743,2048,0.0009765625
+252,Orange secret,Could turmeric really boost your health?,230,8,0.0347826086957,0.0363750185012,3391,0.0002948982601
+253,News Tulsa shooting: Video shows unarmed man shot by officer ,Police-involved shooting of black man in Tulsa prompts investigation,417,61,0.146282973621,0.14498559281,3129,0.0594439117929
+254,"OnPolitics George H.W. Bush to vote for Clinton, reports say ","George H.W. Bush to vote for Clinton, reports say",456,13,0.0285087719298,0.0294390198983,6502,0.0179944632421
+255,Movies Jim Carrey responds to wrongful death lawsuit ,Jim Carrey sued for wrongful death of girlfriend,142,6,0.0422535211268,0.0443628793272,1198,0.00751252086811
+256, Trump Jr. compares refugees to poisoned Skittles ,Donald Trump Jr. compares Syrian refugees to poisoned Skittles,147,13,0.0884353741497,0.0879936451806,3753,0.0583533173461
+257, Kmart to close 64 more stores across the U.S. ,Kmart to close 64 more stores across the U.S.,117,5,0.042735042735,0.0452329955537,3610,0.00193905817175
+258, 'What should I do?': Driver asks 911 before shooting ,'What should I do?': Driver asks 911 before she was shot,71,3,0.0422535211268,0.0462501901181,1280,0.02890625
+259, The Bears already look like a 5-alarm dumpster fire ,It's shaping as another season to forget for Chicago Bears,65,5,0.0769230769231,0.0772985494041,2885,0.00242634315425
+260," Ryan Lochte, 'DWTS' embrace the controversy ","Ryan Lochte, 'Dancing with the Stars' embrace the controversy",38,0,0.0,0.0144565063471,2613,0.00153080750096
+261,NationTerence Crutcher's death by police prompts outcry,"1 day, 2 shootings in spotlight: Terence Crutcher's death prompts outcry",107,11,0.102803738318,0.101168345506,3137,0.0321963659547
+262,MoneyToo soon: Holiday displays show up at some stores,Too soon: Holiday displays show up at some stores,36,1,0.0277777777778,0.0376545969382,2755,0.0119782214156
+263,NewsGoogle to help Clooneys educate Syrian refugees,USA TODAY Money and Tech,132,0,0.0,0.00477443175181,1822,0.00109769484083
+264,NewsFeds unveil plan to ensure safety of self-driving cars,Feds unveil plan to ensure safety of self-driving cars,222,1,0.0045045045045,0.00725019841344,2351,0.0
+265,EXCLUSIVE: Doctor planning world's first head transplant says he is already preparing for his 'Frankenstein' surgery by REANIMATING human corpses ,Head transplant surgeon plans 'Frankenstein' test to reanimate corpses,183,12,0.0655737704918,0.0662131472485,160,0.0125
+266,"'Become French, speak French, live like the French': Nicolas Sarkozy promises to lead a 'merciless war' on Islamist terrorism as he declares migrants must assimilate and ditch the 'medieval' burkini",Nicolas Sarkozy promises to lead a 'merciless war' on Islamist terrorism,91,10,0.10989010989,0.107395549049,2293,0.0148277365896
+267,"You've got no choice but to do trade deals with us, May tell posturing EU leaders ","You've got no choice but to do trade deals with us, May tells EU",143,8,0.0559440559441,0.0572838826023,816,0.00245098039216
+268,Do YOU have a drink problem? The tell-tale signs you need to cut back on booze ,The tell-tale signs you might have a drink problem,18,1,0.0555555555556,0.0633736332479,132,0.0
+269,"Teacher, 30, is struck off after 'having sex with a 17-year-old female pupil' in his marital bed less than a year after marrying his BBC worker wife ",Newlywed wife 'discovered cheating teacher husband was sleeping with pupil',15,0,0.0,0.028694277691,42,0.0238095238095
+270,Mother-of-two said she was left humiliated and looking like a CLOWN thanks to 'horrifying' Boots makeover,Mother says she was left looking like a CLOWN after 'horrifying' Boots makeover,16,3,0.1875,0.150702371865,1893,0.0095087163233
+271,"'I used to be a chav, now I have expensive tastes': Shopaholic, 30, lavishes £25,000 a year on luxury items - including £450 lip fillers, £300 hair extensions, and £35 fake tan","Shopaholic, 30, lavishes tens of thousands a year on luxury items",16,2,0.125,0.109640257907,342,0.0614035087719
+272,It's agony not being able to 'fix' my daughter's depression: A mother's utterly heart-rending account of her child's mental illness,It's agony not being able to 'fix' my daughter's depression,13,1,0.0769230769231,0.0782129056877,200,0.0
+273,The blond boy executioner: Horrific ISIS propaganda video shows angelic-looking child forced to shoot a prisoner in the head in Iraq,Horrific ISIS propaganda video shows blonde boy executing prisoner,54,3,0.0555555555556,0.0588598292494,524,0.328244274809
+274,Are these the most epic sexting fails EVER? Very awkward - but hilarious - attempts at sending dirty messages will leave you cringing ,Are these the most epic sexting fails EVER?,27,3,0.111111111111,0.103812158401,175,0.0171428571429
+275,'Her brother did it': US crime show claims JonBenet Ramsey WAS killed by her 'violent' older sibling and parents covered it up after children 'clashed over a midnight snack of fresh pineapple',Crime show claims JonBenet Ramsey WAS killed by her older brother,104,4,0.0384615384615,0.0415662507638,739,0.0933694181326
+276,Jim Carrey attacks his tragic girlfriend's 'heartless' husband for 'trying to profit from her death' by suing the star for providing drugs which she used to kill herself,Jim Carrey attacks girlfriend's 'heartless' husband for 'trying to profit from her death',20,1,0.05,0.0589033583039,197,0.0507614213198
+277,Latvian father flees country while mother is jailed for starving their newborn son so severely he was three weeks from death because she thought formula milk was 'poisonous' ,Couple starved their newborn son so severely he was three weeks from death,7,0,0.0,0.0436456878738,1623,0.630930375847
+278,The sad decline of Sin City: The impoverished dark side of Las Vegas away from the glitz and glamour of the strip,Impoverished dark-side of Las Vegas captured in photo series,173,12,0.0693641618497,0.0698642045651,379,0.00263852242744
+279,"Prince William tells of 'very dark, sad moments' in air ambulance race to save lives which leaves crew so traumatised they have to give each other counselling","Prince William tells of 'very dark, sad moments' in air ambulance race to save lives",13,1,0.0769230769231,0.0782129056877,318,0.0
+280,"The house that porn built: David Sullivan opens the doors of his £7.5million mansion with 14 bedrooms, a bowling alley and TWO swimming pools ",Inside the house that porn built,10,1,0.1,0.0909974233549,337,0.00296735905045
+281,The playground scrap that turned into a mass brawl: Up to 100 children as young as 11 are filmed battering each other with sticks and beating a youngster lying on the ground in terrifying 'turf war' ,Mass brawl: Shocking footage shows '100 youths' fighting with BATS,61,4,0.0655737704918,0.0673378797266,370,0.162162162162
+282,Thousands of migrants flee a fire at one of Greece's main refugee camps after 'asylum seekers started blaze which damaged tents and prefab housing units' ,"A BOAT will house 1,000 migrants off Lesbos coast after camp fire",66,5,0.0757575757576,0.0762589385428,184,0.179347826087
+283,Chicken shop worker terrorist is held on $5.2m bail as police reveal he left note next to Manhattan bomb praising the Boston bombings and video shows him strolling with deadly suitcase of explosives,"Moment New York bomber, 28, drags explosive through streets",144,12,0.0833333333333,0.0831626449543,662,0.26586102719
+284,Furious Trump says Manhattan bomber should be stripped of his constitutional rights and bemoans the 'amazing' hospital care and 'outstanding lawyer' he will get,Donald Trump says suspected Ny and NJ bomber will probably 'get room service',60,9,0.15,0.141472328722,504,0.0634920634921
+285,He's with her! Former president George H.W. Bush 'plans to vote for Hillary Clinton',Former president George H.W. Bush 'plans to vote for Hillary Clinton',177,29,0.16384180791,0.160073220233,1562,0.0371318822023
+286,Pictured: The hero cops injured during final shootout with New York and New Jersey bomber as bar owner reveals how he spotted the terrorist asleep in his doorway,Pictured: The three hero cops injured during shootout with NYC and NJ bomber,20,2,0.1,0.0941725602964,43,0.0
+287,EXCLUSIVE: Terror suspect was arrested for STABBING but a grand jury let him walk despite cop's warning he was 'a danger' - as it's revealed he was a deadbeat dad who hated America and gays,Terrorist was arrested for STABBING walked free despite cop's warning,202,21,0.10396039604,0.103017648968,722,0.354570637119
+288,Are YOU easy prey for pickpockets? Watch a professional demonstrate the seven ways victims are targeted - and reveal how you can avoid being robbed,Watch a professional pickpocket show the seven ways that victims are targeted,30,3,0.1,0.0956919685946,112,0.0267857142857
+289,Saudi Airlines jet is 'isolated' at Manila airport over hijack fears after pilot TWICE sent out a distress call 'by mistake',Saudi Airlines jet is 'isolated' as pilot is told plane is 'under threat',16,6,0.375,0.27388871374,469,0.0383795309168
+290,Iraq inquiry major - 'I want to face war crimes trial':. Decorated officer says he'll get more justice in a foreign court,Iraq inquiry major: I want to face war crimes trial,10,2,0.2,0.145483391515,105,0.00952380952381
+291,Fury as London's Labour mayor Sadiq Khan allows David Miliband migrant charity to take over Parliament Square with 'life-jacket graveyard' protest,Fury as Sadiq Khan allows migrant charity to take over Parliament Square,147,17,0.115646258503,0.113741400351,1419,0.37843551797
+292,"Menace of the Bambi thugs: Yes, they look heart-meltingly cute. But behind the doe eyes, muntjac deer are a breeding and garden-destroying machine - and now they're even killing people ",Muntjac deer are a breeding and garden-destroying machine,14,1,0.0714285714286,0.0747139711434,112,0.0
+293,Is THIS the secret to a stress-free life? Teacher is hailed as a hero after his list of 101 tips - including buying yourself flowers and practising a 'monster smile' - goes viral ,Teacher is hailed as a hero after his list of 101 tips to a stress-free life goes viral,101,1,0.00990099009901,0.0152725773755,525,0.00190476190476
+294,'This is my job': Amal Clooney fights back tears speaking about risking her life to take on ISIS and how George feels about her dangerous new case,Amal Clooney fights back tears speaking about risking her life to take on ISIS,141,11,0.0780141843972,0.0781375680533,948,0.00210970464135
+295,"Mother left terrified son, 2, alone in car until after MIDNIGHT - and told police she had gone clubbing with her work friends","Terrified boy, 2, left alone in car until after MIDNIGHT while mum went clubbing",20,0,0.0,0.0236341563114,7682,0.565738089039
+296,"Human skeleton discovered at Antikythera shipwreck after more than 2,000 years at the bottom of the sea",Human skeleton discovered at ancient Antikythera shipwreck,22,0,0.0,0.0220768878757,213,0.00469483568075
+297,Four British tourists paraded on TV after 'being caught changing FORGED currency at Thai exchange bureaus',Four Brits caught changing FORGED currency at Thai exchange bureaus,11,0,0.0,0.0346248848223,97,0.0103092783505
+298,German grocery chain Lidl prepares to open in the U.S. from 2018 after crippling British rivals with its rock bottom prices,German grocery chain Lidl prepares to open in the U.S. from 2018,46,1,0.0217391304348,0.0307268551349,1204,0.0
+299,'Smitten' elephant tramples his owner to death in front of tourists before running off into the Cambodian jungle after a female,'Smitten' elephant tramples owner to death to chase a female,14,2,0.142857142857,0.119449996657,466,0.0214592274678
+300,iPooch: Son of China's richest man 'buys eight iPhone 7s for his DOG' ,Son of China's richest man buys eight iPhone 7s for his DOG,104,8,0.0769230769231,0.0771682157126,14895,0.0866062437059
+301,Teacher installs bike pedals under her students' desks to stop them fidgeting and help them channel their energy ,Teacher installs bike pedals under her students' desks to stop them fidgeting,25,1,0.04,0.0500731568816,4025,0.000496894409938
+302,Ahmad Khan Rahami Charged in New York and New Jersey Bombings,"Ahmad Khan Rahami's Father Told Police in 2014 His Son Was a Terrorist, Officials Say",1333,104,0.0780195048762,0.078033209929,1961,0.142274349822
+303,Bombing Case Points to Gaps in Trump’s and Clinton’s Antiterrorism Plans,Bombing Case Points to Gaps in Trump's and Clinton's Antiterrorism Plans,151,8,0.0529801324503,0.0544080656639,50,0.0
+304,U.S. Officials Say Russia Probably Attacked U.N. Humanitarian Convoy,U.S. Officials Say Russia Probably Attacked U.N. Humanitarian Convoy,639,37,0.0579029733959,0.0581909517169,791,0.332490518331
+305,Donald Trump Jr.’s Skittles Post on Twitter Fits a Pattern,Donald Trump Jr.'s Skittles Post on Twitter Fits a Pattern,366,44,0.120218579235,0.119326052732,843,0.517200474496
+306,How Bad Off Is Oil-Rich Venezuela? It’s Buying U.S. Oil,Venezuela Crises Compound as Oil Industry Falls Into Disarray,566,49,0.0865724381625,0.0864800519685,193,0.0
+307,"Obama, in Farewell to U.N., Paints Stark Choices for Unsettled World","Obama, in Farewell to U.N., Calls for Global 'Course Correction'",327,5,0.0152905198777,0.0169078600242,2639,0.00492610837438
+308,Elizabeth Warren Accuses Wells Fargo Chief of ‘Gutless Leadership’,Senators Denounce Wells Fargo Chief Over Scandal,376,29,0.0771276595745,0.0771948717212,1304,0.0230061349693
+309,"Man Killed by Tulsa Police Posed No Threat, His Family Says","Man Killed by Tulsa Police Posed No Threat, His Family Says",128,9,0.0703125,0.0709194716801,2693,0.213516524322
+310,Books of The Times: Bruce Springsteen’s Memoir: Riding Shotgun With the Boss,Bruce Springsteen's Memoir: Riding Shotgun With the Boss,479,11,0.0229645093946,0.0239458854774,4266,0.0
+311,Samantha Bee Condemns NBC and Jimmy Fallon’s Trump Interview,Samantha Bee Condemns NBC and Jimmy Fallon's Trump Interview,437,37,0.0846681922197,0.084584762986,25653,0.0412037578451
+312,The Interpreter: Straightforward Answers to Basic Questions About Syria’s War,Straightforward Answers to Basic Questions About Syria's War,462,23,0.0497835497835,0.0503240968248,456,0.0635964912281
+313,Greeks Appeal for Aid After Fire Damages Refugee Camp,Greeks Appeal for Aid After Fire Damages Refugee Camp,310,3,0.00967741935484,0.0115284085942,131,0.0229007633588
+314,What in the World: A Site to Help Get Wedding Bells Ringing and Ringing and Ringing,A Site to Help Get Wedding Bells Ringing and Ringing and Ringing,210,1,0.0047619047619,0.00764864607307,196,0.132653061224
+315,"Donald Trump Used Over $250,000 From Charity for Business Disputes, Report Says","Donald Trump Used Over $250,000 From Charity for Business Disputes, Report Says",312,25,0.0801282051282,0.0801306043817,2398,0.359466221852
+316,"Sheldon Adelson Focuses on Congressional Races, Despite Donald Trump’s Pleas","Sheldon Adelson Focuses on Congressional Races, Despite Donald Trump's Pleas",238,12,0.0504201680672,0.0514306281127,104,0.0480769230769
+317,Protests Erupt in Charlotte After Police Kill a Black Man,Protests Erupt in Charlotte After Police Kill a Black Man,162,11,0.0679012345679,0.0685053011395,1210,0.161983471074
+318,Editorial: Mr. Trump’s Stupid Excuses on Taxes,Mr. Trump's Stupid Excuses on Taxes,849,72,0.0848056537102,0.0847609769705,3034,0.0164798945287
+319,Op-Ed Contributor: Hillary Clinton: My Plan for Helping America’s Poor,Hillary Clinton: My Plan for Helping America's Poor,601,23,0.0382695507488,0.0388446334431,2384,0.00209731543624
+320,Blackstone Bets Big on Logistics,Blackstone Bets Big on Logistics,71,1,0.0140845070423,0.0210464650046,29,0.0
+321,Retracing a Suspect’s Journey: From a Bomb Site to a Quiet Doorway,Retracing a Suspect's Journey: From a Bomb Site to a Quiet Doorway,110,1,0.00909090909091,0.0141111975133,73,0.027397260274
+322,Political Memo: Donald Trump Stands by Chris Christie Despite Revelations in Bridge Closing Trial,Donald Trump Stands by Chris Christie Despite Revelations in Bridge Closing Trial,314,34,0.108280254777,0.107553117017,239,0.225941422594
+323,How Pop Culture Wore Out Leonard Cohen’s ‘Hallelujah’,How Pop Culture Wore Out Leonard Cohen's 'Hallelujah',373,25,0.0670241286863,0.0673131822257,244,0.0
+324,Sources: Bush 41 says he'll vote Clinton,Fallout after report that George H.W. Bush will vote for Clinton,2209,126,0.0570393843368,0.0571267125886,19539,0.0165310404831
+325,Report: Trump used money from charity ,Report: Trump used family charity to settle lawsuits against his businesses,767,50,0.0651890482399,0.0653509880874,9296,0.344126506024
+326,RIOTS HIT CHARLOTTE: At least 12 cops injured in protests after officer-involved shooting death of black man,At Least 12 Charlotte Cops Injured In Protests Following Officer-involved Death Of Black Man,282,20,0.0709219858156,0.0711894921964,4225,0.553846153846
+327,GREG GUTFELD: Five more lessons from another terror attack,Greg Gutfeld: Five More Lessons From Another Terror Attack,70,8,0.114285714286,0.110653948755,18709,0.0937516703191
+328,Violent protests erupt in Charlotte after police fatally shoot black man,12 officers injured as protests break out in Charlotte after police fatally shoot man,279,41,0.146953405018,0.145013474189,545,0.0697247706422
+329,"Trump used $258,000 from his charity to settle legal problems","Trump used $258,000 from his charity to settle legal problems",5247,370,0.0705164856108,0.0705319096276,5864,0.280866302865
+330,"With Skittles tweet, Donald Trump Jr. draws a new round of condemnation","With Skittles tweet, Donald Trump Jr. draws another round of condemnation",78,8,0.102564102564,0.10040267769,1422,0.372714486639
+331,"West Point women have a new, bloody requirement as the Army completes gender integration","West Point women have a new, bloody requirement as the Army completes gender integration",32,4,0.125,0.115730356458,84,0.0119047619048
+332,What’s for lunch? More people are eating something from home.,Lunch is too expensive,46,1,0.0217391304348,0.0307268551349,207,0.0048309178744
+333,Inside the secret world of wealth managers,How to hide it: inside the secret world of wealth managers,100,5,0.05,0.0523297851787,68,0.0
+334,How to tell if you're a socialist,Am I am socialist? You asked Google – here's the answer,52,5,0.0961538461538,0.0939485142465,121,0.00826446280992
+335,"No, the royal yacht Britannia should not rise again. Let’s sink that idea completely","No, the royal yacht Britannia should not rise again",18,2,0.111111111111,0.101319474307,228,0.0131578947368
+336,Half of UK women flush tampons away – this has to stop,Why flushing tampons down the toilet is not OK,37,6,0.162162162162,0.14706978878,161,0.0124223602484
+337,Convoys in UK 'have had 180 mishaps in 16 years',UK nuclear weapons convoys 'have had 180 mishaps in 16 years',57,8,0.140350877193,0.132665082867,134,0.171641791045
+338,Chinese space station 'out of control' and will crash to Earth,China's Tiangong-1 space station 'out of control' and will crash to Earth,230,37,0.160869565217,0.15804312217,219,0.013698630137
+339,US-led coalition to double resettlement places and expand aid,US-led coalition to double refugee resettlement places and expand aid,24,2,0.0833333333333,0.0825295542234,424,0.0212264150943
+340,Your favourite TV episodes of all time,Our readers' favourite TV episodes of all time,8,0,0.0,0.0409767735525,59,0.0
+341,I was subjected to exorcisms as a child to treat my epilepsy,I was subjected to exorcisms as a child to treat my epilepsy,19,4,0.210526315789,0.170732565625,499,0.192384769539
+342,Noel Edmonds phoned my cat,Noel Edmonds phoned my cat,49,11,0.224489795918,0.203477349627,65,0.0
+343,U.S. Believes Russia Bombed Aid Convoy in Northern Syria,U.S. Believes Russia Bombed Syrian Aid Convoy,100,16,0.16,0.153849489752,70,0.271428571429
+344,Bill Clinton’s Speaking Fee Overlaps With Foundation Business,Bill Clinton's Speaking Fee Overlaps With Foundation Business,251,32,0.127490039841,0.1259675558,929,0.149623250807
+345,N.Y. Bombing Suspect Charged; Views in Notebook Cited,N.Y. Bombing Suspect's Notebook Gives First Look at His Motivations,62,12,0.193548387097,0.180092456599,21,0.0
+346,Replacement Galaxy Notes 7s Arrive En Masse,Replacement Galaxy Notes 7s Arrive En Masse,45,1,0.0222222222222,0.0313027675302,13,0.0769230769231
+347,How Pokémon Became Monster Hit,How Pokémon Became a Monster Hit,19,2,0.105263157895,0.0976153767361,50,0.0
+348,It’s Possibly Sunny in Philadelphia,It's Possibly Sunny in Philadelphia,22,2,0.0909090909091,0.0879674750068,200,0.005
+349,Chipotle Explains Food-Safety Practices in Ad Campaign,Chipotle Explains Food-Safety Practices in New Ad Campaign,67,2,0.0298507462687,0.0354344898445,32,0.0
+350,"Hey, Check Out My New Phone! It Does Nothing.","Hey, Check Out My New Phone! It Does Nothing.",155,15,0.0967741935484,0.0959276780298,179,0.00558659217877
+351,Lawmakers Worry Wells Fargo Sales Practices Hurt Credit Scores,Lawmakers Worry Wells Fargo Sales Practices Hurt Credit Scores,28,4,0.142857142857,0.128464298064,137,0.124087591241
+352,"China to Resume Imports of U.S. Beef, Premier Says","China to Resume Imports of U.S. Beef, Premier Says",28,3,0.107142857143,0.100956516192,96,0.0104166666667
+353,China State Steel Merger Taps Old Theme: Bigger Is Better,China State Steel Merger Taps Old Theme: Bigger Is Better,21,1,0.047619047619,0.0568966585604,72,0.0138888888889
+354,Warehouse Workers of the Future: Autonomous Robots,Fully Autonomous Robots: The Warehouse Workers of the Near Future,339,13,0.0383480825959,0.0393550472983,219,0.00456621004566
+355,Christian Laettner Reaches Deal to Repay Investors,Christian Laettner Reaches Deal to Repay Investors,24,5,0.208333333333,0.175255657531,75,0.0
+356,"South Sudanese Violence Engulfs Aid Workers, Pushes Nation Closer to the Brink","South Sudanese Violence Engulfs Aid Workers, Pushes Nation Closer to the Brink",89,26,0.292134831461,0.273951617554,61,0.196721311475
+357,French Children Practice for Terrorist Threat,French Children Prepare for Terrorist Threat With Drills at School,54,5,0.0925925925926,0.0909350910557,100,0.09
+358,Obama Urges World to Make ‘Course Correction’,"Reflective Obama Contrasts Prosperity, Instability in Final U.N. Speech",11,4,0.363636363636,0.241307457396,101,0.0891089108911
+359,Brazil’s Lula da Silva Indicted in Corruption Probe,Brazil's Lula da Silva Indicted in Corruption Probe,11,1,0.0909090909091,0.0862955279657,171,0.0175438596491
+360,Group of 21 States Sues U.S. Over New Overtime-Pay Rule,Group of 21 States Sues U.S. Over New Overtime-Pay Rule,49,9,0.183673469388,0.168605802839,192,0.125
+361,Number of Illegal Immigrants in U.S. Steady at 11 Million,Number of Illegal Immigrants in U.S. Holds Steady at 11 Million,27,5,0.185185185185,0.160383884855,52,0.0192307692308
+362,Hillary Clinton Prepping for Two Trumps at Debate,Hillary Clinton Prepping for Two Trumps at Debate,34,5,0.147058823529,0.133876248145,165,0.00606060606061
+363,"Microsoft Plans $40 Billion Stock Buyback, Raises Dividend",Microsoft Plans $40 Billion Stock Buyback and Raises Dividend,71,1,0.0140845070423,0.0210464650046,138,0.0
+364,Bank of Japan’s New Rate Policy a Hit With Investors,Japan's 10-Year Bond Yield Turns Positive After BOJ Acts,7,1,0.142857142857,0.108778056529,54,0.0
+365,Is It a Car or a Computer?,Is It a Car or a Computer?,48,0,0.0,0.0118911741081,133,0.0
+366,The College Football Rivalries That Should Exist,The College Football Rivalries That Should Exist,14,0,0.0,0.0299779456299,56,0.0
+367,Grass-Fed Beef Is on a Roll,Why Grass-Fed Beef Is on a Roll,69,3,0.0434782608696,0.0474460062165,85,0.0
+368,The Power of Mirroring,Use Mirroring to Connect With Others,76,5,0.0657894736842,0.067218522333,33,0.0
+369,"At London Fashion Week, Labels Want More Buzz From Less Show","At London Fashion Week, Labels Want More Buzz From Less Show",10,0,0.0,0.0365114551943,40,0.0
+370,"As Presidential Ad Spending Falls, Broadcasters’ Shares Decline","As Presidential Ad Spending Falls, Broadcasters' Shares Decline",26,5,0.192307692308,0.165052538381,173,0.0115606936416
+371,Skittles snapper: I'm a refugee,"'I'm a refugee,' says man who took Skittles picture in Donald Trump Jr's tweet",696,129,0.185344827586,0.184098091724,1801,0.070516379789
+372,Police injured after Charlotte shooting,Charlotte protests: Police injured after black man shot,23,1,0.0434782608696,0.0532672754153,1470,0.0448979591837
+373,Attacker shot at Israel's Turkey embassy,Turkey attack: Man shot at Israel embassy in Ankara,23,0,0.0,0.0213727561501,1234,0.017017828201
+374,Brad Pitt 'very saddened' by divorce,Brad Pitt 'saddened' by Angelina Jolie divorce,27,2,0.0740740740741,0.0755262951746,2490,0.00281124497992
+375,New York bombing suspect charged,Rahami charged over NY and NJ bombings,34,1,0.0294117647059,0.0394327135524,1962,0.0672782874618
+376,"Rethink fad for 'flat-faced' dogs, say UK vets",UK vets warn people against buying 'flat-faced' dogs,66,20,0.30303030303,0.277998337803,4676,0.0271599657827
+377,Cat handbag creates online stir,Taxidermy cat handbag up for auction in New Zealand,48,14,0.291666666667,0.260323613341,3033,0.276953511375
+378,Soutik Biswas: Is India in the throes of a fever outbreak?,Is India in the throes of a fever outbreak?,36,2,0.0555555555556,0.0602008086245,1770,0.00338983050847
+379,Outback fakes,"If you love The Onion, you'll love this country newspaper",16,0,0.0,0.0275160299905,2283,0.000438020148927
+380, Feds charge Rahami in NYC-area bombings ,Feds charge Rahami in bombing campaign,35,2,0.0571428571429,0.06158941665,2882,0.00693962526024
+381,WashingtonMylan CEO's mother used position to push EpiPen into schools,Family matters: EpiPens had high-level help getting into schools,509,61,0.119842829077,0.119203069976,1749,0.0308747855918
+382,WorldMeet one of Trump Jr.’s 'Skittles.' He's a 13-year-old Syrian refugee,Reporter's notebook: Syrian migrant family confronts terror in Europe,108,5,0.0462962962963,0.048731794366,3125,0.00064
+383,Family flee their home after finding dozens of spiders in bunch of Asda bananas whose bite brings four-hour erection then death,Family flee home after finding spiders in bananas which cause 4-hour erection,43,8,0.186046511628,0.168832366777,500,0.004
+384,Man shouting 'Allahu Akbar' is shot and injured as he attempted to storm Israeli embassy in Turkey armed with a knife,One person injured as two people attempt to storm Israeli embassy in Turkey,36,3,0.0833333333333,0.0827470203109,226,0.0796460176991
+385,'She blew a gasket': Selena Gomez's 'flirty' Instagram post with Brad Pitt at Golden Globe Awards 'upset Angelina',Selena Gomez's 'Instagram post with Brad Pitt upset Angelina Jolie',29,2,0.0689655172414,0.0714824117319,1756,0.00170842824601
+386,Marion Cotillard 'absolutely devastated' at being dragged into Angelina Jolie and Brad Pitt's split after starring in sexually charged spy thriller with actor,Marion Cotillard 'devastated' at being dragged into Brangelina split,45,5,0.111111111111,0.106274630781,219,0.0730593607306
+387,"Christina Applegate dumped him mid-date, Gwyneth Paltrow branded him 'too good' for her and Jennifer Aniston became the world's most famous jilted wife: A look back at Brad Pitt's true romances",A look back at Brad Pitt's true romances,15,0,0.0,0.028694277691,656,0.0015243902439
+388,Now that's impeccable timing! Brad Pitt and Marion Cotillard get hot and heavy as they fall in love in new Allied trailer... released by studio just hours after Angelina Jolie divorce bombshell,Brad Pitt and Marion Cotillard get hot and heavy in new Allied trailer,19,3,0.157894736842,0.134173971181,358,0.0279329608939
+389,EXCLUSIVE: Angelina Jolie was so jealous of Marion Cotillard she ignored the French star on Brad's film set leaving her devastated - despite the fact that she and Pitt did NOT have an affair,EXCLUSIVE: Jealous Angelina Jolie ignored Marion Cotillard on film set,28,0,0.0,0.0184331705793,1432,0.00558659217877
+390,The news that blind-sided Hollywood AND Brad himself: Close friend George Clooney is left shocked on camera as he's told about Brangelina divorce - and Pitt himself was only told of split a day before,The moment George Clooney finds out about his friend Brad Pitt's marriage split,27,1,0.037037037037,0.0472404319478,292,0.00342465753425
+391,Angelina Jolie 'fired children's nanny for flirting with Brad' just months before filing for divorce,Angelina Jolie 'fired children's nanny for flirting with Brad',14,1,0.0714285714286,0.0747139711434,828,0.0024154589372
+392,PICTURED: Angelina Jolie's dad Jon Voight expresses sadness and shock at her split from Brad Pitt... as he speculates that 'something very serious must have happened',Angelina Jolie's father Jon Voight expresses shock at her split from Brad Pitt,16,0,0.0,0.0275160299905,395,0.00253164556962
+393,"'And that, my friends, is what they call closure': Brangelina break-up immediately inspires hilarious memes - and they've all got one thing in common...",Jennifer Aniston memes flood Twitter after Angelina and Brad's split,127,13,0.102362204724,0.100995709142,18358,0.000544721647238
+394,"Angelina is just the latest Hollywod A-lister to hire Laura Wasser, Tinseltown's Queen of Divorces",Angelina Jolie is just the latest Hollywod A-lister to hire Laura Wasser,12,0,0.0,0.0329236962618,135,0.0
+395,"Vials of blood, knife play, kissing her brother, lesbian flings and 'sexual kindergarten': The bizarre history of Angelina Jolie's love life",The bizarre history of Angelina Jolie's love life,26,1,0.0384615384615,0.0486155651751,964,0.0124481327801
+396,It was a deadly war of egos only Angelina could win: ALISON BOSHOFF says Jolie was never going to be mere red carpet eye-candy,ALISON BOSHOFF: It was a deadly war of egos only Angelina could win,10,0,0.0,0.0365114551943,232,0.0
+397,Toxic meltdown of Brangelina: What now for the children they collected like trophies? ,Richard Kay: What now for the Brangelina children they collected like trophies?,11,0,0.0,0.0346248848223,425,0.00941176470588
+398,'That's Karma for you!': Jennifer Aniston 'knew it was just a matter of time before Brad Pitt and Angelina Jolie would split',Jennifer Aniston 'thinks Brad Pitt and Angelina Jolie split is karma',59,5,0.0847457627119,0.0841844920032,9914,0.00635464998991
+399,Were her clothes in the wash? Woman accidentally takes topless selfie when she posts glowing review of her washing machine on Currys website,Woman accidentally takes topless selfie for review of washing machine,4,0,0.0,0.0542450048308,745,0.0
+400,"The bizarre rise of SCROTOX: Men are paying nearly £3,000 to have Botox in their private parts - so would you let your man do it? ","Men are paying nearly £3,000 to have Botox in their private parts",20,1,0.05,0.0589033583039,117,0.0
+401,"Personal mini-bar, round-the-clock gourmet food and a hot shower: Lucky flier films his experience of being upgraded to an eye-popping $21,000 first-class seat on an Emirates flight","Flier films his journey in a $21,000 first class Emirates seat",45,0,0.0,0.0125598017175,2031,0.00147710487445
+402,Female US cop who shot dead unarmed black pastor claims she 'felt threatened' when he reached into his car - as police reveal they found PCP in his vehicle,Cop who killed unarmed black pastor 'felt threatened' when he reached into SUV,61,11,0.180327868852,0.168270279979,1097,0.355515041021
+403,Protests break out across North Carolina as cops shoot dead a 'disabled' black father-of-seven: Police claim he had a gun but family insist he was unarmed and reading a book,Protests break out after Charlotte police fatally shoot black man,83,7,0.0843373493976,0.0839608788762,226,0.194690265487
+404,Amal Clooney attacks Britain over refugee crisis and says the country should be taking more immigrants from Syria ,Amal Clooney calls on the UK to take MORE refugees from Syria,104,7,0.0673076923077,0.0682677244754,2354,0.293542905692
+405,"PIERS MORGAN: It doesn't matter what names the mainstream media call Trump - he says exactly what most Americans think, especially when it comes to Islamic terror ",PIERS MORGAN: Media may call Donald Trump names - but he says what most Americans think,510,29,0.056862745098,0.0572391545899,749,0.0267022696929
+406,'Stop being poor!' The Rich Kids of Singapore brag about their extreme wealth by lying on beds of cash and driving supercars NAKED ,Rich Kids of Singapore brag about their extreme wealth on Instagram,52,6,0.115384615385,0.11051760301,1100,0.1
+407,Revealing more than just the news: Glamorous Italian presenter's boobs burst out of her plunging dress live on-air ,Glamorous Italian presenter's boobs burst out of her plunging dress live on-air,11,1,0.0909090909091,0.0862955279657,772,0.00259067357513
+408,US police hunt for man pictured dragging a little girl around a supermarket by her hair,Woman snaps photos of man dragging a child by her hair in Walmart,58,4,0.0689655172414,0.0703823928013,2256,0.550531914894
+409,'He gave me confidence to look forward': Prince Harry reveals how his colour sergeant at Sandhurst restored his hope for the future after Diana's death ,Prince Harry reveals how his sergeant at Sandhurst restored his hope for the future,15,0,0.0,0.028694277691,222,0.0045045045045
+410,Incredibly rare double-faced calf born in Kentucky ... and of course the farming family call her 'Lucky' ,Incredibly rare double-faced calf born in Kentucky,6,2,0.333333333333,0.186026790695,527,0.0
