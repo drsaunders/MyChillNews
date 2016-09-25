@@ -81,7 +81,7 @@ def create_srcs_table(engine):
             {'name':'New York Times', 
             'prefix':'nyt',
             'fb_page':'nytimes',
-            'front_page':'http://www.nytimes.com/pages/todayspaper/index.html'},
+            'front_page':'http://www.nytimes.com/'},
             {'name':'Yahoo News',
             'prefix':'yahoo',
             'fb_page':'yahoonews',
@@ -176,21 +176,26 @@ def do_crop(params):
         '-crop', '%sx%s+0+0' % (params['width'], params['height']),
         params['crop_path']
     ]
-    print command
+#    print command
     execute_command(' '.join(command))
+#    print ' '.join(command)
 
 
 def do_thumbnail(params):
     print "Generating thumbnail from cropped captured image.."
+    params2 = {'screen_path':params['crop_path'], 
+    'crop_path':params['thumbnail_path'], 
+        'width': params['crop_width'], 'height': params['crop_height']/2}
+    do_crop(params2)
     command = [
         'convert',
-        params['crop_path'],
+        params['thumbnail_path'],
         '-filter', 'Lanczos',
         '-thumbnail', '%sx%s' % (params['width'], params['height']),
         params['thumbnail_path']
     ]
     execute_command(' '.join(command))
-
+#    print ' '.join(command)
 
 def get_screen_shot(**kwargs):
     url = kwargs['url']
@@ -208,10 +213,11 @@ def get_screen_shot(**kwargs):
     thumbnail_width = int(kwargs.get('thumbnail_width', width)) # the width of thumbnail
     thumbnail_height = int(kwargs.get('thumbnail_height', height)) # the height of thumbnail
     thumbnail_replace = kwargs.get('thumbnail_replace', False) # does thumbnail image replace crop image?
+    thumbnail_filename = kwargs.get('thumbnail_filename', ROOT) # does thumbnail image replace crop image?
 
     screen_path = abspath(path, filename)
     crop_path = thumbnail_path = screen_path
-
+    
     if thumbnail and not crop:
         raise Exception, 'Thumnail generation requires crop image, set crop=True'
 
@@ -227,10 +233,10 @@ def get_screen_shot(**kwargs):
 
         if thumbnail:
             if not thumbnail_replace:
-                thumbnail_path = abspath(path, filename + "_thumbnail")
+                thumbnail_path = abspath(path, "thumbnail_" + filename)
             params = {
                 'width': thumbnail_width, 'height': thumbnail_height,
-                'thumbnail_path': thumbnail_path, 'crop_path': crop_path}
+                'thumbnail_path': thumbnail_path, 'crop_path': crop_path, 'crop_width':crop_width, 'crop_height':crop_height}
             do_thumbnail(params)
     return screen_path, crop_path, thumbnail_path
 
@@ -251,7 +257,8 @@ sql_query = "SELECT * FROM srcs;"
 srcs = pd.read_sql_query(sql_query,engine,index_col='index')
 
 # Get the timestamp and setup directories
-fp_timestamp =  datetime.datetime.now().strftime("%Y-%m-%d-%H%M")
+#fp_timestamp =  datetime.datetime.now().strftime("%Y-%m-%d-%H%M")
+fp_timestamp = '2016-09-22-0724'
 frontpagedir = '../frontpages/%s/' % fp_timestamp
 if not os.path.exists(frontpagedir):
     os.makedirs(frontpagedir)
@@ -267,17 +274,22 @@ for (i, src) in srcs.iterrows():
     else:
         print "Failed to access URL %s" % src['front_page']
 #%%
+extract_headlines_to_db(fp_timestamp, engine)
+
+#%%
 # Download front page web pages as images
 
 print "Downloading images of web pages... "
 for (i, src) in srcs.iterrows():
     url = src['front_page']
     screen_path, crop_path, thumbnail_path = get_screen_shot(
-        url=url, filename=frontpagedir + src['prefix'] + fp_timestamp + '.png',
+        path=frontpagedir,      
+        url=url, filename=src['prefix'] + fp_timestamp + '.png',
         crop=True, crop_replace=True, crop_height=2304,
         thumbnail=True, thumbnail_replace=False, 
-        thumbnail_width=200, thumbnail_height=150,
+        thumbnail_width=400, thumbnail_height=350,
     )
+    
 
-#%%
-extract_headlines_to_db(fp_timestamp, engine)
+    
+os.system('killall phantomjs')

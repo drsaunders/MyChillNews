@@ -14,7 +14,7 @@ import time
 import pandas as pd
 from sqlalchemy import create_engine
 from sqlalchemy_utils import database_exists, create_database
-
+import numpy as np
 
 dbname = 'frontpage'
 username = 'dsaunder'
@@ -202,7 +202,7 @@ if __name__ == '__main__':
         total_written = total_written + np.sum(use_row)
         print ("Earliest for %s is " % src_row.prefix)
         print src_statuses.status_published.sort_values().iloc[0]
-    print("Wrote %d new headlines to database" % np.sum(use_row))
+    print("Wrote %d new headlines to database" % total_written)
 
     
 

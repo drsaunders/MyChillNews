@@ -99,7 +99,7 @@ def detect_negative_tweets(tweets, headline):
 #        print neg_wordcount
     neg_wordcount = np.squeeze(np.asarray(neg_wordcount))
  
-    tweet_negative = neg_wordcount > 0
+    tweet_negative = float(neg_wordcount > 0)
     if not hasattr(tweet_negative, '__iter__'):
         tweet_negative = np.array([tweet_negative])
         
@@ -122,7 +122,7 @@ if __name__ == "__main__":
     # prepare for database
     engine = create_engine('postgres://%s@localhost/%s'%(username,dbname))
 
-    sql_query = "SELECT * FROM tweets"
+    sql_query = "SELECT * FROM tweets WHERE fp_timestamp IS NOT NULL;"
     tweets_to_score =  pd.read_sql_query(sql_query,engine)
     sql_query = "SELECT * FROM frontpage"
     frontpage_data =  pd.read_sql_query(sql_query,engine)
@@ -146,7 +146,7 @@ if __name__ == "__main__":
                                     'negative':negativity,
                                     'neg_words':neg_words})
         tweet_negativity_list.append(new_scores)
-    #%%
+
     tweet_negativity = pd.concat(tweet_negativity_list)
     
     tweet_negativity.to_sql('tweet_negativity', engine, if_exists='replace')
@@ -180,4 +180,6 @@ if __name__ == "__main__":
 #    
 #    # Overwrite the current frontpage table
 #    frontpage_data.to_sql('frontpage', engine, if_exists='replace')
+
+
 

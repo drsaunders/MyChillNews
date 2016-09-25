@@ -12,6 +12,7 @@ import numpy as np
 import scipy.stats
 import matplotlib.pyplot as plt
 from scipy.special import gamma as gammaf
+import sys
 
 if __name__ == "__main__":
 
@@ -60,5 +61,5 @@ if __name__ == "__main__":
     'num_tweets':summarized_negativity.num_tweets, 
     })
     article_summaries.to_sql('sis_for_articles', engine, if_exists='replace')
-    
+   
     

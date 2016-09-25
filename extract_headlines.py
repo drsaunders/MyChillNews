@@ -75,7 +75,7 @@ def extract_all_headlines(fp_timestamp):
     
     with open(read_frontpage_by_prefix(prefix,frontpagedir), 'r') as f:
         soup = BeautifulSoup(f, 'html.parser')
-    headline_selectors = ['div.story h3 a','ul.headlinesOnly h6 a']
+    headline_selectors = ['h1.story-heading a','h2.story-heading a']
     
     src_rows = pd.DataFrame()
     for selector in headline_selectors:
@@ -86,8 +86,9 @@ def extract_all_headlines(fp_timestamp):
          'url':[get_url(a, url_prefix) for a in headlines]
         })
         
-        new_rows = new_rows.loc[new_rows.headline != '', :]
-        src_rows = src_rows.append(new_rows, ignore_index=True)
+        if len(new_rows > 0):
+            new_rows = new_rows.loc[new_rows.headline != '', :]
+            src_rows = src_rows.append(new_rows, ignore_index=True)
     
     src_rows.loc[:,'article_order'] = range(1,len(src_rows)+1)
     frontpage_data = frontpage_data.append(src_rows, ignore_index=True)

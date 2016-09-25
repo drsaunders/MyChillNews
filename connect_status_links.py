@@ -6,122 +6,15 @@ Created on Mon Sep 19 17:31:58 2016
 @author: dsaunder
 """
 
-import httplib
-import urlparse
-import re
-import requests
 import pandas as pd
 import numpy as np
 from sqlalchemy import create_engine
 import seaborn as sns
 import scipy
+import time
+import matplotlib.pyplot as plt
 
-dbname = 'frontpage'
-username = 'dsaunder'
-# prepare for database
-engine = create_engine('postgres://%s@localhost/%s'%(username,dbname))
-#
-#sql_query = """
-#        SELECT * 
-#        FROM fb_statuses 
-#     """
 
-sql_query = """
-        SELECT * 
-        FROM fb_statuses 
-        WHERE status_id NOT IN
-            (SELECT status_id FROM fb_matchstr_lookup);
-    """
-
-fb = pd.read_sql_query(sql_query,engine)
-
-def unshorten_url(url):
-    parsed = urlparse.urlparse(url)
-    h = httplib.HTTPConnection(parsed.netloc)
-    resource = parsed.path
-    if parsed.query != "":
-        resource += "?" + parsed.query
-    h.request('HEAD', resource )
-    response = h.getresponse()
-    if response.status/100 == 3 and response.getheader('Location'):
-        return unshorten_url(response.getheader('Location')) # changed to process chains of short urls
-    else:
-        return url
-        
-        
-
-matchstr_lookup = []
-for i,row in fb.iterrows():
-    if row.src == 'nyt':
-        if not 'nyti.ms' in row.status_link:
-            continue
-        url = unshorten_url(row.status_link)
-        if not 'myaccount' in url:
-            continue
-        pattern = '%2F([^%.]*\.html)'
-    elif row.src == 'lat':
-        url = row.status_link
-        pattern = '(.*)'
-    elif row.src == 'cnn':
-        if not 'cnn.it' in row.status_link:
-            continue
-        url = unshorten_url(row.status_link)
-        pattern = '/([^/]*)/index\.html'
-    elif row.src == 'dm':
-        if not 'dailym.ai' in row.status_link:
-            continue
-        url = unshorten_url(row.status_link)
-        pattern = '/([^/]*\.html)'
-    elif row.src == 'fox':
-        if not '.foxnews.com' in row.status_link:
-            continue
-        if 'latino.foxnews.com' in row.status_link:
-            continue
-        url = row.status_link
-        pattern = '/([^/]*)($|\.html)'
-    elif row.src == 'bbc':
-        if not 'bbc.in' in row.status_link:
-            continue
-        url = unshorten_url(row.status_link)
-        pattern = '/([^/]*)\?'
-    elif row.src == 'usa':
-        if not '.usatoday.com' in row.status_link:
-            continue
-        url = row.status_link
-        pattern = '/([^/]*/[^/]*)/[^/]*/$'
-    elif row.src == 'wsj':
-        url = row.status_link
-        if 'on.wsj.com' in url:
-            url = unshorten_url(url)
-        pattern = '/([^/]+)\?'
-    elif row.src == 'gua':
-        url = row.status_link
-        pattern = '/([^/]+)\?'
-    elif row.src == 'wap':
-        url = row.status_link
-#        print url
-        if 'wapo.st' in url:
-            r = requests.head(url, allow_redirects=True)
-            url = r.url
-        if not 'www.washingtonpost.com' in url:
-            continue
-        
-        pattern = '/([^/]+)(\.html|/\?)'
-    else:
-        continue
-    
-    thematch = re.search(pattern,url)
-    if thematch:
-        matchstr = re.search(pattern,url).groups()[0]
-#    print url + "\n     " + matchstr
-        if len(matchstr) > 0:
-            print row.src + ":   " + matchstr            
-            matchstr_lookup.append({'src':row.src, 'status_id':row.status_id, 'when_posted':row.status_published, 'url':url, 'matchstr':matchstr})
-
-matchstr_lookup = pd.DataFrame(matchstr_lookup)
-#matchstr_lookup.to_sql('fb_matchstr_lookup', engine, if_exists='replace')
-matchstr_lookup.to_sql('fb_matchstr_lookup', engine, if_exists='append')
-print "%d fb matchstrings added" % len(matchstr_lookup)
 #%%
 sql_query = "SELECT * FROM fb_matchstr_lookup;" # WHERE article_order <= 10;"
 matchstr_lookup = pd.read_sql_query(sql_query,engine)
@@ -129,8 +22,8 @@ sql_query = "SELECT * FROM frontpage;" # WHERE article_order <= 10;"
 frontpage_data = pd.read_sql_query(sql_query,engine)
 #%%
 # Find all the statuses that match frontpages in my database
-# Note that there can legitimately be more than one facebook status per
-# news story - in this case I will sum the likes and angrys etc
+# Note that there can sometimes be more than one facebook status per
+# news story - in this case I will just pick the first one
 
 fb_matches = []
 nummatches = 0
@@ -143,11 +36,12 @@ for i,row in frontpage_data.iterrows():
              fb_matches.append({'status_id':matching_status.status_id, 'fp_url':row.url, 'article_id':row.fp_timestamp+"-"+row.src+"-"+str(int(row.article_order))})
          nummatches = nummatches + 1
 
+# fb_matches simply connects an article URL to a facebook status id
 fb_matches = pd.DataFrame(fb_matches)
 
 #%% Look up tweets for all the articles that I haven't already collected tweets
 # for (necessary because in my normal script I only collect tweets for the 
-# first 10 stories)
+# first 10 stories of the day)
 urls_needed = np.unique(fb_matches.fp_url)
 urls_needed_str = ["'%s'" % a for a in urls_needed]
 urls_needed_str = ','.join(urls_needed_str)
@@ -161,6 +55,7 @@ articles_needed.drop_duplicates(subset='url',inplace=True)
 print len(articles_needed)
 
 
+total_start_time = time.time()
 new_tweet_list = []
 try:
     for i,article in articles_needed.iterrows():
@@ -191,6 +86,10 @@ print("Wrote %d new tweets to database" % np.sum(use_row))
 
 #%%
 
+# Before this next step, we've got to compute tweet negativities, 
+# and article sis 
+
+#%%
 sql_query = 'SELECT * FROM fb_statuses;'
 fb = pd.read_sql_query(sql_query,engine)
 
@@ -201,32 +100,45 @@ sis_for_articles =  pd.read_sql_query(sql_query,engine)
 
 matching_urls = np.unique(fb_matches.fp_url)
 
+# Prepare the list of articles that we have found to match
 articles_to_compare = frontpage_data.merge(pd.DataFrame({'url':matching_urls}), on='url', how='right')
 articles_to_compare = articles_to_compare.merge(sis_for_articles, on='url')
 
-
+# Prepare the list of facebook stories we have found to match
 fb_to_compare = fb_matches.merge(fb, on='status_id')
 gb = fb_to_compare.groupby('fp_url')
 fb_reactions_only = gb.sum()  # Deal with double postings on FB of the same article
 fb_reactions_only.drop(['index','level_0'],1,inplace=True)
 fb_reactions_only.loc[:,'fp_url'] = fb_reactions_only.index
 
+# Now merge on the front page (newspaper website) URL
 fb_tweet_comparison = articles_to_compare.merge(fb_to_compare.drop_duplicates(subset=['fp_url']), left_on='url',right_on='fp_url')
 #fb_tweet_comparison = articles_to_compare.merge(fb_reactions_only, left_on='url',right_index=True, how='inner',suffixes=('l_','r_'))
+
+# Get rid of duplicates (which can occur)
 fb_tweet_comparison.drop_duplicates(subset=['url'],inplace=True)
+
+# Compute some summaries
 fb_tweet_comparison.loc[:,'prop_neg_fb'] = (fb_tweet_comparison.num_angries + fb_tweet_comparison.num_sads) / fb_tweet_comparison.num_reactions
 fb_tweet_comparison.loc[:,'prop_angry_fb'] = fb_tweet_comparison.num_angries / fb_tweet_comparison.num_reactions
-sns.distplot(fb_tweet_comparison.loc[:,'prop_neg_fb'])
+#sns.distplot(fb_tweet_comparison.loc[:,'prop_neg_fb'])
 
 fb_tweet_comparison.loc[:,['headline','link_name','num_tweets','num_neg','prop_neg','sis','num_reactions','prop_angry_fb']].to_csv('fb_tweet_to_inspect.csv',encoding='utf-8')
-
+#%%
+import seaborn as sns
+plt.figure()
+sns.regplot(x='sis',y='prop_neg_fb', data=fb_tweet_comparison)
+scipy.stats.pearsonr(fb_tweet_comparison.sis, fb_tweet_comparison.prop_neg_fb)
+#%%
+plt.figure()
+sns.regplot(x='sis',y='prop_angry_fb', data=fb_tweet_comparison)
+scipy.stats.pearsonr(fb_tweet_comparison.sis, fb_tweet_comparison.prop_angry_fb)
 #%%
 plt.figure()
 sns.regplot(fb_tweet_comparison.sis, fb_tweet_comparison.prop_neg_fb)
-sns.regplot(np.log(fb_tweet_comparison.sis), np.log(fb_tweet_comparison.prop_neg_fb))
+sns.regplot(np.log(fb_tweet_comparison.sis), np.log(fb_tweet_comparison.prop_angry_fb))
 sns.pairplot(fb_tweet_comparison)
 sns.regplot()
-scipy.stats.pearsonr(fb_tweet_comparison.sis, fb_tweet_comparison.prop_neg_fb)
 
 
 

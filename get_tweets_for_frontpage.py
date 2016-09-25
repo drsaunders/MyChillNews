@@ -1,4 +1,4 @@
-#!/usr/bin/env python2
+e#!/usr/bin/env python2
 # -*- coding: utf-8 -*-
 """
 Created on Fri Sep  9 09:32:12 2016
@@ -166,28 +166,28 @@ def get_all_tweets_for_article(article, engine, ts):
 #%%
 # MAIN 
  
-with open('../twitter_app_keys.dat','r') as f:
-    consumer_key = next(f).strip()
-    consumer_secret = next(f).strip()
-    access_token = next(f).strip()
-    access_token_secret = next(f).strip()
-
-try:
-    ts = TwitterSearch(consumer_key = consumer_key, consumer_secret = consumer_secret,
-        access_token = access_token,
-        access_token_secret = access_token_secret
-    )
-except TwitterSearchException as e:
-    print "TWITTER ERROR: Too many simultaneous connections"
-    print e
-
 #%%
 
 if __name__ == "__main__":
+    with open('../twitter_app_keys.dat','r') as f:
+        consumer_key = next(f).strip()
+        consumer_secret = next(f).strip()
+        access_token = next(f).strip()
+        access_token_secret = next(f).strip()
     
+    try:
+        ts = TwitterSearch(consumer_key = consumer_key, consumer_secret = consumer_secret,
+            access_token = access_token,
+            access_token_secret = access_token_secret
+        )
+    except TwitterSearchException as e:
+        print "TWITTER ERROR: Too many simultaneous connections"
+        print e
+    
+   
     total_start_time = time.time()
     total_num_searches = 0
-    fp_timestamp = '2016-09-21-0842'
+    fp_timestamp = '2016-09-22-0724'
     
     dbname = 'frontpage'
     username = 'dsaunder'
