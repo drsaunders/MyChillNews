@@ -26,8 +26,8 @@ db = create_engine('postgres://%s%s/%s'%(user,host,dbname))
 con = None
 con = psycopg2.connect(database = dbname, user = user)
 
-todays_date = datetime.datetime.now().strftime("%Y-%m-%d")
-#todays_date = '2016-09-15'
+#todays_date = datetime.datetime.now().strftime("%Y-%m-%d")
+todays_date = '2016-09-20'
 #%%
 
 @app.route('/')
@@ -50,6 +50,8 @@ def index():
     sis_values_string = ','.join(['%.1f' % (a*1000) for a in mean_by_name.sis.values])
     url_list = [frontpage_for_render.loc[frontpage_for_render.name ==a,'front_page'].iloc[0] for a in mean_by_name.index.values]
     url_string = ','.join('"%s"' % a for a in url_list)
+    thumbnail_paths = ['/static/thumbnail_%s2016-09-23-0739.png' % frontpage_for_render.loc[frontpage_for_render.name ==a,'src'].iloc[0] for a in mean_by_name.index.values]
+    thumbnail_string = ','.join('"%s"' % a for a in thumbnail_paths)
     return render_template("index.html",
        todays_date = todays_date,
        total_num_tweets = np.sum(frontpage_for_render.num_tweets),
@@ -59,4 +61,5 @@ def index():
        sis_values_string=sis_values_string,
        url_string = url_string,
        row_colors=row_colors,
+       thumbnail_string=thumbnail_string
        )

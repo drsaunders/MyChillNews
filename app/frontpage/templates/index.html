@@ -58,9 +58,6 @@
 <br/><br/><br/>
 
     <div class="container">
-      <div class="starter-template">
-        <p class="lead"> Put this list in order of your favourites: </p>
-      </div>
     
     <style>
       {% for i in range(10) %}
@@ -82,14 +79,16 @@
 	      max-width:100%;
 	      
 	 } 
-	 a {
+	 a#recommendation {
 		text-decoration: underline;
 	}
     </style>
     
     <div class="container-fluid">
     <div class="row">
+
     	<div class="col-sm-5">
+        <p class="lead"> Put this list in order of your favourites: </p>
 			<ul id="news_srcs" class="list-group">
 			  {% for i in range(10) %}
 				<li class="d{{i}} list-group-item" data-id="{{i}}"> <span class="src-name"> {{ mean_by_name.iloc[i]['name'] }}</span>  {{ '%d' % total_by_name.iloc[i]['num_neg'] }} negative tweets (out of {{ '%d' % total_by_name.iloc[i]['num_tweets'] }})</li>
@@ -103,7 +102,8 @@
 			  <input type="range" id="sis_tolerance" onInput="update_recommendation(sortable.toArray())" value="75" min="0" max="150" data-show-value="false">
 	  		Today I recommend you read:
 			<div class="recommended">
-				<a id="recommendation"  href="http://nytimes.com"></a>
+				<p><a id="recommendation"  href="http://nytimes.com"></a></p>
+				<p><a id="thumbnail_link"><img id="thumbnail_img" src=""  hidden=true></a></p>
 			</div>
 		</div> <!-- span6 -->
 		<div class="col-sm-2">
@@ -148,6 +148,8 @@
     	sis_list = [{{ sis_values_string }}];
     	name_list = [{{ src_names_string | safe}}];
     	url_list = [{{ url_string | safe}}];
+    	thumbnail_path_list = [{{ thumbnail_string | safe}}];
+    	
     	tolerance_slider = document.getElementById('sis_tolerance');
     	sis_tolerance = tolerance_slider.value;
     	
@@ -155,6 +157,9 @@
     	
         document.getElementById("recommendation").innerHTML = name_list[recommendation];  
         document.getElementById("recommendation").href = url_list[recommendation];  
+        document.getElementById("thumbnail_link").href = url_list[recommendation];  
+        document.getElementById("thumbnail_img").src = thumbnail_path_list[recommendation];  
+        document.getElementById("thumbnail_img").hidden = false;
     }
     // Simple list
 	var el = document.getElementById('news_srcs');
