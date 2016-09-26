@@ -257,8 +257,8 @@ sql_query = "SELECT * FROM srcs;"
 srcs = pd.read_sql_query(sql_query,engine,index_col='index')
 
 # Get the timestamp and setup directories
-#fp_timestamp =  datetime.datetime.now().strftime("%Y-%m-%d-%H%M")
-fp_timestamp = '2016-09-22-0724'
+fp_timestamp =  datetime.datetime.now().strftime("%Y-%m-%d-%H%M")
+#fp_timestamp = '2016-09-22-0724'
 frontpagedir = '../frontpages/%s/' % fp_timestamp
 if not os.path.exists(frontpagedir):
     os.makedirs(frontpagedir)
