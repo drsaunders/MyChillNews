@@ -33,7 +33,6 @@ con = None
 con = psycopg2.connect(database = dbname, user = user)
 
 todays_date = datetime.datetime.now().strftime("%Y-%m-%d")
-todays_date = '2016-09-20'
 #%%
 
 
@@ -44,7 +43,7 @@ def index():
                 SELECT * FROM frontpage 
                 JOIN srcs ON frontpage.src=srcs.prefix
                 JOIN sis_for_articles_model ON frontpage.url = sis_for_articles_model.url
-                WHERE fp_timestamp LIKE '%s%%' AND article_order <= 10;                                                                               
+                WHERE fp_timestamp like '%s%%' AND article_order <= 10;                                                                               
                 """  % todays_date
     frontpage_for_render = pd.read_sql_query(sql_query,con)
     

@@ -174,28 +174,30 @@ def add_article_id_to_db(engine):
     frontpage_data.to_sql('frontpage', engine, if_exists='replace')
 
 #%%
-sql_query = "SELECT * FROM srcs;"
-srcs = pd.read_sql_query(sql_query,engine,index_col='index')
-
-# Get the timestamp and setup directories
-fp_timestamp =  datetime.datetime.now().strftime("%Y-%m-%d-%H%M")
-#fp_timestamp = '2016-09-22-0724'
-frontpagedir = '../current_frontpage/'
-if not os.path.exists(frontpagedir):
-    os.makedirs(frontpagedir)
-
-# Download front page web pages HTML
-print "Downloading HTML web pages... "
-for (i, src) in srcs.iterrows():
-    response = requests.get(src['front_page'])
-    if response.status_code == 200:    
-        outfile = frontpagedir + src['prefix'] + '.html'
-        with open(outfile, 'w') as f:
-            f.write(response.content)
-    else:
-        print "Failed to access URL %s" % src['front_page']
-#%%
-extract_headlines_to_db(fp_timestamp, engine)
-
-#%%
-compute_sis_with_model.compute_sis_for_all(engine)
+if __name__ == '__main__':
+    
+    sql_query = "SELECT * FROM srcs;"
+    srcs = pd.read_sql_query(sql_query,engine,index_col='index')
+    
+    # Get the timestamp and setup directories
+    fp_timestamp =  datetime.datetime.now().strftime("%Y-%m-%d-%H%M")
+    #fp_timestamp = '2016-09-22-0724'
+    frontpagedir = '../current_frontpage/'
+    if not os.path.exists(frontpagedir):
+        os.makedirs(frontpagedir)
+    
+    # Download front page web pages HTML
+    print "Downloading HTML web pages... "
+    for (i, src) in srcs.iterrows():
+        response = requests.get(src['front_page'])
+        if response.status_code == 200:    
+            outfile = frontpagedir + src['prefix'] + '.html'
+            with open(outfile, 'w') as f:
+                f.write(response.content)
+        else:
+            print "Failed to access URL %s" % src['front_page']
+    #%%
+    extract_headlines_to_db(fp_timestamp, engine)
+    
+    #%%
+    compute_sis_with_model.compute_sis_for_all(engine)

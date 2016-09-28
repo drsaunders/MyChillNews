@@ -18,7 +18,10 @@ import numpy as np
 #%%
 
 dbname = 'frontpage'
-username = 'dsaunder'
+username = getpass.getuser()
+if username == 'root':  # Hack just for my web server
+    username = 'ubuntu'
+
 
 engine = create_engine('postgres://%s@localhost/%s'%(username,dbname))
 
