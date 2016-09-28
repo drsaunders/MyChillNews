@@ -15,6 +15,7 @@ import pandas as pd
 from sqlalchemy import create_engine
 from sqlalchemy_utils import database_exists, create_database
 import numpy as np
+import getpass
 #%%
 
 dbname = 'frontpage'
@@ -181,7 +182,10 @@ def scrapeFacebookPageFeedStatus(page_id, access_token):
     
 if __name__ == '__main__':
     dbname = 'frontpage'
-    username = 'dsaunder'
+    username = getpass.getuser()
+    if username == 'root':  # Hack just for my web server
+        username = 'ubuntu'
+
     timestamp =  datetime.datetime.now().strftime("%Y-%m-%d-%H%M")
    
     sql_query = "SELECT * FROM srcs;"
