@@ -23,6 +23,8 @@ color_range = sns.color_palette("coolwarm",n_colors=100) #sns.color_palette("RdB
 color_range = [(a[0]*255, a[1]*255, a[2]*255) for a in color_range]
 hex_colors = np.array([RGBToHTMLColor(rgb_tuple) for rgb_tuple in color_range])
 user = getpass.getuser()
+if user == 'root':  # Hack just for my web server
+    user = 'ubuntu'
  #add your username here (same as previous postgreSQL)            
 host = 'localhost'
 dbname = 'frontpage'
