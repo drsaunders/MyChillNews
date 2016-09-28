@@ -66,7 +66,7 @@ def index():
 
     url_list = [frontpage_for_render.loc[frontpage_for_render.name ==a,'front_page'].iloc[0] for a in mean_by_name.index.values]
     url_string = ','.join('"%s"' % a for a in url_list)
-    thumbnail_paths = ['/static/thumbnail_%s2016-09-26-0718.png' % frontpage_for_render.loc[frontpage_for_render.name ==a,'src'].iloc[0] for a in mean_by_name.index.values]
+    thumbnail_paths = ['/static/thumbnail_%s2016-09-23-0739.png' % frontpage_for_render.loc[frontpage_for_render.name ==a,'src'].iloc[0] for a in mean_by_name.index.values]
     thumbnail_string = ','.join('"%s"' % a for a in thumbnail_paths)
     return render_template("index.html"
        ,todays_date = todays_date
