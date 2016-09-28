@@ -6,6 +6,7 @@ import datetime
 import seaborn as sns
 import numpy as np
 import re
+import getpass
 #%%
 from flask import render_template
 from frontpage import app
@@ -21,7 +22,8 @@ def RGBToHTMLColor(rgb_tuple):
 color_range = sns.color_palette("coolwarm",n_colors=100) #sns.color_palette("RdBu_r",n_colors=151)
 color_range = [(a[0]*255, a[1]*255, a[2]*255) for a in color_range]
 hex_colors = np.array([RGBToHTMLColor(rgb_tuple) for rgb_tuple in color_range])
-user = 'dsaunder' #add your username here (same as previous postgreSQL)            
+user = getpass.getuser()
+ #add your username here (same as previous postgreSQL)            
 host = 'localhost'
 dbname = 'frontpage'
 db = create_engine('postgres://%s%s/%s'%(user,host,dbname))

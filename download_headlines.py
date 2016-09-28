@@ -17,6 +17,7 @@ from subprocess import Popen, PIPE
 from selenium import webdriver
 import extract_headlines  # LOCAL MODULE
 import numpy as np
+import getpass
 
 from subprocess import Popen, PIPE
 from selenium import webdriver
@@ -26,7 +27,7 @@ abspath = lambda *p: os.path.abspath(os.path.join(*p))
 ROOT = abspath(os.path.dirname(__file__))
 
 dbname = 'frontpage'
-username = 'dsaunder'
+username = getpass.getuser()
    
 # prepare for database
 engine = create_engine('postgres://%s@localhost/%s'%(username,dbname))

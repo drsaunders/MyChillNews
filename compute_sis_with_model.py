@@ -15,12 +15,13 @@ import time
 import matplotlib.pyplot as plt
 import pickle
 from scipy.sparse import hstack
-import scipy.stats.zscore
+import scipy.stats
+import getpass
 
 fp_timestamp= '2016-09-24-0948'
 
 dbname = 'frontpage'
-username = 'dsaunder'
+username = getpass.getuser()
 # prepare for database
 engine = create_engine('postgres://%s@localhost/%s'%(username,dbname))
 sql_query = 'SELECT * FROM srcs;'
