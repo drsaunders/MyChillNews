@@ -27,7 +27,7 @@ sql_query = 'SELECT * FROM srcs;'
 srcs = pd.read_sql_query(sql_query,engine)
 src_lookup = {a.prefix:a.loc['index'] for i,a in srcs.iterrows()}
 
-headline_model = pickle.load( open( 'headline_model.pickle', "rb" ) )
+headline_model = pickle.load( open( '../headline_model.pickle', "rb" ) )
 #headline_model = {'estimator':clf, 'vectorizer':headline_vectorizer, 'tfidf':headline_tfidf}
 
 sql_query = "SELECT * FROM frontpage" # WHERE fp_timestamp='%s' AND article_order <=10" % fp_timestamp
@@ -36,8 +36,8 @@ frontpage_data.loc[:,'article_id'] = [a.fp_timestamp+"-"+a.src+"-"+str(int(a.art
 headlines = frontpage_data.headline
 bag = headline_model['vectorizer'].transform(headlines)
 X = headline_model['tfidf'].transform(bag)
-src = frontpage_data.src.map(src_lookup)    
-src_matrix = scipy.sparse.csr.csr_matrix(src.values.reshape(-1,1)) 
+src = frontpage_data.src.map(src_lookup)
+src_matrix = scipy.sparse.csr.csr_matrix(src.values.reshape(-1,1))
 X= hstack((X, src_matrix))
 #%%
 angry_estimates = headline_model['angry_estimator'].predict(X)
@@ -59,10 +59,10 @@ article_summaries = pd.DataFrame({'article_id':frontpage_data.article_id
                                   ,'sad':sad_estimates
                                   ,'zsad':scipy.stats.zscore(sad_estimates)
                                   ,'sis_pct':sis_pct
-                                  
+
                                  })
 
-article_summaries.to_sql('sis_for_articles_model', engine, if_exists='replace', chunk_size=1000)
+article_summaries.to_sql('sis_for_articles_model', engine, if_exists='replace', chunksize=1000)
 
 
 #%%
@@ -70,7 +70,7 @@ from wordcloud import WordCloud
 def red_color_func(word, font_size, position, orientation, random_state=None, **kwargs):
     the_color = sns.color_palette("coolwarm",n_colors=2)[0]
     return (255,0,0)
-    
+
 def blue_color_func(word, font_size, position, orientation, random_state=None, **kwargs):
     the_color = sns.color_palette("coolwarm",n_colors=2)[1]
     return (0,0,255)
@@ -80,7 +80,7 @@ x,y = np.meshgrid(range(width),range(height))
 ellipse_mask = ((x-1000)/1000.)**2 + ((y-800)/800.)**2 > 1
 ellipse_mask = ellipse_mask.astype(int)*255
     #%%
-    
+
 lower_text = ' '.join(headlines.iloc[np.argsort(sis)[:1000]])
 wordcloud = WordCloud(mask=ellipse_mask, background_color='white', relative_scaling=1,width=2000,height=1600, min_font_size=30).generate(lower_text)
 wordcloud.recolor(0,blue_color_func)

@@ -38,7 +38,7 @@ def plot_feature_importance(features, fitted_forest):
 def plot_fit_heatmap(real_y, estimate_y, vmax=100):
     h = np.histogram2d(x=real_y,y=estimate_y, bins=np.arange(-5,0,0.5))
     plt.figure()
-    
+
     sns.set(font_scale=1.5)
     sns.heatmap(h[0], annot=False,vmin=0, vmax=vmax, fmt='.0f',cmap='Greens')
     plt.gca().invert_yaxis()
@@ -73,13 +73,13 @@ fb = fb.loc[lens > 12,:]
 src_is_none = [(a is None) or (a == np.nan) for a in fb.src]
 fb = fb.loc[np.invert(src_is_none),:]
 fb.loc[fb.src=='nbd','src'] = 'nbc'
-            
+
 #Remove nuisance items that aren't really news stories
 nuisance_regexes = ['Take the quiz','Instagram photo by New York Times Archives','Your .* Briefing','Yahoo Movies','Yahoo Sports','Yahoo Movies UK','Yahoo UK & Ireland','Yahoo Finance','Yahoo Canada','Yahoo Music','Yahoo Celebrity','Yahoo Style + Beauty','The 10-Point.','Daily Mail Australia','USA TODAY Money and Tech']
 found= np.zeros(len(fb))
 for regex in nuisance_regexes:
     found = found + np.array([not re.search(regex, a) is None for a in fb.link_name])
-             
+
 fb = fb.loc[np.invert(found.astype(bool)),:]
 
 print len(fb)
@@ -134,12 +134,12 @@ revocab = {headline_vectorizer.vocabulary_[a]:a for a in headline_vectorizer.voc
 #    return text.split()
 #def tokenizer_porter(text):
 #    return [porter.stem(word) for word in text.split()]
-#            
+#
 #%%
 def tokenizer(text):
     tokenized = [w for w in text.split() if w not in stop]
     return tokenized
-    
+
 from sklearn.ensemble import RandomForestRegressor
 from sklearn.feature_extraction.text import TfidfTransformer
 
@@ -183,8 +183,8 @@ from scipy.sparse import hstack
 sql_query = 'SELECT * FROM srcs;'
 srcs = pd.read_sql_query(sql_query,engine)
 src_lookup = {a.prefix:a.loc['index'] for i,a in srcs.iterrows()}
-src_code = fb.src.map(src_lookup)     
-revocab[X.shape[1]]= 'SOURCE'         
+src_code = fb.src.map(src_lookup)
+revocab[X.shape[1]]= 'SOURCE'
 src_matrix = scipy.sparse.csr.csr_matrix(src_code.values.reshape(-1,1))
 X_with_src = hstack((X, src_matrix))
 #enc = preprocessing.OneHotEncoder()
@@ -216,8 +216,8 @@ clf.fit(X_with_src, y)
 
 test_bag = headline_vectorizer.transform(fb_test.link_name)
 test_X = headline_tfidf.transform(test_bag)
-test_src = fb_test.src.map(src_lookup)    
-test_src_matrix = scipy.sparse.csr.csr_matrix(test_src.values.reshape(-1,1)) 
+test_src = fb_test.src.map(src_lookup)
+test_src_matrix = scipy.sparse.csr.csr_matrix(test_src.values.reshape(-1,1))
 test_X= hstack((test_X, test_src_matrix))
 test_y = np.log(fb_test.prop_angry+0.01)
 
@@ -231,12 +231,12 @@ import pickle
 angry_y = np.log(fb.prop_angry+0.01)
 sad_y = np.log(fb.prop_sad+0.01)
 angry_clf = RandomForestRegressor(n_estimators=150, n_jobs=-1, verbose=1, oob_score=True)
-clf.fit(X_with_src, angry_y)
+angry_clf.fit(X_with_src, angry_y)
 sad_clf = RandomForestRegressor(n_estimators=150, n_jobs=-1, verbose=1, oob_score=True)
-clf.fit(X_with_src, sad_y)
+sad_clf.fit(X_with_src, sad_y)
 headline_model = {'angry_estimator':angry_clf, 'sad_estimator':sad_clf, 'vectorizer':headline_vectorizer, 'tfidf':headline_tfidf}
-filehandler = open('headline_model.pickle', 'wb') 
-pickle.dump(headline_model, filehandler) 
+filehandler = open('../headline_model.pickle', 'wb')
+pickle.dump(headline_model, filehandler)
 filehandler.close()
 
 
@@ -260,7 +260,7 @@ g = sns.FacetGrid(fb.loc[fb.src.isin(['fox','cnn','nbc']),:], row="src")
 g.map(sns.distplot,'prop_angry')
 
 #%%
-# Attempt at naive bayesian on classification data 
+# Attempt at naive bayesian on classification data
 
 from sklearn.naive_bayes import GaussianNB
 gnb = GaussianNB()
@@ -270,14 +270,14 @@ scores = cross_validation.cross_val_score( gnb, X.toarray(), y_binary, cv=5, n_j
 
 #print gnb.score(X.toarray(),y_binary)s
 
-#%% 
-# 
+#%%
+#
 plt.figure()
 plt.subplot(1,2,1)
 sns.set(font_scale=1.5)
 sns.distplot(fb.prop_angry,kde=False, color='purple')
 plt.xlabel('Proportion of "Angry" reactions')
-plt.tight_layout() 
+plt.tight_layout()
 
 
 plt.subplot(1,2,2)
@@ -285,7 +285,7 @@ plt.subplot(1,2,2)
 sns.set(font_scale=1.5)
 sns.distplot(np.log(fb.prop_angry+0.01),kde=False, color='orange')
 plt.xlabel('Log proportion of "Angry" reactions')
-plt.tight_layout() 
+plt.tight_layout()
 
 #%%
 #plt.figure()
@@ -316,9 +316,9 @@ def headline_to_vector(headline, size):
     count = 0
     # Remove punctuation
     headline = re.sub('[%s]' % re.escape(string.punctuation),'', headline)
-    
+
     # For each word, if it's found in either lower case or upper case add it
-    words = headline.split()    
+    words = headline.split()
     for word in words:
         upper = word
         upper = upper[0].upper() + upper[1:]
@@ -345,7 +345,7 @@ def headline_to_vector_list(headline, size):
     vecs = []
 
     headline = re.sub('[%s]' % re.escape(string.punctuation),'', headline)
-    words = headline.split()    
+    words = headline.split()
     for word in words:
         upper = word
         upper = upper[0].upper() + upper[1:]
@@ -361,8 +361,8 @@ def headline_to_vector_list(headline, size):
         except KeyError:
             pass
     return vecs
-        
-        
+
+
     #%%
 regex = re.compile('[%s]' % re.escape(string.punctuation))
 out = headline.translate(string.maketrans("",""), string.punctuation)
