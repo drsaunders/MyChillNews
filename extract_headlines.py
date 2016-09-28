@@ -40,10 +40,12 @@ def get_contents(tag):
     contents, dummy = re.subn('&amp;apos;','\'',contents)
     return contents
 
+
+    
     
 def extract_all_headlines(fp_timestamp):
-    frontpagedir = '../frontpages/%s/' % fp_timestamp
-    frontpage_data = pd.DataFrame()
+    frontpagedir = '../current_frontpage/' 
+    new_headlines = pd.DataFrame()
     
     #%%
     # LA TIMES
@@ -66,7 +68,7 @@ def extract_all_headlines(fp_timestamp):
         src_rows = src_rows.append(new_rows, ignore_index=True)
     
     src_rows.loc[:,'article_order'] = range(1,len(src_rows)+1)
-    frontpage_data = frontpage_data.append(src_rows, ignore_index=True)
+    new_headlines = new_headlines.append(src_rows, ignore_index=True)
     
     #%%
     # New York Times
@@ -91,7 +93,7 @@ def extract_all_headlines(fp_timestamp):
             src_rows = src_rows.append(new_rows, ignore_index=True)
     
     src_rows.loc[:,'article_order'] = range(1,len(src_rows)+1)
-    frontpage_data = frontpage_data.append(src_rows, ignore_index=True)
+    new_headlines = new_headlines.append(src_rows, ignore_index=True)
         
     
     ##%%
@@ -116,7 +118,7 @@ def extract_all_headlines(fp_timestamp):
     #    src_rows = src_rows.append(new_rows, ignore_index=True)
     #
     #src_rows.loc[:,'article_order'] = range(1,len(src_rows)+1)
-    #frontpage_data = frontpage_data.append(src_rows, ignore_index=True)
+    #new_headlines = new_headlines.append(src_rows, ignore_index=True)
     #    
     
     #%%
@@ -141,7 +143,7 @@ def extract_all_headlines(fp_timestamp):
         src_rows = src_rows.append(new_rows, ignore_index=True)
     
     src_rows.loc[:,'article_order'] = range(1,len(src_rows)+1)
-    frontpage_data = frontpage_data.append(src_rows, ignore_index=True)
+    new_headlines = new_headlines.append(src_rows, ignore_index=True)
     
     #%%
     # Fox
@@ -170,7 +172,7 @@ def extract_all_headlines(fp_timestamp):
             src_rows.loc[j,'headline'] = re.search('>(.*)<',src_rows.loc[j,'headline']).groups()[0]
     
     src_rows.loc[:,'article_order'] = range(1,len(src_rows)+1)
-    frontpage_data = frontpage_data.append(src_rows, ignore_index=True)
+    new_headlines = new_headlines.append(src_rows, ignore_index=True)
     
     #%%
     # Washington Post
@@ -196,7 +198,7 @@ def extract_all_headlines(fp_timestamp):
         src_rows = src_rows.append(new_rows, ignore_index=True)
     
     src_rows.loc[:,'article_order'] = range(1,len(src_rows)+1)
-    frontpage_data = frontpage_data.append(src_rows, ignore_index=True)
+    new_headlines = new_headlines.append(src_rows, ignore_index=True)
     
     #%%
     # The Guardian
@@ -219,7 +221,7 @@ def extract_all_headlines(fp_timestamp):
         src_rows = src_rows.append(new_rows, ignore_index=True)
     
     src_rows.loc[:,'article_order'] = range(1,len(src_rows)+1)
-    frontpage_data = frontpage_data.append(src_rows, ignore_index=True)
+    new_headlines = new_headlines.append(src_rows, ignore_index=True)
     
     
     
@@ -244,7 +246,7 @@ def extract_all_headlines(fp_timestamp):
         src_rows = src_rows.append(new_rows, ignore_index=True)
     
     src_rows.loc[:,'article_order'] = range(1,len(src_rows)+1)
-    frontpage_data = frontpage_data.append(src_rows, ignore_index=True)
+    new_headlines = new_headlines.append(src_rows, ignore_index=True)
     #%%
     # BBC news
     prefix = 'bbc'
@@ -266,7 +268,7 @@ def extract_all_headlines(fp_timestamp):
         src_rows = src_rows.append(new_rows, ignore_index=True)
     
     src_rows.loc[:,'article_order'] = range(1,len(src_rows)+1)
-    frontpage_data = frontpage_data.append(src_rows, ignore_index=True)
+    new_headlines = new_headlines.append(src_rows, ignore_index=True)
     
     #%%
     # USA Today
@@ -289,7 +291,7 @@ def extract_all_headlines(fp_timestamp):
         src_rows = src_rows.append(new_rows, ignore_index=True)
     
     src_rows.loc[:,'article_order'] = range(1,len(src_rows)+1)
-    frontpage_data = frontpage_data.append(src_rows, ignore_index=True)
+    new_headlines = new_headlines.append(src_rows, ignore_index=True)
     
     
     #%%
@@ -313,7 +315,7 @@ def extract_all_headlines(fp_timestamp):
         src_rows = src_rows.append(new_rows, ignore_index=True)
     
     src_rows.loc[:,'article_order'] = range(1,len(src_rows)+1)
-    frontpage_data = frontpage_data.append(src_rows, ignore_index=True)
+    new_headlines = new_headlines.append(src_rows, ignore_index=True)
 
 #    #%%
 #    # Boston Globe
@@ -336,9 +338,11 @@ def extract_all_headlines(fp_timestamp):
 #        src_rows = src_rows.append(new_rows, ignore_index=True)
 #    
 #    src_rows.loc[:,'article_order'] = range(1,len(src_rows)+1)
-#    frontpage_data = frontpage_data.append(src_rows, ignore_index=True)
+#    new_headlines = new_headlines.append(src_rows, ignore_index=True)
 
     #%%
-    frontpage_data.loc[:,'fp_timestamp'] = fp_timestamp
+    new_headlines.loc[:,'fp_timestamp'] = fp_timestamp
+    new_headlines.loc[:,'article_id'] = [a.fp_timestamp+"-"+a.src+"-"+str(int(a.article_order)) for i,a in new_headlines.iterrows()]
 
-    return frontpage_data
+
+    return new_headlines
