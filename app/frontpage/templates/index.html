@@ -82,6 +82,10 @@
 	 a#recommendation {
 		text-decoration: underline;
 	}
+	li.list-group-item {
+		cursor: move;
+	}
+	
     </style>
     
     <div class="container-fluid">
@@ -91,7 +95,7 @@
         <p class="lead"> Put this list in order of your favourites: </p>
 			<ul id="news_srcs" class="list-group">
 			  {% for i in range(10) %}
-				<li class="d{{i}} list-group-item" data-id="{{i}}"> <span class="src-name"> {{ mean_by_name.iloc[i]['name'] }}</span>  {{ '%d' % total_by_name.iloc[i]['num_neg'] }} negative tweets (out of {{ '%d' % total_by_name.iloc[i]['num_tweets'] }})</li>
+				<li class="d{{i}} list-group-item" data-id="{{i}}"> <span class="src-name"> {{ mean_by_name.iloc[i]['name'] }}</span> <span > Angry: {{ anger_string[i] }} Sad: {{ sad_string[i] }}</span>  </li>
 			  {% endfor %}
 			</ul>
 		</div> <!-- span6 -->
@@ -99,7 +103,7 @@
 		<div class="col-sm-5">
 			<p class="lead"> And choose your stress impact tolerance for today: </p>
 			<img src="/static/coolwarm.png" class="scaling">
-			  <input type="range" id="sis_tolerance" onInput="update_recommendation(sortable.toArray())" value="75" min="0" max="150" data-show-value="false">
+			  <input type="range" id="sis_tolerance" onInput="update_recommendation(sortable.toArray())" value="75" min="-4500" max="-2000" data-show-value="false">
 	  		Today I recommend you read:
 			<div class="recommended">
 				<p><a id="recommendation"  href="http://nytimes.com"></a></p>

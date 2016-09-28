@@ -23,12 +23,6 @@
 	}
 })(function () {
 	"use strict";
-	
-	if (typeof window == "undefined" || typeof window.document == "undefined") {
-		return function () {
-			throw new Error("Sortable.js requires a window with a document");
-		};
-	}
 
 	var dragEl,
 		parentEl,
@@ -262,8 +256,9 @@
 				type = evt.type,
 				touch = evt.touches && evt.touches[0],
 				target = (touch || evt).target,
-				originalTarget = evt.target.shadowRoot && evt.path[0] || target,
+				originalTarget = target,
 				filter = options.filter;
+
 
 			if (type === 'mousedown' && evt.button !== 0 || options.disabled) {
 				return; // only left button or enabled
@@ -276,7 +271,7 @@
 			}
 
 			// get the index of the dragged element within its parent
-			oldIndex = _index(target, options.draggable);
+			oldIndex = _index(target);
 
 			// Check filter
 			if (typeof filter === 'function') {
@@ -400,11 +395,8 @@
 			}
 
 			try {
-				if (document.selection) {					
-					// Timeout neccessary for IE9					
-					setTimeout(function () {
-						document.selection.empty();
-					});					
+				if (document.selection) {
+					document.selection.empty();
 				} else {
 					window.getSelection().removeAllRanges();
 				}
@@ -774,7 +766,7 @@
 					_toggleClass(dragEl, this.options.chosenClass, false);
 
 					if (rootEl !== parentEl) {
-						newIndex = _index(dragEl, options.draggable);
+						newIndex = _index(dragEl);
 
 						if (newIndex >= 0) {
 							// drag from one list and drop into another
@@ -794,7 +786,7 @@
 
 						if (dragEl.nextSibling !== nextEl) {
 							// Get the index of the dragged element within its parent
-							newIndex = _index(dragEl, options.draggable);
+							newIndex = _index(dragEl);
 
 							if (newIndex >= 0) {
 								// drag & drop within the same list
@@ -805,8 +797,7 @@
 					}
 
 					if (Sortable.active) {
-						/* jshint eqnull:true */
-						if (newIndex == null || newIndex === -1) {
+						if (newIndex === null || newIndex === -1) {
 							newIndex = oldIndex;
 						}
 
@@ -817,13 +808,7 @@
 					}
 				}
 
-			}
-
-			this._nulling();
-		},
-
-		_nulling: function () {
-			if (Sortable.active === this) {
+				// Nulling
 				rootEl =
 				dragEl =
 				parentEl =
@@ -847,6 +832,7 @@
 				Sortable.active = null;
 			}
 		},
+
 
 		handleEvent: function (/**Event*/evt) {
 			var type = evt.type;
@@ -993,22 +979,26 @@
 	function _closest(/**HTMLElement*/el, /**String*/selector, /**HTMLElement*/ctx) {
 		if (el) {
 			ctx = ctx || document;
+			selector = selector.split('.');
+
+			var tag = selector.shift().toUpperCase(),
+				re = new RegExp('\\s(' + selector.join('|') + ')(?=\\s)', 'g');
 
 			do {
 				if (
-					(selector === '>*' && el.parentNode === ctx)
-					|| _matches(el, selector)
+					(tag === '>*' && el.parentNode === ctx) || (
+						(tag === '' || el.nodeName.toUpperCase() == tag) &&
+						(!selector.length || ((' ' + el.className + ' ').match(re) || []).length == selector.length)
+					)
 				) {
 					return el;
 				}
 			}
-			while (el = ('host' in el) ? el.host : el.parentNode)
+			while (el !== ctx && (el = el.parentNode));
 		}
 
 		return null;
 	}
-
-
 
 
 	function _globalDragOver(/**Event*/evt) {
@@ -1172,13 +1162,11 @@
 	}
 
 	/**
-	 * Returns the index of an element within its parent for a selected set of
-	 * elements
+	 * Returns the index of an element within its parent
 	 * @param  {HTMLElement} el
-	 * @param  {selector} selector
 	 * @return {number}
 	 */
-	function _index(el, selector) {
+	function _index(el) {
 		var index = 0;
 
 		if (!el || !el.parentNode) {
@@ -1186,29 +1174,12 @@
 		}
 
 		while (el && (el = el.previousElementSibling)) {
-			if (el.nodeName.toUpperCase() !== 'TEMPLATE'
-					&& _matches(el, selector)) {
+			if (el.nodeName.toUpperCase() !== 'TEMPLATE') {
 				index++;
 			}
 		}
 
 		return index;
-	}
-
-	function _matches(/**HTMLElement*/el, /**String*/selector) {
-		if (el) {
-			selector = selector.split('.');
-
-			var tag = selector.shift().toUpperCase(),
-				re = new RegExp('\\s(' + selector.join('|') + ')(?=\\s)', 'g');
-
-			return (
-				(tag === '' || el.nodeName.toUpperCase() == tag) &&
-				(!selector.length || ((' ' + el.className + ' ').match(re) || []).length == selector.length)
-			);
-		}
-
-		return false;
 	}
 
 	function _throttle(callback, ms) {

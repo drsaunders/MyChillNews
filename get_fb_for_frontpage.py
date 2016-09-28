@@ -15,6 +15,7 @@ import pandas as pd
 from sqlalchemy import create_engine
 from sqlalchemy_utils import database_exists, create_database
 import numpy as np
+#%%
 
 dbname = 'frontpage'
 username = 'dsaunder'
