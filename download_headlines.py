@@ -138,10 +138,6 @@ def create_srcs_table(engine):
     srcs.to_sql('srcs', engine, if_exists='replace')
 
 #%%
-def execute_command(command):
-    result = Popen(command, shell=True, stdout=PIPE).stdout.read()
-    if len(result) > 0 and not result.isspace():
-        raise Exception(result)
 
 
 
