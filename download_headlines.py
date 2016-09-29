@@ -157,11 +157,11 @@ def extract_headlines_to_db(fp_timestamp, engine):
     
 
 def add_article_id_to_db(engine):
-sql_query = "SELECT * FROM frontpage;" # WHERE article_order <= 10;"
-frontpage_data = pd.read_sql_query(sql_query,engine)
-frontpage_data.loc[:,'article_id'] = [a.fp_timestamp+"-"+a.src+"-"+str(int(a.article_order)) for i,a in frontpage_data.iterrows()]
-frontpage_data.to_sql('frontpage', engine, if_exists='replace')
-frontpage_data.to_sql('frontpage', engine, if_exists='replace', chunksize=100)
+    sql_query = "SELECT * FROM frontpage;" # WHERE article_order <= 10;"
+    frontpage_data = pd.read_sql_query(sql_query,engine)
+    frontpage_data.loc[:,'article_id'] = [a.fp_timestamp+"-"+a.src+"-"+str(int(a.article_order)) for i,a in frontpage_data.iterrows()]
+    frontpage_data.to_sql('frontpage', engine, if_exists='replace')
+    frontpage_data.to_sql('frontpage', engine, if_exists='replace', chunksize=100)
 
 #%%
 if __name__ == '__main__':
