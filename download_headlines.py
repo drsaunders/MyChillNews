@@ -19,17 +19,6 @@ import compute_sis_with_model # LOCAL MODULE
 import numpy as np
 import getpass
 
-abspath = lambda *p: os.path.abspath(os.path.join(*p))
-ROOT = abspath(os.path.dirname(__file__))
-
-dbname = 'frontpage'
-username = getpass.getuser()
-if username == 'root':  # Hack just for my web server
-    username = 'ubuntu'
-
-   
-# prepare for database
-engine = create_engine('postgres://%s@localhost/%s'%(username,dbname))
 
 #%%
 def clean_df_db_dups(df, tablename, engine, dup_cols=[],
@@ -168,13 +157,26 @@ def extract_headlines_to_db(fp_timestamp, engine):
     
 
 def add_article_id_to_db(engine):
-    sql_query = "SELECT * FROM frontpage;" # WHERE article_order <= 10;"
-    frontpage_data = pd.read_sql_query(sql_query,engine)
-    frontpage_data.loc[:,'article_id'] = [a.fp_timestamp+"-"+a.src+"-"+str(int(a.article_order)) for i,a in frontpage_data.iterrows()]
-    frontpage_data.to_sql('frontpage', engine, if_exists='replace')
+sql_query = "SELECT * FROM frontpage;" # WHERE article_order <= 10;"
+frontpage_data = pd.read_sql_query(sql_query,engine)
+frontpage_data.loc[:,'article_id'] = [a.fp_timestamp+"-"+a.src+"-"+str(int(a.article_order)) for i,a in frontpage_data.iterrows()]
+frontpage_data.to_sql('frontpage', engine, if_exists='replace')
+frontpage_data.to_sql('frontpage', engine, if_exists='replace', chunksize=100)
 
 #%%
 if __name__ == '__main__':
+    
+    abspath = lambda *p: os.path.abspath(os.path.join(*p))
+    ROOT = abspath(os.path.dirname(__file__))
+    
+    dbname = 'frontpage'
+    username = getpass.getuser()
+    if username == 'root':  # Hack just for my web server
+        username = 'ubuntu'
+    
+       
+    # prepare for database
+    engine = create_engine('postgres://%s@localhost/%s'%(username,dbname))
     
     sql_query = "SELECT * FROM srcs;"
     srcs = pd.read_sql_query(sql_query,engine,index_col='index')
@@ -197,7 +199,9 @@ if __name__ == '__main__':
         else:
             print "Failed to access URL %s" % src['front_page']
     #%%
+    print "Extracting headlines... "
     extract_headlines_to_db(fp_timestamp, engine)
     
     #%%
+    print "Computing stress impact scores for articles..."
     compute_sis_with_model.compute_sis_for_all(engine)

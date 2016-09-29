@@ -26,8 +26,10 @@ def compute_sis_for_all(engine):
     headline_model = pickle.load( open( '../headline_model.pickle', "rb" ) )
     #headline_model = {'estimator':clf, 'vectorizer':headline_vectorizer, 'tfidf':headline_tfidf}
     
+    print "Loading all articles..."
     sql_query = "SELECT * FROM frontpage" # WHERE fp_timestamp='%s' AND article_order <=10" % fp_timestamp
     frontpage_data =  pd.read_sql_query(sql_query,engine)
+    print "Computing sis..."
     headlines = frontpage_data.headline
     bag = headline_model['vectorizer'].transform(headlines)
     X = headline_model['tfidf'].transform(bag)
@@ -54,7 +56,8 @@ def compute_sis_for_all(engine):
     
                                      })
     
-    article_summaries.to_sql('sis_for_articles_model', engine, if_exists='replace', chunksize=1000)
+    print "Writing SIS to database..."
+    article_summaries.to_sql('sis_for_articles_model', engine, if_exists='replace', chunksize=100)
     
 
 #%%

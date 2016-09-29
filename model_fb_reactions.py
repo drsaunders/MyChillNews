@@ -35,18 +35,28 @@ def plot_feature_importance(features, fitted_forest):
     plt.grid(axis='y',linestyle=':')
     plt.xlabel('Feature importance score')
 
-def plot_fit_heatmap(real_y, estimate_y, vmax=100):
-    h = np.histogram2d(x=real_y,y=estimate_y, bins=np.arange(-5,0,0.5))
+def print_feature_importances(clf):
+    ordering = np.argsort(clf.feature_importances_)
+    ordering = ordering[::-1]
+    words = [revocab[a] for a in ordering]
+    for i in range(20):
+        print "%.2f\t%s" % (clf.feature_importances_[ordering[i]], words[i])
+
+def plot_fit_heatmap(real_y, estimate_y, vmax=100, cmap='Greens',reaction='angry',bins=[]):
+    if len(bins)==0:
+        bins=np.arange(-5,0,0.5)
+        
+    h = np.histogram2d(x=real_y,y=estimate_y, bins=bins)
     plt.figure()
 
     sns.set(font_scale=1.5)
-    sns.heatmap(h[0], annot=False,vmin=0, vmax=vmax, fmt='.0f',cmap='Greens')
+    sns.heatmap(h[0], annot=False,vmin=0, vmax=vmax, fmt='.0f',cmap=cmap)
     plt.gca().invert_yaxis()
     xt = plt.xticks()[0]
-    plt.yticks(xt,h[2])
+    plt.yticks(xt,h[2][::-1])
     plt.xticks(xt,h[2])
-    plt.xlabel('Actual log proportion angry')
-    plt.ylabel('Predicted log proportion angry')
+    plt.xlabel('Actual log proportion %s' % reaction)
+    plt.ylabel('Predicted log proportion %s' % reaction)
     plt.tight_layout()
 #    plt.xticks(xt,h[1])
 #%%
@@ -166,16 +176,9 @@ y_cv = cross_validation.cross_val_predict( clf, X, y, cv=cv, n_jobs=-1, verbose=
 #sns.regplot(y,y_cv)
 print (time.time()-start)/60.
 
-plot_fit_heatmap(y, y_cv)
 
 #%%
 clf.fit(X,y)
-def print_feature_importances(clf):
-    ordering = np.argsort(clf.feature_importances_)
-    ordering = ordering[::-1]
-    words = [revocab[a] for a in ordering]
-    for i in range(20):
-        print "%.2f\t%s" % (clf.feature_importances_[ordering[i]], words[i])
 print_feature_importances(clf)
         #%%
 from scipy.sparse import hstack
@@ -223,9 +226,6 @@ test_y = np.log(fb_test.prop_angry+0.01)
 
 print clf.score(test_X, test_y)
 
-test_y_pred = clf.predict(test_X)
-print_feature_importances(clf)
-plot_fit_heatmap(test_y, test_y_pred,vmax=18)
 #%%
 import pickle
 angry_y = np.log(fb.prop_angry+0.01)
@@ -234,10 +234,70 @@ angry_clf = RandomForestRegressor(n_estimators=150, n_jobs=-1, verbose=1, oob_sc
 angry_clf.fit(X_with_src, angry_y)
 sad_clf = RandomForestRegressor(n_estimators=150, n_jobs=-1, verbose=1, oob_score=True)
 sad_clf.fit(X_with_src, sad_y)
+print_feature_importances(angry_clf)
+
+test_sad_y = np.log(fb_test.prop_sad+0.01)
+sad_y_pred = sad_clf.predict(test_X)
+print_feature_importances(sad_clf)
+plot_fit_heatmap(test_sad_y, sad_y_pred,vmax=30, cmap='Purples', reaction='sad')
+plt.savefig('sad.pdf')
+print sad_clf.oob_score_
+
+test_angry_y= np.log(fb_test.prop_angry+0.01)
+angry_y_pred = angry_clf.predict(test_X)
+print_feature_importances(angry_clf)
+plot_fit_heatmap(test_angry_y, angry_y_pred,vmax=30, cmap='Greens', reaction='angry')
+plt.savefig('angry.pdf')
+print angry_clf.oob_score_
+#%%
 headline_model = {'angry_estimator':angry_clf, 'sad_estimator':sad_clf, 'vectorizer':headline_vectorizer, 'tfidf':headline_tfidf}
 filehandler = open('../headline_model.pickle', 'wb')
 pickle.dump(headline_model, filehandler)
 filehandler.close()
+
+#%%
+# Front page analysis
+import dateutil
+from datetime import datetime
+
+
+dts = [dateutil.parser.parse(a) for a in fb_test.status_published]
+fb_test.loc[:,'dt'] = dts
+fb_test.loc[:,'date'] = [a.date() for a in fb_test.dt]
+
+#gb = fb_test.groupby(['src','date'])
+#daycounts = gb.count().dt
+#daycounts = daycounts.reset_index()
+#daycounts = pd.DataFrame(daycounts).pivot('src','date','dt')
+##%%
+#b = daycounts>=8
+#b.all(0)
+fb_test.loc[:,'angry'] = test_angry_y
+fb_test.loc[:,'sad'] = test_sad_y
+fb_test.loc[:,'pred_angry'] = angry_y_pred
+fb_test.loc[:,'pred_sad'] = sad_y_pred
+#%%
+fpsamples = []
+fb_test.loc[:,'datestr'] = [datetime.strftime(a,'%Y-%m-%d') for a in fb_test.date]
+for d in np.unique(fb_test.datestr):
+    for src in np.unique(fb_test.src):
+        record = fb_test.loc[(fb_test.datestr==d) & (fb_test.src ==src),:].iloc[:10]
+        if len(record) >= 10:
+            fpsamples.append({'datestr':d, 'src':src, 'angry':np.mean(record.angry), 'pred_angry':np.mean(record.pred_angry),'sad':np.mean(record.sad),'pred_sad':np.mean(record.pred_sad)})
+                   
+fpsamples = pd.DataFrame(fpsamples)
+fpsamples.dropna(subset=['angry'],inplace=True)
+#%%
+
+
+print scipy.stats.pearsonr(fpsamples.sad, fpsamples.pred_sad)[0]**2
+print scipy.stats.pearsonr(fpsamples.angry, fpsamples.pred_angry)[0]**2
+plt.figure()
+sns.regplot(fpsamples.angry, fpsamples.pred_angry)
+
+plot_fit_heatmap(fpsamples.angry,  fpsamples.pred_angry, vmax=4,bins=np.arange(-5,-2,0.25), cmap='Greens',reaction='angry')
+plt.savefig('average_anger.pdf')
+
 
 
 
@@ -305,6 +365,7 @@ print np.mean(scores)
 y_cv = cross_validation.cross_val_predict( clf, X_root, y_root, cv=cv, n_jobs=-1, verbose=1)
 plt.figure()
 sns.regplot(y_root,y_cv)
+
 
 #%%
 start = time.time()
