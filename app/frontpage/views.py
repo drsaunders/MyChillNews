@@ -34,6 +34,7 @@ con = None
 con = psycopg2.connect(database = dbname, user = user)
 
 todays_date = datetime.datetime.now().strftime("%Y-%m-%d")
+todays_date = '2016-09-28'
 #%%
 
 
@@ -68,7 +69,7 @@ def index():
     url_list = [frontpage_for_render.loc[frontpage_for_render.name ==a,'front_page'].iloc[0] for a in mean_by_name.index.values]
     url_string = ','.join('"%s"' % a for a in url_list)
     print os.getcwd()
-    thumbnail_paths = ['../../../thumbnail_%s.png' % frontpage_for_render.loc[frontpage_for_render.name ==a,'src'].iloc[0] for a in mean_by_name.index.values]
+    thumbnail_paths = ['/static/current_frontpage_thumbnails/thumbnail_%s.png' % frontpage_for_render.loc[frontpage_for_render.name ==a,'src'].iloc[0] for a in mean_by_name.index.values]
     thumbnail_string = ','.join('"%s"' % a for a in thumbnail_paths)
     return render_template("index.html"
        ,todays_date = todays_date
