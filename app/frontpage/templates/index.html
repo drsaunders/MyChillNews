@@ -29,7 +29,7 @@
       <script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
       <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
     <![endif]-->
-    
+
   </head>
 
   <body>
@@ -58,7 +58,7 @@
 <br/><br/><br/>
 
     <div class="container">
-    
+
     <style>
       {% for i in range(10) %}
       .d{{i}} {
@@ -72,35 +72,36 @@
      .recommended {
       	font-weight: bold;
       	font-size: xx-large;
-      	margin: auto; 
+      	margin: auto;
       	 text-align: center;
       }
       img.scaling {
 	      max-width:100%;
-	      
-	 } 
+
+	 }
 	 a#recommendation {
 		text-decoration: underline;
 	}
 	li.list-group-item {
 		cursor: move;
 	}
-	
+
     </style>
-    
+
     <div class="container-fluid">
     <div class="row">
 
     	<div class="col-sm-5">
         <p class="lead"> These are the estimated stress impacts of <b>today's</b> front pages. </p>
         <p class="lead"> Reorder by dragging your favorites to the top: </p>
+        <p class="tiny"> Data refreshed: {{date_to_use}}<p>
 			<ul id="news_srcs" class="list-group">
 			  {% for i in range(10) %}
-				<li class="d{{i}} list-group-item" data-id="{{i}}"> <span class="src-name"> {{ mean_by_name.iloc[i]['name'] }}</span> <span > Angry: {{ anger_string[i] }} Sad: {{ sad_string[i] }}</span>  </li>
+				<li class="d{{i}} list-group-item" data-id="{{i}}"> <span class="src-name"> {{ mean_by_name.iloc[i]['name'] }}</span>  </li>
 			  {% endfor %}
 			</ul>
 		</div> <!-- span6 -->
-	
+
 		<div class="col-sm-5">
 			<p class="lead"> And choose your stress impact tolerance for today: </p>
 			<img src="/static/coolwarm.png" class="scaling">
@@ -140,30 +141,30 @@
     		i++;
     		cur_item = parseInt(preference_order[i]);
     	}
-	    	
+
     	// If none found, just make it the lowest sis score on the list
     	if (i == sis_list.length) {
     		cur_item = sis_list.indexOf(Math.min.apply(null, sis_list));
     	}
     	return cur_item;
-    	
+
     }
-    
+
     function update_recommendation(preference_order) {
     	sis_list = [{{ sis_values_string }}];
     	name_list = [{{ src_names_string | safe}}];
     	url_list = [{{ url_string | safe}}];
     	thumbnail_path_list = [{{ thumbnail_string | safe}}];
-    	
+
     	tolerance_slider = document.getElementById('sis_tolerance');
     	sis_tolerance = tolerance_slider.value;
-    	
+
     	recommendation = pick_src(preference_order, sis_list, sis_tolerance);
-    	
-        document.getElementById("recommendation").innerHTML = name_list[recommendation];  
-        document.getElementById("recommendation").href = url_list[recommendation];  
-        document.getElementById("thumbnail_link").href = url_list[recommendation];  
-        document.getElementById("thumbnail_img").src = thumbnail_path_list[recommendation];  
+
+        document.getElementById("recommendation").innerHTML = name_list[recommendation];
+        document.getElementById("recommendation").href = url_list[recommendation];
+        document.getElementById("thumbnail_link").href = url_list[recommendation];
+        document.getElementById("thumbnail_img").src = thumbnail_path_list[recommendation];
         document.getElementById("thumbnail_img").hidden = false;
     }
     // Simple list

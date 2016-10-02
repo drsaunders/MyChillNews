@@ -34,21 +34,32 @@ con = None
 con = psycopg2.connect(database = dbname, user = user)
 
 todays_date = datetime.datetime.now().strftime("%Y-%m-%d")
-todays_date = '2016-09-28'
+#todays_date = '2016-09-28'
 #%%
 
 
 @app.route('/')
 @app.route('/index')
 def index():
+#%%
+    # Use the most recent day that has sis data 
+    date_query = sql_query = """                                                             
+        SELECT fp_timestamp 
+        FROM frontpage JOIN sis_for_articles_model 
+            ON frontpage.article_id = sis_for_articles_model.article_id 
+        ORDER BY frontpage.article_id DESC LIMIT 1;                """  
+    date_to_use = pd.read_sql_query(sql_query,con)
+    date_to_use =  date_to_use.fp_timestamp.values[0]
     sql_query = """                                                             
                 SELECT * FROM frontpage 
                 JOIN srcs ON frontpage.src=srcs.prefix
                 JOIN sis_for_articles_model ON frontpage.url = sis_for_articles_model.url
-                WHERE fp_timestamp like '%s%%' AND article_order <= 10;                                                                               
-                """  % todays_date
+                WHERE fp_timestamp = '%s' AND article_order <= 10;                                                                               
+                """  % date_to_use
     frontpage_for_render = pd.read_sql_query(sql_query,con)
-    
+#%%
+#    frontpage_for_render.drop_duplicates(subset=['url'],inplace=True)
+
     by_name = frontpage_for_render.groupby('name')
     mean_by_name = by_name.mean()
     total_by_name = by_name.sum()
@@ -72,7 +83,7 @@ def index():
     thumbnail_paths = ['/static/current_frontpage_thumbnails/thumbnail_%s.png' % frontpage_for_render.loc[frontpage_for_render.name ==a,'src'].iloc[0] for a in mean_by_name.index.values]
     thumbnail_string = ','.join('"%s"' % a for a in thumbnail_paths)
     return render_template("index.html"
-       ,todays_date = todays_date
+       ,date_to_use = '%s %s:%s' % (date_to_use[:-5], date_to_use[-4:-2], date_to_use[-2:])
        ,total_num_tweets = 0
        ,mean_by_name = mean_by_name
        ,total_by_name = total_by_name
