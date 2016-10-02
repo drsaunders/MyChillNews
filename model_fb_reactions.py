@@ -50,16 +50,59 @@ def plot_fit_heatmap(real_y, estimate_y, vmax=100, cmap='Greens',reaction='angry
     plt.figure()
 
     sns.set(font_scale=1.5)
-    sns.heatmap(h[0], annot=False,vmin=0, vmax=vmax, fmt='.0f',cmap=cmap)
+    sns.set_style()
+    sns.heatmap(h[0], annot=False,vmin=0, vmax=vmax, fmt='.0f'
+                ,cmap=cmap, cbar=False, square=True)
     plt.gca().invert_yaxis()
+    plt.gca().set_frame_on(True)
     xt = plt.xticks()[0]
-    plt.yticks(xt,h[2][::-1])
-    plt.xticks(xt,h[2])
+    plt.yticks(range(len(bins)),h[2][::-1])
+    plt.xticks(range(len(bins)),h[2])
     plt.xlabel('Actual log proportion %s' % reaction)
     plt.ylabel('Predicted log proportion %s' % reaction)
     plt.tight_layout()
-#    plt.xticks(xt,h[1])
-#%%
+    
+def clean_fb_statuses(fb):
+    # Filter only links (more likely to also appear on the website)
+    fb = fb.loc[fb.status_type == 'link',:]
+    print len(fb)
+    
+    
+    # Remove items that aren't really links
+    lens = np.array([len(a) for a in fb.link_name])
+    fb = fb.loc[lens > 12,:]
+    
+    #Remove items with no src
+    src_is_none = [(a is None) or (a == np.nan) for a in fb.src]
+    fb = fb.loc[np.invert(src_is_none),:]
+    fb.loc[fb.src=='nbd','src'] = 'nbc'
+    
+    #Remove nuisance items that aren't really news stories
+    nuisance_regexes = ['Take the quiz','Instagram photo by New York Times Archives','Your .* Briefing','Yahoo Movies','Yahoo Sports','Yahoo Movies UK','Yahoo UK & Ireland','Yahoo Finance','Yahoo Canada','Yahoo Music','Yahoo Celebrity','Yahoo Style + Beauty','The 10-Point.','Daily Mail Australia','USA TODAY Money and Tech']
+    found= np.zeros(len(fb))
+    for regex in nuisance_regexes:
+        found = found + np.array([not re.search(regex, a) is None for a in fb.link_name])
+    
+    fb = fb.loc[np.invert(found.astype(bool)),:]
+    
+    print len(fb)
+    
+    
+    # Remove items with no reactions at all (to prevent divide-by-zeros)
+    
+    fb = fb.loc[fb.num_reactions > 0,:]
+    print len(fb)
+    
+    # Strip out extraneous phrases
+    
+    headline_regexes = [' - The Boston Globe',' \|.*$']
+    for regex in headline_regexes:
+        fb.loc[:,'link_name'] = [re.sub(regex, '',a) for  a in fb.loc[:,'link_name']]
+
+    return fb
+    #%%
+#if __name__ == '__main__':
+
 dbname = 'frontpage'
 username = 'dsaunder'
 # prepare for database
@@ -69,42 +112,7 @@ sql_query = 'SELECT * FROM fb_statuses;'
 fb = pd.read_sql_query(sql_query,engine)
 print len(fb)
 
-
-# Filter only links (more likely to also appear on the website)
-fb = fb.loc[fb.status_type == 'link',:]
-print len(fb)
-
-
-# Remove items that aren't really links
-lens = np.array([len(a) for a in fb.link_name])
-fb = fb.loc[lens > 12,:]
-
-#Remove items with no src
-src_is_none = [(a is None) or (a == np.nan) for a in fb.src]
-fb = fb.loc[np.invert(src_is_none),:]
-fb.loc[fb.src=='nbd','src'] = 'nbc'
-
-#Remove nuisance items that aren't really news stories
-nuisance_regexes = ['Take the quiz','Instagram photo by New York Times Archives','Your .* Briefing','Yahoo Movies','Yahoo Sports','Yahoo Movies UK','Yahoo UK & Ireland','Yahoo Finance','Yahoo Canada','Yahoo Music','Yahoo Celebrity','Yahoo Style + Beauty','The 10-Point.','Daily Mail Australia','USA TODAY Money and Tech']
-found= np.zeros(len(fb))
-for regex in nuisance_regexes:
-    found = found + np.array([not re.search(regex, a) is None for a in fb.link_name])
-
-fb = fb.loc[np.invert(found.astype(bool)),:]
-
-print len(fb)
-
-
-# Remove items with no reactions at all (to prevent divide-by-zeros)
-
-fb = fb.loc[fb.num_reactions > 0,:]
-print len(fb)
-
-# Strip out extraneous phrases
-
-headline_regexes = [' - The Boston Globe',' \|.*$']
-for regex in headline_regexes:
-    fb.loc[:,'link_name'] = [re.sub(regex, '',a) for  a in fb.loc[:,'link_name']]
+fb = clean_fb_statuses(fb)
 
 # Compute the proportion angry/sad/controversial
 fb.loc[:,'prop_angry'] = fb.num_angries/fb.num_reactions
@@ -276,7 +284,7 @@ fb_test.loc[:,'angry'] = test_angry_y
 fb_test.loc[:,'sad'] = test_sad_y
 fb_test.loc[:,'pred_angry'] = angry_y_pred
 fb_test.loc[:,'pred_sad'] = sad_y_pred
-#%%
+
 fpsamples = []
 fb_test.loc[:,'datestr'] = [datetime.strftime(a,'%Y-%m-%d') for a in fb_test.date]
 for d in np.unique(fb_test.datestr):
@@ -295,7 +303,11 @@ print scipy.stats.pearsonr(fpsamples.angry, fpsamples.pred_angry)[0]**2
 plt.figure()
 sns.regplot(fpsamples.angry, fpsamples.pred_angry)
 
-plot_fit_heatmap(fpsamples.angry,  fpsamples.pred_angry, vmax=4,bins=np.arange(-5,-2,0.25), cmap='Greens',reaction='angry')
+bins = np.arange(-5,-2,0.25)
+plot_fit_heatmap(fpsamples.angry,  fpsamples.pred_angry, vmax=4,bins=bins, cmap='Greens',reaction='angry')
+bins = np.arange(-5,-2,0.5)
+plt.yticks(np.arange(len(bins))*2,bins[::-1])
+plt.xticks(np.arange(len(bins))*2,bins)
 plt.savefig('average_anger.pdf')
 
 
