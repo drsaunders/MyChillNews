@@ -18,6 +18,7 @@ import extract_headlines  # LOCAL MODULE
 import compute_sis_with_model # LOCAL MODULE
 import numpy as np
 import getpass
+import sys
 
 
 #%%
@@ -142,14 +143,17 @@ def create_srcs_table(engine):
 
 
 
-def extract_headlines_to_db(fp_timestamp, engine):
+def extract_headlines_to_db(fp_timestamp, engine, suppress_db_write=False):
     new_headlines = extract_headlines.extract_all_headlines(fp_timestamp)
     sql_query = "SELECT article_id FROM frontpage;"
     existing_ids = pd.read_sql_query(sql_query,engine)
     existing_ids = set(existing_ids.values.flat)
     use_row = np.invert(new_headlines.article_id.isin(existing_ids))
-    new_headlines.loc[use_row,:].to_sql('frontpage', engine, if_exists='append')
-    print("Wrote %d new headlines to database" % np.sum(use_row))
+    if not suppress_db_write:
+        new_headlines.loc[use_row,:].to_sql('frontpage', engine, if_exists='append')
+        print("Wrote %d new headlines to database" % np.sum(use_row))
+    else:
+        print("Suppressed - Would have written %d new headlines to database" % np.sum(use_row))
     
 
 def add_article_id_to_db(engine):
@@ -161,7 +165,12 @@ def add_article_id_to_db(engine):
 
 #%%
 if __name__ == '__main__':
-    
+    suppress_db_write = False
+    if len(sys.argv) > 1:
+        if sys.argv[1] == 'suppress':
+            suppress_db_write = True
+            
+
     abspath = lambda *p: os.path.abspath(os.path.join(*p))
     ROOT = abspath(os.path.dirname(__file__))
     
@@ -196,8 +205,8 @@ if __name__ == '__main__':
             print "Failed to access URL %s" % src['front_page']
     #%%
     print "Extracting headlines... "
-    extract_headlines_to_db(fp_timestamp, engine)
+    extract_headlines_to_db(fp_timestamp, engine, suppress_db_write)
     
     #%%
     print "Computing stress impact scores for articles..."
-    compute_sis_with_model.compute_sis_for_all(engine)
+    compute_sis_with_model.compute_sis_for_all(engine, suppress_db_write)

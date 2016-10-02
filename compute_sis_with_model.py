@@ -18,7 +18,7 @@ from scipy.sparse import hstack
 import scipy.stats
 
 #%%
-def compute_sis_for_all(engine):
+def compute_sis_for_all(engine, suppress_db_write=False):
     sql_query = 'SELECT * FROM srcs;'
     srcs = pd.read_sql_query(sql_query,engine)
     src_lookup = {a.prefix:a.loc['index'] for i,a in srcs.iterrows()}
@@ -56,8 +56,10 @@ def compute_sis_for_all(engine):
     
                                      })
     
-    print "Writing SIS to database..."
-    article_summaries.to_sql('sis_for_articles_model', engine, if_exists='replace', chunksize=100)
-    
+    if not suppress_db_write:
+        print "Writing SIS to database..."
+        article_summaries.to_sql('sis_for_articles_model', engine, if_exists='replace', chunksize=100)
+    else:
+        print "Suppressed writing SIS to database"
 
 #%%
