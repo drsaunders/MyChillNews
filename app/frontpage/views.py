@@ -11,6 +11,7 @@ import getpass
 
 #%%
 from flask import render_template
+from flask import render_template_string
 from frontpage import app
 from flask import request
 #%%
@@ -43,24 +44,27 @@ def index():
     db = create_engine('postgres://%s%s/%s'%(user,host,dbname))
     con = None
     con = psycopg2.connect(database = dbname, user = user)
-    # Use the most recent day that has sis data 
+#     Use the most recent day that has sis data 
     date_to_use = request.args.get('date')
-    if not date_to_use:
+    if date_to_use is None:
         date_query = """                                                             
             SELECT fp_timestamp 
             FROM frontpage JOIN sis_for_articles_model 
                 ON frontpage.article_id = sis_for_articles_model.article_id 
             ORDER BY frontpage.article_id DESC LIMIT 1;                """  
-        date_to_use = pd.read_sql_query(date_query,con)
+        date_to_use = pd.read_sql_query(date_query,con).values[0][0]
 
     sql_query = """                                                             
                 SELECT * FROM frontpage 
                 JOIN srcs ON frontpage.src=srcs.prefix
                 JOIN sis_for_articles_model ON frontpage.url = sis_for_articles_model.url
-                WHERE fp_timestamp = '%s' AND article_order <= 10;                                                                               
+                WHERE fp_timestamp LIKE '%s%%' AND article_order <= 10;                                                                               
                 """  % date_to_use
     frontpage_for_render = pd.read_sql_query(sql_query,con)
     con.close()
+    
+    if len(frontpage_for_render) == 0:
+        return render_template_string('No data for date %s' % date_to_use)
 #%%
 #    frontpage_for_render.drop_duplicates(subset=['url'],inplace=True)
 

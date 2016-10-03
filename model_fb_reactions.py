@@ -101,6 +101,11 @@ def clean_fb_statuses(fb):
         fb.loc[:,'link_name'] = [re.sub(regex, '',a) for  a in fb.loc[:,'link_name']]
 
     return fb
+
+def upload_new_model():    
+    execstr = 'scp -i ../insight2016.pem ../headline_model.pickle ubuntu@52.43.167.177:/home/ubuntu/' 
+    print os.system(execstr)
+
     #%%
 #if __name__ == '__main__':
 
@@ -183,7 +188,7 @@ test_X= hstack((test_X, test_src_hot))
 test_y = np.sqrt((fb_test.prop_angry+fb_test.prop_sad)/2)
 
 print clf_r.score(test_X, test_y)
-#[revocab[a] for a in np.argsort(clf_r.coef_)[-100:] if a < np.max(revocab.keys())]
+[revocab[a] for a in np.argsort(clf_r.coef_)[-100:] if a < np.max(revocab.keys())]
 
   #%%
 
@@ -231,14 +236,15 @@ plt.xlabel('Actual article SIS')
 plt.ylabel('Predicted article SIS')
 plt.axis('square')
 plt.axis([0,0.7,0,0.7])
+plt.savefig('articlesis.png')
 
-pred_test_y  = clf_r.predict(test_X)
 plt.figure()
 sns.regplot(fpsamples.sis, fpsamples.pred_sis, line_kws={'color':sns.xkcd_palette(['dark grey'])[0]}, scatter_kws={"s": 60},color=sns.xkcd_palette(['purple'])[0])
-plt.xlabel('Actual front page SIS')
-plt.ylabel('Predicted front page SIS')
+plt.xlabel('Actual mean SIS')
+plt.ylabel('Predicted mean SIS')
 plt.axis('square')
 plt.axis([0,0.5,0,0.5])
+plt.savefig('frontpagesis.png')
 
 #%
 
