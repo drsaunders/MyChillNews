@@ -128,7 +128,6 @@ if __name__ == '__main__':
     sql_query = "SELECT * FROM srcs;"
     srcs = pd.read_sql_query(sql_query,engine,index_col='index')
     
-    
     frontpagedir = 'app/frontpage/static/current_frontpage_thumbnails/'
     print "Downloading images of web pages... "
     for (i, src) in srcs.iterrows():
