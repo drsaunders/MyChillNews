@@ -55,7 +55,18 @@ def index():
         date_to_use = pd.read_sql_query(date_query,con).values[0][0]
 
     sql_query = """                                                             
-                SELECT * FROM frontpage 
+                SELECT article_order
+                    , fp_timestamp
+                    , headline
+                    , src
+                    , frontpage.url as url
+                    , frontpage.article_id as article_id
+                    , name
+                    , sis
+                    , sis_pct
+                    , front_page
+                    , zsis
+                    as article_id FROM frontpage 
                 JOIN srcs ON frontpage.src=srcs.prefix
                 JOIN sis_for_articles_model ON frontpage.url = sis_for_articles_model.url
                 WHERE fp_timestamp LIKE '%s%%' AND article_order <= 10;                                                                               
@@ -66,21 +77,30 @@ def index():
     if len(frontpage_for_render) == 0:
         return render_template_string('No data for date %s' % date_to_use)
 #%%
-#    frontpage_for_render.drop_duplicates(subset=['url'],inplace=True)
+    frontpage_for_render.drop_duplicates(subset=['url'],inplace=True)
 
     by_name = frontpage_for_render.groupby('name')
     mean_by_name = by_name.mean()
     total_by_name = by_name.sum()
-    row_colors = hex_colors[np.floor(mean_by_name.sis_pct.values*100).astype(int)]
+    sis_for_frontpages = mean_by_name.sis_pct.values
+
+    # Adjust 
+    sis_for_frontpages = (sis_for_frontpages - 0.5)*np.sqrt(10)+0.5
+    sis_for_frontpages[sis_for_frontpages>0.98] = 0.98
+    sis_for_frontpages[sis_for_frontpages<0.02] = 0.02
+
+
+    row_colors = hex_colors[np.floor(sis_for_frontpages*100).astype(int)]
 
     src_names_string = ','.join(['"%s"' % a for a in mean_by_name.index.values])
-    sis_values_string = ','.join(['%.1f' % (a*1000) for a in mean_by_name.sis.values])
+    sis_values_string = ','.join(['%.1f' % (a*1000) for a in sis_for_frontpages])
 
     url_list = [frontpage_for_render.loc[frontpage_for_render.name ==a,'front_page'].iloc[0] for a in mean_by_name.index.values]
     url_string = ','.join('"%s"' % a for a in url_list)
     print os.getcwd()
     thumbnail_paths = ['/static/current_frontpage_thumbnails/thumbnail_%s.png' % frontpage_for_render.loc[frontpage_for_render.name ==a,'src'].iloc[0] for a in mean_by_name.index.values]
     thumbnail_string = ','.join('"%s"' % a for a in thumbnail_paths)
+    
     
     frontpage_for_render.loc[:,['src','headline','sis','sis_pct']].sort_values(['src','sis']).to_csv('frontpage_scoring.csv',encoding='utf-8')
 #%%
