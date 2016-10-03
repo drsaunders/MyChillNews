@@ -8,6 +8,7 @@ import numpy as np
 import re
 import os
 import getpass
+
 #%%
 from flask import render_template
 from frontpage import app
@@ -29,9 +30,6 @@ if user == 'root':  # Hack just for my web server
  #add your username here (same as previous postgreSQL)            
 host = 'localhost'
 dbname = 'frontpage'
-db = create_engine('postgres://%s%s/%s'%(user,host,dbname))
-con = None
-con = psycopg2.connect(database = dbname, user = user)
 
 todays_date = datetime.datetime.now().strftime("%Y-%m-%d")
 #todays_date = '2016-09-28'
@@ -42,14 +40,19 @@ todays_date = datetime.datetime.now().strftime("%Y-%m-%d")
 @app.route('/index')
 def index():
 #%%
+    db = create_engine('postgres://%s%s/%s'%(user,host,dbname))
+    con = None
+    con = psycopg2.connect(database = dbname, user = user)
     # Use the most recent day that has sis data 
-    date_query = sql_query = """                                                             
-        SELECT fp_timestamp 
-        FROM frontpage JOIN sis_for_articles_model 
-            ON frontpage.article_id = sis_for_articles_model.article_id 
-        ORDER BY frontpage.article_id DESC LIMIT 1;                """  
-    date_to_use = pd.read_sql_query(sql_query,con)
-    date_to_use =  date_to_use.fp_timestamp.values[0]
+    date_to_use = request.args.get('date')
+    if not date_to_use:
+        date_query = """                                                             
+            SELECT fp_timestamp 
+            FROM frontpage JOIN sis_for_articles_model 
+                ON frontpage.article_id = sis_for_articles_model.article_id 
+            ORDER BY frontpage.article_id DESC LIMIT 1;                """  
+        date_to_use = pd.read_sql_query(date_query,con)
+
     sql_query = """                                                             
                 SELECT * FROM frontpage 
                 JOIN srcs ON frontpage.src=srcs.prefix
@@ -57,6 +60,7 @@ def index():
                 WHERE fp_timestamp = '%s' AND article_order <= 10;                                                                               
                 """  % date_to_use
     frontpage_for_render = pd.read_sql_query(sql_query,con)
+    con.close()
 #%%
 #    frontpage_for_render.drop_duplicates(subset=['url'],inplace=True)
 
@@ -67,21 +71,15 @@ def index():
 
     src_names_string = ','.join(['"%s"' % a for a in mean_by_name.index.values])
     sis_values_string = ','.join(['%.1f' % (a*1000) for a in mean_by_name.sis.values])
-    levels =['low','med','high']
-    cutoffs = 1/np.sqrt(by_name.count()['article_order'].values)
-
-    anger_val = (mean_by_name.zangry.values > -cutoffs).astype(int)
-    anger_val[mean_by_name.zangry.values > cutoffs] = 2
-    anger_string = [levels[a] for a in anger_val]
-    sad_val = (mean_by_name.zsad.values > -cutoffs).astype(int)
-    sad_val[mean_by_name.zsad.values > cutoffs] = 2
-    sad_string = [levels[a] for a in sad_val]
 
     url_list = [frontpage_for_render.loc[frontpage_for_render.name ==a,'front_page'].iloc[0] for a in mean_by_name.index.values]
     url_string = ','.join('"%s"' % a for a in url_list)
     print os.getcwd()
     thumbnail_paths = ['/static/current_frontpage_thumbnails/thumbnail_%s.png' % frontpage_for_render.loc[frontpage_for_render.name ==a,'src'].iloc[0] for a in mean_by_name.index.values]
     thumbnail_string = ','.join('"%s"' % a for a in thumbnail_paths)
+    
+    frontpage_for_render.loc[:,['src','headline','sis','sis_pct']].sort_values(['src','sis']).to_csv('frontpage_scoring.csv',encoding='utf-8')
+#%%
     return render_template("index.html"
        ,date_to_use = '%s %s:%s' % (date_to_use[:-5], date_to_use[-4:-2], date_to_use[-2:])
        ,total_num_tweets = 0
@@ -92,6 +90,8 @@ def index():
        ,url_string = url_string
        ,row_colors=row_colors
        ,thumbnail_string=thumbnail_string
-       ,anger_string=anger_string
-       ,sad_string=sad_string
        )
+
+@app.route('/about')
+def about():
+    return render_template("about.html")

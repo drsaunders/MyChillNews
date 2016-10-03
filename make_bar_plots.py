@@ -68,3 +68,20 @@ sis_for_articles_wordvec = pd.read_sql_query(sql_query,engine)
 plt.figure()
 sns.distplot(sis_for_articles_wordvec.sis)
 plt.xlabel('Stress Impact Score')
+
+#%%
+sql_query = "SELECT * FROM sis_for_articles_model"
+sisfor = pd.read_sql_query(sql_query,engine)
+sns.distplot(sisfor.sis)
+counts, bin_lefts = np.histogram(sisfor.sis,100)
+pcts = [np.mean(a > sisfor.sis.values) for a in bin_lefts[:-1]]
+color_range = np.array(sns.color_palette("coolwarm",n_colors=100))
+bar_colors = color_range[np.floor(np.array(pcts)*100).astype(int)]
+#%%
+plt.figure()
+sns.set_palette(bar_colors)
+sns.barplot(bin_lefts[:-1], counts,linewidth=0)
+plt.axis('off')
+plt.xlabel('SIS score')
+plt.savefig('sisdist.png')
+
