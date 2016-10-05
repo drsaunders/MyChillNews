@@ -89,3 +89,9 @@ def compute_sis_for_all(engine, suppress_db_write=False):
 
     
 #%%
+if __name__ == '__main__':
+    dbname = 'frontpage'
+    username = 'ubuntu'
+    # prepare for database
+    engine = create_engine('postgres://%s@localhost/%s'%(username,dbname))
+    compute_sis_for_all(engine)
