@@ -2,3 +2,4 @@
 ghostdriver.log
 *.pyc
 app/*.pyc
+app/frontpage/static/current_frontpage_thumbnails/*
