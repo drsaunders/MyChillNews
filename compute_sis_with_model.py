@@ -26,7 +26,7 @@ def score_frontpage_frame(fp, src_lookup, headline_model):
     src_code = fp.src.map(src_lookup)
     
     src_hot = headline_model['src_encoder'].transform(src_code.reshape(-1,1))
-#    X = hstack((X, src_hot))
+    X = hstack((X, src_hot))
     
     sis = headline_model['estimator'].predict(X)
 

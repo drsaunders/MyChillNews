@@ -36,7 +36,7 @@ access_token = app_id + "|" + app_secret
 
 
 limited = True # limits the number of posts processed. Change to False if you want the whole page.
-limit = 100 # The number of pages to be processed if limited is True. Uses multiples of 100 to scrape for bandwith reasons.
+limit = 200 # The number of pages to be processed if limited is True. Uses multiples of 100 to scrape for bandwith reasons.
 
 
 def request_until_succeed(url):
