@@ -138,9 +138,9 @@ def extract_all_headlines(fp_timestamp):
          'headline':[a.contents[0].contents[0] for a in headlines],
          'url':[get_url(a, url_prefix) for a in headlines]
         })
-        
-        new_rows = new_rows.loc[new_rows.headline != '', :]
-        src_rows = src_rows.append(new_rows, ignore_index=True)
+        if len(new_rows)>0:
+            new_rows = new_rows.loc[new_rows.headline != '', :]
+            src_rows = src_rows.append(new_rows, ignore_index=True)
     
     src_rows.loc[:,'article_order'] = range(1,len(src_rows)+1)
     new_headlines = new_headlines.append(src_rows, ignore_index=True)
