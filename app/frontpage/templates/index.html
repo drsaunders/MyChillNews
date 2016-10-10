@@ -126,7 +126,7 @@
 			<p class="lead">Choose your maximum stress impact for today: </p>
 			<img src="/static/coolwarm.png" class="scaling">
 			  <input type="range" id="sis_tolerance" onInput="update_recommendation(sortable.toArray())" value="1000" min="0" max="1000" data-show-value="false">
-	  		Today I recommend you read:
+	  		<p class="lead">Today I recommend you read:</p>
 			<div class="recommended">
 				<p><a id="recommendation"  href="http://nytimes.com"></a></p>
 				<p><a id="thumbnail_link"><img id="thumbnail_img" src=""  hidden=true></a></p>
@@ -195,7 +195,7 @@
 		}
 	 }
 	);
-	//update_recommendation(sortable.toArray());
+	update_recommendation(sortable.toArray());
 
 </script>
 
