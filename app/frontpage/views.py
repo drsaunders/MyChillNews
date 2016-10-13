@@ -85,7 +85,7 @@ def index():
     sis_for_frontpages = mean_by_name.sis_pct.values
 
     # Adjust 
-    sis_for_frontpages = (sis_for_frontpages - 0.5)*np.sqrt(10)+0.5
+    sis_for_frontpages = (sis_for_frontpages - 0.5)*2+0.5
     sis_for_frontpages[sis_for_frontpages>0.98] = 0.98
     sis_for_frontpages[sis_for_frontpages<0.02] = 0.02
 

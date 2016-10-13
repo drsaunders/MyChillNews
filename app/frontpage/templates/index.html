@@ -125,11 +125,11 @@
 		<div class="col-sm-5">
 			<p class="lead">Choose your maximum stress impact for today: </p>
 			<img src="/static/coolwarm.png" class="scaling">
-			  <input type="range" id="sis_tolerance" onInput="update_recommendation(sortable.toArray())" value="1000" min="0" max="1000" data-show-value="false">
+			  <input type="range" id="sis_tolerance" onInput="update_recommendation(sortable.toArray())" onChange="update_thumbnail()" value="1000" min="0" max="1000" data-show-value="false">
 	  		<p class="lead">Today I recommend you read:</p>
 			<div class="recommended">
 				<p><a id="recommendation"  href="http://nytimes.com"></a></p>
-				<p><a id="thumbnail_link"><img id="thumbnail_img" src=""  hidden=true></a></p>
+				<p><a id="thumbnail_link"><img id="thumbnail_img" src="" ></a></p>
 			</div>
 		</div> <!-- span6 -->
 		<div class="col-sm-1">
@@ -184,19 +184,25 @@
         document.getElementById("recommendation").innerHTML = name_list[recommendation];
         document.getElementById("recommendation").href = url_list[recommendation];
         document.getElementById("thumbnail_link").href = url_list[recommendation];
-        document.getElementById("thumbnail_img").src = thumbnail_path_list[recommendation];
-        document.getElementById("thumbnail_img").hidden = false;
+        window.thumbnail_img = thumbnail_path_list[recommendation];
+
+    }
+    function update_thumbnail() {
+      if (document.getElementById("thumbnail_img").src != window.thumbnail_img) {
+        document.getElementById("thumbnail_img").src = window.thumbnail_img;
+      }
     }
     // Simple list
 	var el = document.getElementById('news_srcs');
 	var sortable = Sortable.create(el, {
 		onUpdate: function (/**Event*/evt) {
 			update_recommendation(this.toArray());
+      update_thumbnail();
 		}
 	 }
 	);
 	update_recommendation(sortable.toArray());
-
+  update_thumbnail();
 </script>
 
 </body></html>
