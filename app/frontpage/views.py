@@ -9,11 +9,11 @@ import re
 import os
 import getpass
 
-#%%
 from flask import render_template
 from flask import render_template_string
-from frontpage import app
 from flask import request
+#%%
+from frontpage import app
 #%%
 
 def RGBToHTMLColor(rgb_tuple):
@@ -32,7 +32,7 @@ if user == 'root':  # Hack just for my web server
 host = 'localhost'
 dbname = 'frontpage'
 
-todays_date = datetime.datetime.now().strftime("%Y-%m-%d")
+date_to_use = None
 #todays_date = '2016-09-28'
 #%%
 
@@ -40,12 +40,12 @@ todays_date = datetime.datetime.now().strftime("%Y-%m-%d")
 @app.route('/')
 @app.route('/index')
 def index():
+    date_to_use = request.args.get('date')
 #%%
     db = create_engine('postgres://%s%s/%s'%(user,host,dbname))
     con = None
     con = psycopg2.connect(database = dbname, user = user)
 #     Use the most recent day that has sis data 
-    date_to_use = request.args.get('date')
     if date_to_use is None:
         date_query = """                                                             
             SELECT fp_timestamp 
@@ -73,15 +73,15 @@ def index():
                 """  % date_to_use
     frontpage_for_render = pd.read_sql_query(sql_query,con)
     con.close()
-    
+    #%%
     if len(frontpage_for_render) == 0:
         return render_template_string('No data for date %s' % date_to_use)
-#%%
+        #%%
     frontpage_for_render.drop_duplicates(subset=['url'],inplace=True)
 
-    by_name = frontpage_for_render.groupby('name')
-    mean_by_name = by_name.mean()
-    total_by_name = by_name.sum()
+    by_name = frontpage_for_render.groupby(['name','src'])
+    mean_by_name = by_name.mean().reset_index()
+    total_by_name = by_name.sum().reset_index()
     sis_for_frontpages = mean_by_name.sis_pct.values
 
     # Adjust 
@@ -92,17 +92,25 @@ def index():
 
     row_colors = hex_colors[np.floor(sis_for_frontpages*100).astype(int)]
 
-    src_names_string = ','.join(['"%s"' % a for a in mean_by_name.index.values])
+    src_names_string = ','.join(['"%s"' % a for a in mean_by_name.name.values])
     sis_values_string = ','.join(['%.1f' % (a*1000) for a in sis_for_frontpages])
 
-    url_list = [frontpage_for_render.loc[frontpage_for_render.name ==a,'front_page'].iloc[0] for a in mean_by_name.index.values]
+    url_list = [frontpage_for_render.loc[frontpage_for_render.name ==a,'front_page'].iloc[0] for a in mean_by_name.name.values]
     url_string = ','.join('"%s"' % a for a in url_list)
-    print os.getcwd()
-    thumbnail_paths = ['/static/current_frontpage_thumbnails/thumbnail_%s.png' % frontpage_for_render.loc[frontpage_for_render.name ==a,'src'].iloc[0] for a in mean_by_name.index.values]
+    
+    thumbnail_paths = ['/static/current_frontpage_thumbnails/thumbnail_%s.png' % frontpage_for_render.loc[frontpage_for_render.name ==a,'src'].iloc[0] for a in mean_by_name.name.values]
     thumbnail_string = ','.join('"%s"' % a for a in thumbnail_paths)
     
-    
-    frontpage_for_render.loc[:,['src','headline','sis','sis_pct']].sort_values(['src','sis']).to_csv('frontpage_scoring.csv',encoding='utf-8')
+    with open("frontpage_scoring.txt",'w') as fid:
+
+        for i in range(len(sis_for_frontpages)):
+            fid.write("\n\n%s  frontpage SIS:  %.1f (rescaled for color: %.2f)" % (mean_by_name.name.values[i], mean_by_name.sis_pct.values[i]*100, sis_for_frontpages[i]))
+            for_src = frontpage_for_render.loc[frontpage_for_render.src == mean_by_name.src.values[i],:].copy()
+            for_src.sort_values(['src','sis'],inplace=True)
+            for j,h in for_src.iterrows():
+                fid.write("\n\t%.1f %s" % (h.sis_pct*100, h.headline))
+                         
+#    frontpage_for_render.loc[:,['src','headline','sis','sis_pct']].sort_values(['src','sis']).to_csv('frontpage_scoring.csv',encoding='utf-8')
 #%%
     return render_template("index.html"
        ,date_to_use = '%s %s:%s' % (date_to_use[:-5], date_to_use[-4:-2], date_to_use[-2:])
