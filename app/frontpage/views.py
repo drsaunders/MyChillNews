@@ -28,7 +28,7 @@ hex_colors = np.array([RGBToHTMLColor(rgb_tuple) for rgb_tuple in color_range])
 user = getpass.getuser()
 if user == 'root':  # Hack just for my web server
     user = 'ubuntu'
- #add your username here (same as previous postgreSQL)            
+ #add your username here (same as previous postgreSQL)
 host = 'localhost'
 dbname = 'frontpage'
 
@@ -45,16 +45,16 @@ def index():
     db = create_engine('postgres://%s%s/%s'%(user,host,dbname))
     con = None
     con = psycopg2.connect(database = dbname, user = user)
-#     Use the most recent day that has sis data 
+#     Use the most recent day that has sis data
     if date_to_use is None:
-        date_query = """                                                             
-            SELECT fp_timestamp 
-            FROM frontpage JOIN sis_for_articles_model 
-                ON frontpage.article_id = sis_for_articles_model.article_id 
-            ORDER BY frontpage.article_id DESC LIMIT 1;                """  
+        date_query = """
+            SELECT fp_timestamp
+            FROM frontpage JOIN sis_for_articles_model
+                ON frontpage.article_id = sis_for_articles_model.article_id
+            ORDER BY frontpage.article_id DESC LIMIT 1;                """
         date_to_use = pd.read_sql_query(date_query,con).values[0][0]
 
-    sql_query = """                                                             
+    sql_query = """
                 SELECT article_order
                     , fp_timestamp
                     , headline
@@ -66,10 +66,10 @@ def index():
                     , sis_pct
                     , front_page
                     , zsis
-                    as article_id FROM frontpage 
+                    as article_id FROM frontpage
                 JOIN srcs ON frontpage.src=srcs.prefix
                 JOIN sis_for_articles_model ON frontpage.url = sis_for_articles_model.url
-                WHERE fp_timestamp LIKE '%s%%' AND article_order <= 10;                                                                               
+                WHERE fp_timestamp LIKE '%s%%' AND article_order <= 10;
                 """  % date_to_use
     frontpage_for_render = pd.read_sql_query(sql_query,con)
     con.close()
@@ -84,7 +84,7 @@ def index():
     total_by_name = by_name.sum().reset_index()
     sis_for_frontpages = mean_by_name.sis_pct.values
 
-    # Adjust 
+    # Adjust
     sis_for_frontpages = (sis_for_frontpages - 0.5)*2+0.5
     sis_for_frontpages[sis_for_frontpages>0.98] = 0.98
     sis_for_frontpages[sis_for_frontpages<0.02] = 0.02
@@ -97,10 +97,10 @@ def index():
 
     url_list = [frontpage_for_render.loc[frontpage_for_render.name ==a,'front_page'].iloc[0] for a in mean_by_name.name.values]
     url_string = ','.join('"%s"' % a for a in url_list)
-    
+
     thumbnail_paths = ['/static/current_frontpage_thumbnails/thumbnail_%s.png' % frontpage_for_render.loc[frontpage_for_render.name ==a,'src'].iloc[0] for a in mean_by_name.name.values]
     thumbnail_string = ','.join('"%s"' % a for a in thumbnail_paths)
-    
+
     with open("frontpage_scoring.txt",'w') as fid:
 
         for i in range(len(sis_for_frontpages)):
@@ -109,7 +109,7 @@ def index():
             for_src.sort_values(['src','sis'],inplace=True)
             for j,h in for_src.iterrows():
                 fid.write("\n\t%.1f %s" % (h.sis_pct*100, h.headline))
-                         
+
 #    frontpage_for_render.loc[:,['src','headline','sis','sis_pct']].sort_values(['src','sis']).to_csv('frontpage_scoring.csv',encoding='utf-8')
 
 #%%
@@ -128,3 +128,7 @@ def index():
 @app.route('/about')
 def about():
     return render_template("about.html")
+
+@app.route('/contact')
+def contact():
+    return render_template("contact.html")
