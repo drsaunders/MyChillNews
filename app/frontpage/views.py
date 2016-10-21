@@ -111,6 +111,7 @@ def index():
                 fid.write("\n\t%.1f %s" % (h.sis_pct*100, h.headline))
                          
 #    frontpage_for_render.loc[:,['src','headline','sis','sis_pct']].sort_values(['src','sis']).to_csv('frontpage_scoring.csv',encoding='utf-8')
+
 #%%
     return render_template("index.html"
        ,date_to_use = '%s %s:%s' % (date_to_use[:-5], date_to_use[-4:-2], date_to_use[-2:])

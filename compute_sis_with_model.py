@@ -65,7 +65,9 @@ def compute_sis_for_all(engine, suppress_db_write=False):
     print "Loading all articles..."
     sql_query = "SELECT * FROM frontpage" # WHERE fp_timestamp='%s' AND article_order <=10" % fp_timestamp
     frontpage_data =  pd.read_sql_query(sql_query,engine)
+    print "Num headlines =  %d" % len(frontpage_data)
     print "Computing sis..."
+    
 
     sis = score_frontpage_frame(frontpage_data, src_lookup, headline_model)
 

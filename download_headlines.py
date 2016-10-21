@@ -176,9 +176,9 @@ if __name__ == '__main__':
     
     dbname = 'frontpage'
     username = getpass.getuser()
+    print username
     if username == 'root':  # Hack just for my web server
         username = 'ubuntu'
-    
        
     # prepare for database
     engine = create_engine('postgres://%s@localhost/%s'%(username,dbname))
@@ -188,6 +188,7 @@ if __name__ == '__main__':
     
     # Get the timestamp and setup directories
     fp_timestamp =  datetime.datetime.now().strftime("%Y-%m-%d-%H%M")
+    print "Extracting headlines at timestamp %s" % fp_timestamp
     #fp_timestamp = '2016-09-22-0724'
     frontpagedir = '../current_frontpage/'
     if not os.path.exists(frontpagedir):
