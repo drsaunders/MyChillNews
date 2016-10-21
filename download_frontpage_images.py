@@ -23,16 +23,20 @@ from sqlalchemy import create_engine
 
 def do_screen_capturing(url, screen_path, width, height):
     print "Capturing screen.."
-    driver = webdriver.PhantomJS()
+    driver = webdriver.PhantomJS(service_args=['--ignore-ssl-errors=true', '--ssl-protocol=ANY'])
+    print "Initialized driver"
     # it save service log file in same directory
     # if you want to have log file stored else where
     # initialize the webdriver.PhantomJS() as
     # driver = webdriver.PhantomJS(service_log_path='/var/log/phantomjs/ghostdriver.log')
-    driver.set_script_timeout(30)
+    driver.set_script_timeout(120)
     if width and height:
         driver.set_window_size(width, height)
     driver.get(url)
+    print "Got URL"
+    print screen_path
     driver.save_screenshot(screen_path)
+    print "Saved screenshot"
 
 def execute_command(command):
     result = Popen(command, shell=True, stdout=PIPE).stdout.read()

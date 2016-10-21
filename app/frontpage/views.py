@@ -101,8 +101,6 @@ def index():
     thumbnail_paths = ['/static/current_frontpage_thumbnails/thumbnail_%s.png' % frontpage_for_render.loc[frontpage_for_render.name ==a,'src'].iloc[0] for a in mean_by_name.index.values]
     thumbnail_string = ','.join('"%s"' % a for a in thumbnail_paths)
     
-    
-    frontpage_for_render.loc[:,['src','headline','sis','sis_pct']].sort_values(['src','sis']).to_csv('frontpage_scoring.csv',encoding='utf-8')
 #%%
     return render_template("index.html"
        ,date_to_use = '%s %s:%s' % (date_to_use[:-5], date_to_use[-4:-2], date_to_use[-2:])
