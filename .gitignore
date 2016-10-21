@@ -5,3 +5,4 @@ app/*.pyc
 app/frontpage/static/current_frontpage_thumbnails/*
 *~
 app/supervisord.pid
+frontpage_scoring.txt
