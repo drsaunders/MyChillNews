@@ -1,10 +1,24 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
-# Outputting as utf-8 not yet included, but not difficult to add if needed.
+"""
+Download a large batch of recent FB news stories and add them to the database.
 
+For all my news sources, go to their public facebook pages and scrape the most
+recent 200 stories worth of reactions and add them to the database (removing
+duplicates first)
+
+This all happens on my local computer, where I train the model, rather than 
+on the app.
+
+Quite slow at the moment - the status processing could almost certainly be 
+optimized.
+
+Most of the code comes from this original source.
 # Forked from https://github.com/minimaxir/facebook-page-post-scraper, originally by Max Woolf (minimaxir), https://github.com/minimaxir
 # Updated by Peeter Tinits 14.06.2016 to read reactions separately based on http://stackoverflow.com/questions/36930414/how-can-i-get-facebook-graph-api-reaction-summary-count-separately recommendations.
 # Runs with Py 2.7.10
+
+"""
 
 import urllib2
 import json
@@ -18,12 +32,11 @@ import numpy as np
 import getpass
 #%%
 
+# Connect to the database
 dbname = 'frontpage'
 username = getpass.getuser()
 if username == 'root':  # Hack just for my web server
     username = 'ubuntu'
-
-
 engine = create_engine('postgres://%s@localhost/%s'%(username,dbname))
 
 #Get your app id and key here on facebook. Help here: https://goldplugins.com/documentation/wp-social-pro-documentation/how-to-get-an-app-id-and-secret-key-from-facebook/
@@ -34,12 +47,18 @@ with open('../facebook_app_keys.dat','r') as f:
 
 access_token = app_id + "|" + app_secret
 
-
 limited = True # limits the number of posts processed. Change to False if you want the whole page.
 limit = 200 # The number of pages to be processed if limited is True. Uses multiples of 100 to scrape for bandwith reasons.
 
-
 def request_until_succeed(url):
+    """Repeat request for URL until it works.
+    
+    Args:
+        url: The url to open
+       
+    Return:
+        The contents of the page
+    """
     req = urllib2.Request(url)
     success = False
     while success is False:
@@ -61,7 +80,14 @@ def unicode_normalize(text):
 	return text.translate({ 0x2018:0x27, 0x2019:0x27, 0x201C:0x22, 0x201D:0x22, 0xa0:0x20 }).encode('utf-8')
 
 def getFacebookPageFeedData(page_id, access_token, num_statuses):
+    """Get a list of latest statuses from a particular page.
     
+    Args:
+        page_id: The FB page to download from.
+        access_token: FB developer api token 
+        num_statuses: How many to grab this time
+        
+    """
     # construct the URL string
     base = "https://graph.facebook.com/v2.6/"
     node = "/" + page_id + "/posts" 
@@ -72,7 +98,17 @@ def getFacebookPageFeedData(page_id, access_token, num_statuses):
     data = json.loads(request_until_succeed(url))
     
     return data
+    
 def getFacebookPostData(page_id, access_token):
+    """Get the whole JSON of info about a particular post.
+    
+    Args:
+        page_id: The id of the particular post
+        access_token: FB developer api token 
+         
+    Returns:
+        The whole JSON of stuff about the post.
+    """
     num_statuses = 1
     # construct the URL string
     base = "https://graph.facebook.com/v2.6/"
@@ -91,7 +127,14 @@ def getFacebookPostData(page_id, access_token):
    
 
 def processFacebookPageFeedStatus(status):
-    
+    """Take a single FB story and break it down into a row.
+
+    Args:
+        status: A facebook story retrieved from an API call
+
+    Returns:
+        A single row describing the aggregated reactions to the story.    
+    """
     # The status is now a Python dictionary, so for top-level items,
     # we can simply call the key.
     
@@ -138,6 +181,15 @@ def processFacebookPageFeedStatus(status):
             num_loves, num_wows, num_hahas, num_sads, num_angries, num_thankfuls)
 
 def scrapeFacebookPageFeedStatus(page_id, access_token):
+    """Gets all the statuses, up to a particular limit, for a public FB page.
+    
+    Args:
+        page_id: The name of the public page e.g. "HuffingtonPost"
+        access_token: FB developer api token 
+        
+    Returns:
+        A dataframe with a row for each story, and columns as described below.
+    """
     columns=["status_id", "status_message", "link_name", "status_type", "status_link",
        "status_published", "num_reactions", "num_comments", "num_shares", "num_likes",
                 "num_loves","num_wows","num_hahas","num_sads","num_angries","num_thankfuls"]
@@ -151,6 +203,7 @@ def scrapeFacebookPageFeedStatus(page_id, access_token):
     statuses = getFacebookPageFeedData(page_id, access_token, 100)
     #print(statuses)
     
+    # Get one "page" of 100 statuses at a time
     new_rows = []
     while has_next_page:
         for status in statuses['data']:
@@ -188,13 +241,17 @@ if __name__ == '__main__':
 
     timestamp =  datetime.datetime.now().strftime("%Y-%m-%d-%H%M")
    
+    # Get the news source info
     sql_query = "SELECT * FROM srcs;"
     srcs = pd.read_sql_query(sql_query,engine,index_col='index')
 
+    # Query the existing linked URLs to avoid adding duplicates
     sql_query = "SELECT status_link FROM fb_statuses;"
     existing_ids = pd.read_sql_query(sql_query,engine)
     existing_ids = set(existing_ids.values.flat)
 
+    # Go through all the sources and download the last 200 FB statuses for the 
+    # associated public pages
     total_written = 0
     for i,src_row in srcs.iterrows():
         if src_row.fb_page == '':
@@ -211,8 +268,3 @@ if __name__ == '__main__':
         print ("Earliest for %s is " % src_row.prefix)
         print src_statuses.status_published.sort_values().iloc[0]
     print("Wrote %d new headlines to database" % total_written)
-
-    
-
- 
-# The CSV can be opened in all major statistical programs. Have fun! :)
