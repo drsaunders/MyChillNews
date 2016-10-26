@@ -1,6 +1,9 @@
 #!/usr/bin/env python2
 # -*- coding: utf-8 -*-
 """
+Makes wordclouds of top 1000 and bottom 1000 most angry headlines.
+Save them as two pngs.
+
 Created on Wed Sep 28 15:05:30 2016
 
 @author: dsaunder
@@ -20,12 +23,15 @@ def red_color_func(word, font_size, position, orientation, random_state=None, **
 def blue_color_func(word, font_size, position, orientation, random_state=None, **kwargs):
     the_color = sns.color_palette("coolwarm",n_colors=2)[1]
     return (0,0,255)
+    
+# Make a fancy ellipse mask for the cloud
 width = 2000
 height = 1600
 x,y = np.meshgrid(range(width),range(height))
 ellipse_mask = ((x-1000)/1000.)**2 + ((y-800)/800.)**2 > 1
 ellipse_mask = ellipse_mask.astype(int)*255
-    #%%
+ #%%
+    
 dbname = 'frontpage'
 username = getpass.getuser()
 if username == 'root':  # Hack just for my web server
@@ -35,6 +41,7 @@ if username == 'root':  # Hack just for my web server
 # prepare for database
 engine = create_engine('postgres://%s@localhost/%s'%(username,dbname))
 
+# Use SIS for all headlines in the database
 sql_query = """                                                             
             SELECT headline, src, sis, frontpage.url as url, frontpage.article_id as article_id FROM frontpage 
             JOIN srcs ON frontpage.src=srcs.prefix
@@ -44,7 +51,7 @@ frontpages = pd.read_sql_query(sql_query,engine)
 frontpages.drop_duplicates(subset=['url'],inplace=True)
 frontpages.drop_duplicates(subset=['headline'],inplace=True)
 #%%
-    
+# Create and export word cloud for the least stressful 1000 headlines
 headlines = frontpages.headline
 sis = frontpages.sis
 lower_text = ' '.join(headlines.iloc[np.argsort(sis)[:1000]])
@@ -55,12 +62,15 @@ plt.imshow(wordcloud)
 plt.axis("off")
 plt.savefig('lower.png')
 
-
 #%%
+# What's up with "new" appearing in all these low SIS headlines?
 for h in headlines.iloc[np.argsort(sis)[:1000]]:
     if 'new' in h.lower():
         print h
+        
 #%%
+# Create and export word cloud for the most stressful 1000 headlines
+
 upper_text = ' '.join(headlines.iloc[np.argsort(sis)[-1000:]])
 
 wordcloud = WordCloud(mask=ellipse_mask, background_color='white', relative_scaling=1,width=2000,height=1600, min_font_size=30).generate(upper_text)
@@ -72,6 +82,5 @@ plt.figure(figsize=(10,10))
 plt.imshow(wordcloud)
 plt.axis("off")
 plt.savefig('upper.png')
-#%%
 plt.figure()
 plt.imshow(ellipse_mask)
