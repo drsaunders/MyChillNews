@@ -29,9 +29,10 @@ def do_screen_capturing(url, screen_path, width, height):
     # if you want to have log file stored else where
     # initialize the webdriver.PhantomJS() as
     # driver = webdriver.PhantomJS(service_log_path='/var/log/phantomjs/ghostdriver.log')
-    driver.set_script_timeout(120)
+    driver.set_script_timeout(220)
     if width and height:
         driver.set_window_size(width, height)
+    print url
     driver.get(url)
     print "Got URL"
     print screen_path
