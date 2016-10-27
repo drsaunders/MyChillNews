@@ -1,6 +1,11 @@
 #!/usr/bin/env python2
 # -*- coding: utf-8 -*-
 """
+Connect facebook statuses to scraped headline links.
+
+Rough code that might be useful someday, e.g. to see which stories tend to get
+cross-posted on facebook.
+
 Created on Mon Sep 19 17:31:58 2016
 
 @author: dsaunder

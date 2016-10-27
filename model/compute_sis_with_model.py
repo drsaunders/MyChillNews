@@ -1,6 +1,12 @@
 #!/usr/bin/env python2
 # -*- coding: utf-8 -*-
 """
+Takes all existing headlines and scores them according to the model.
+
+Refreshes the entire sis_for_articles_model table with all stored headlines 
+taken from the frontpage table. To be run immediately after scraping the 
+latest batch of headlines. Uses the model that was trained on FB data.
+
 Created on Sun Sep 25 23:56:31 2016
 
 @author: dsaunder
@@ -20,19 +26,43 @@ from sklearn.preprocessing import OneHotEncoder
 
 
 def score_frontpage_frame(fp, src_lookup, headline_model):
+    """Score a headline that's been stored in a dataframe.
+    
+    Args:
+        fp: Dataframe containing headline text and a src
+        src_lookup: A dict from src codes to the numbers used in training
+        headline_model: The complete model for mapping from text to a predicted 
+            SIS.
+    
+    Returns:
+        A single SIS score for that headline (higher means more stressful)
+    """
+    
     headlines = fp.headline
-    bag = headline_model['vectorizer'].transform(headlines)
+    bag = headline_model['vectorizer'].transform(headlines)  # Tokenize
     X = bag #headline_model['tfidf'].transform(bag)
-    src_code = fp.src.map(src_lookup)
+    src_code = fp.src.map(src_lookup)  
 
-    src_hot = headline_model['src_encoder'].transform(src_code.reshape(-1,1))
-    X = hstack((X, src_hot))
+    src_hot = headline_model['src_encoder'].transform(src_code.reshape(-1,1)) # One hot encoding of src
+    X = hstack((X, src_hot))  # Add src to the features
 
-    sis = headline_model['estimator'].predict(X)
+    sis = headline_model['estimator'].predict(X)  
 
     return sis
 
 def score_phrase(text, src, headline_model):
+    """Score a phrase according to my model of the stressfulness of headlines.
+    
+    Args:
+        text: A string to be scored
+        src: two or three letter string indicating the news source.
+        headline_model: The complete model for mapping from text to a predicted 
+            SIS.
+            
+    Returns:
+        A single SIS score for that headline (higher means more stressful)        
+    """
+    
     src_lookup = {u'abc': 10,
  u'bbc': 12,
  u'bos': 15,
@@ -52,23 +82,28 @@ def score_phrase(text, src, headline_model):
     fp = pd.DataFrame({'headline':text, 'src':src},index=[0])
     phrase_sis = score_frontpage_frame(fp, src_lookup, headline_model)
     return phrase_sis[0]
-#%%
+
 def compute_sis_for_all(engine, suppress_db_write=False):
-#%%
+    """For all headlines in the database, compute and store their SIS.
+    
+    Args:
+        engine: A valid database engine
+        suppress_db_write: If true, just compute, don't write to database.
+    """
+        
     sql_query = 'SELECT * FROM srcs;'
     srcs = pd.read_sql_query(sql_query,engine)
     src_lookup = {a.prefix:a.loc['index'] for i,a in srcs.iterrows()}
 
-    headline_model = pickle.load( open( '../headline_model.pickle', "rb" ) )
-    #headline_model = {'estimator':clf, 'vectorizer':headline_vectorizer, 'tfidf':headline_tfidf}
+    # Load the stored model, generated with fb_model_reactions.py
+    headline_model = pickle.load( open( '../../headline_model.pickle', "rb" ) )
 
     print "Loading all articles..."
     sql_query = "SELECT * FROM frontpage" # WHERE fp_timestamp='%s' AND article_order <=10" % fp_timestamp
     frontpage_data =  pd.read_sql_query(sql_query,engine)
     print "Num headlines =  %d" % len(frontpage_data)
-    print "Computing sis..."
-    
 
+    print "Computing sis..."
     sis = score_frontpage_frame(frontpage_data, src_lookup, headline_model)
 
     # Should probably drop duplicates before doing z score or pct

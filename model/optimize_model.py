@@ -1,6 +1,9 @@
 #!/usr/bin/env python2
 # -*- coding: utf-8 -*-
 """
+Workspace where I rapidly optimized the FB model and settled on the one used in
+model_fb_reactions.
+
 Created on Thu Sep 29 16:20:28 2016
 
 @author: dsaunder
@@ -15,16 +18,26 @@ import scipy
 import time
 import matplotlib.pyplot as plt
 import re
-import os
-from sklearn import preprocessing
 from sklearn import cross_validation
 from gensim.models.word2vec import Word2Vec
 import tqdm
 import scipy.stats
 from scipy.sparse import hstack
 from sklearn.feature_extraction.text import TfidfTransformer
+from sklearn.preprocessing import OneHotEncoder    
+
 
 def plot_fit_heatmap(real_y, estimate_y, vmax=100, cmap='Greens',reaction='angry',bins=[]):
+    """Make a heat map showing the quality of the fit.
+    
+    Args:
+        real_y: Array of the real values
+        estimate_y: Estimated values to compare.
+        vmax: Maximum value for the colour scale
+        cmap: Which colour scheme to use (matplotlib colour maps)
+        reaction: Which this is trying to model (sad or angry)
+        bins: Bin edges for the 2D histogram
+    """
     if len(bins)==0:
         bins=np.arange(-5,0,0.5)
         
@@ -45,6 +58,12 @@ def plot_fit_heatmap(real_y, estimate_y, vmax=100, cmap='Greens',reaction='angry
     plt.tight_layout()
     
 def print_feature_importances(clf):
+    """Output the importance of different words or bigrams, after random forest.
+    Assumes revocab, the mapping from index to word, has been defined.
+    
+    Args:
+        clf: A fitted random forest estimator.
+    """
     ordering = np.argsort(clf.feature_importances_)
     ordering = ordering[::-1]
     words = [revocab[a] for a in ordering]
@@ -53,6 +72,17 @@ def print_feature_importances(clf):
 
 
 def clean_fb_statuses(fb):
+    """Apply a number of rules to remove facebook statuses and clean headlines.
+    
+    As we go, print out how many headlines are retained at each stage.
+    
+    Args:
+        fb: Dataframe containing info about facebook statuses.
+        
+    Returns:
+        The cleaned version of fb - fewerer statuses (usually about 45% less) and
+        some strings removed from headlines.
+    """
     # Filter only links (more likely to also appear on the website)
     fb = fb.loc[fb.status_type == 'link',:]
     print len(fb)
@@ -91,16 +121,14 @@ def clean_fb_statuses(fb):
 
     return fb
 
+
+# Load the facebook status data
 dbname = 'frontpage'
 username = 'dsaunder'
-# prepare for database
 engine = create_engine('postgres://%s@localhost/%s'%(username,dbname))
-
-
 sql_query = 'SELECT * FROM fb_statuses;'
 fb = pd.read_sql_query(sql_query,engine)
 print len(fb)
-
 fb = clean_fb_statuses(fb)
 
 # Compute the proportion angry/sad/controversial
@@ -110,7 +138,6 @@ fb.loc[:,'prop_contro'] = fb.num_comments/fb.num_reactions
 
 (fb, fb_test) = cross_validation.train_test_split(fb, test_size=0.2, random_state=0)
 print len(fb)
-
 
 #%% 
 # Starting model. Baseline 
@@ -130,9 +157,12 @@ revocab = {headline_vectorizer.vocabulary_[a]:a for a in headline_vectorizer.voc
 headline_tfidf = TfidfTransformer(use_idf=True, norm='l2', smooth_idf=True)
 X = bag #headline_tfidf.fit_transform(bag)
 y = np.log(fb.prop_angry+0.01)
+
+# Start by just using the average of the proportion sad and angry reactions as
+# the dependent.
 y_sis = (fb.prop_angry + fb.prop_sad)/2
 
-# Add src
+# Add src as a feature
 sql_query = 'SELECT * FROM srcs;'
 srcs = pd.read_sql_query(sql_query,engine)
 src_lookup = {a.prefix:a.loc['index'] for i,a in srcs.iterrows()}
@@ -140,17 +170,23 @@ src_code = fb.src.map(src_lookup)
 revocab[X.shape[1]]= 'SOURCE'
 src_matrix = scipy.sparse.csr.csr_matrix(src_code.values.reshape(-1,1))
 X_with_src = hstack((X, src_matrix))
+src_encoder = OneHotEncoder()
+src_hot = src_encoder.fit_transform(src_code.reshape(-1,1))
+X_with_src2 = hstack((X, src_hot))
+X_with_src2 = X_with_src2.tocsr()
+      
 
 ##%%
 ## Fit random forest
+# Commented out because it's slow
 #clf = RandomForestRegressor(n_estimators=15, n_jobs=-1, verbose=1, oob_score=True)
 #clf.fit(X_with_src,y)
 #print "Oob score = %.3f" % clf.oob_score_
 
-
-
 X[:,X.shape[1]-len(srcs):]
+
 #%%
+# Ridge regression exploration. Tried values of alpha by hand
 from sklearn.linear_model import Ridge
 from sklearn.linear_model import RidgeCV
 clf_r = Ridge(alpha=5, normalize=True)
@@ -160,7 +196,7 @@ scores = cross_validation.cross_val_score( clf_r, X_with_src2, y, cv=cv, n_jobs=
 print np.mean(scores)
 
 clf_r.fit(X_with_src2,y)
-[revocab[a] for a in np.argsort(clf_r.coef_)[-100:] if a < np.max(revocab.keys())]
+print [revocab[a] for a in np.argsort(clf_r.coef_)[-100:] if a < np.max(revocab.keys())]
 #preds = cross_validation.cross_val_predict( clf_r, X_with_src2, y, cv=cv, n_jobs=-1, verbose=1)
 #plt.figure()
 #plt.plot(y,preds, '.')
@@ -170,6 +206,7 @@ clf_r.fit(X_with_src2,y)
 #scores = cross_validation.cross_val_score( clf_rcv, X_with_src2, y, cv=cv, n_jobs=-1, scoring='r2', verbose=1)
 
 #%%
+# Lasso regression exploration. SLOW
 from sklearn.linear_model import Lasso
 clf_l = Lasso(alpha=0.0001, normalize=True)
 
@@ -177,11 +214,12 @@ cv = cross_validation.KFold(X.shape[0], n_folds=5, shuffle=True, random_state=0)
 scores = cross_validation.cross_val_score( clf_l, X_with_src2, y, cv=cv, n_jobs=-1, scoring='r2', verbose=1)
 print np.mean(scores)
 
-
 clf_l.fit(X_with_src2,y)
 print([revocab[a] for a in np.argsort(clf_l.coef_)[-100:]])
 
 #%%
+# ElasticNet exploration
+
 from sklearn.linear_model import ElasticNet
 clf_e = ElasticNet(alpha=0.0001, normalize=True)
 
@@ -189,12 +227,12 @@ cv = cross_validation.KFold(X.shape[0], n_folds=5, shuffle=True, random_state=0)
 scores = cross_validation.cross_val_score( clf_e, X_with_src2, y, cv=cv, n_jobs=-1, scoring='r2', verbose=1)
 print np.mean(scores)
 
-#%%
 clf_e.fit(X_with_src2,y)
 [revocab[a] for a in np.argsort(clf_e.coef_)[-100:]]
 
  
 #%%
+# Nearest neighbour exploration
 
 from sklearn.neighbors import KNeighborsRegressor
 neigh = KNeighborsRegressor(n_neighbors=100)
@@ -202,8 +240,8 @@ scores = cross_validation.cross_val_score( neigh, X_with_src2, y, cv=cv, n_jobs=
 print np.mean(scores)
 
 #%%
+# More in depth Ridge regression
 
-#%%
 from sklearn.linear_model import Ridge
 from sklearn.linear_model import RidgeCV
 clf_r = Ridge(alpha=10, normalize=True)
@@ -212,17 +250,22 @@ cv = cross_validation.KFold(X.shape[0], n_folds=5, shuffle=True, random_state=0)
 scores = cross_validation.cross_val_score( clf_r, X_with_src2, y_sis, cv=cv, n_jobs=-1, scoring='r2', verbose=1)
 print np.mean(scores)
 #%%
+# Try log transform of the dependent 
+
 cv = cross_validation.KFold(X.shape[0], n_folds=5, shuffle=True, random_state=0)
 scores = cross_validation.cross_val_score( clf_r, X_with_src2, np.log1p(y_sis), cv=cv, n_jobs=-1, scoring='r2', verbose=1)
 print np.mean(scores)
 plot_fit_heatmap(np.log1p(y_sis), preds, bins=np.arange(0,0.5,0.02),vmax=100)
 
 #%%
+# Try sqrt of dependent
+
 clf_r = Ridge(alpha=2, normalize=True)
 cv = cross_validation.KFold(X.shape[0], n_folds=5, shuffle=True, random_state=0)
 scores = cross_validation.cross_val_score( clf_r, X_with_src2, np.sqrt(y_sis), cv=cv, n_jobs=-1, scoring='r2', verbose=1)
 print np.mean(scores)
 
+# This looks good, so scatter plot
 preds = cross_validation.cross_val_predict( clf_r, X_with_src2, np.sqrt(y_sis), cv=cv, n_jobs=-1, verbose=1)
 plt.figure()
 #plt.plot(np.sqrt(y_sis),preds, '.')
@@ -230,6 +273,7 @@ sns.regplot(np.sqrt(y_sis),preds)
 plot_fit_heatmap(np.sqrt(y_sis), preds, bins=np.arange(0,0.8,0.05),vmax=150)
 
 #%%
+# Try cube root
 cv = cross_validation.KFold(X.shape[0], n_folds=5, shuffle=True, random_state=0)
 scores = cross_validation.cross_val_score( clf_r, X_with_src2, y_sis**(1./3), cv=cv, n_jobs=-1, scoring='r2', verbose=1)
 print np.mean(scores)
@@ -265,7 +309,7 @@ def fit_lda(X, vocab, num_topics=100, passes=20):
                     id2word=dict([(i, s) for i, s in enumerate(vocab)]))
     print (time.time()-start)/60.
 
-    #%%
+
 vocab = headline_vectorizer.get_feature_names()
 start =time.time()
 lda = fit_lda(X, vocab)
@@ -278,6 +322,7 @@ plt.plot(b[:,0],b[:,1],'.')
 
 
 #%%
+# Tentative attempt to use PCA
 from sklearn.decomposition import PCA
 start =time.time()
 pca = PCA(n_components=1000)
@@ -286,6 +331,8 @@ print (time.time()-start)/60.
 
 
 #%%
+# Grid search over several hyperparameters using ridge regression
+# Actually did this a couple of times zooming in on the parameters to test
 y_cube = y_sis.values**(1./3)
 from sklearn.datasets import fetch_20newsgroups
 from sklearn.feature_extraction.text import CountVectorizer
@@ -319,40 +366,4 @@ parameters = {
 grid_search = GridSearchCV(pipeline, parameters, n_jobs=-1, verbose=1)
 grid_search.fit(fb.link_name, y_cube)
 
-pipeline.set_params(grid_search.be
-#%%
-#
-#
-##%%
-#dts = [dateutil.parser.parse(a) for a in fb.status_published]
-#fb.loc[:,'dt'] = dts
-#fb.loc[:,'date'] = [a.date() for a in fb.dt]
-#fb.loc[:,'datestr'] = [datetime.strftime(a,'%Y-%m-%d') for a in fb.date]
-#
-##%%
-#gb = fb.groupby(['src','date'])
-#anger = gb.mean()['prop_angry']
-#sadness = gb.mean()['prop_sad']
-#
-##%%
-#plt.figure()
-#for the_src in np.unique(fb.src):
-#    plt.plot(anger[the_src])
-#plt.legend(np.unique(fb.src))
-#plt.title('Anger')
-#
-##%%
-#plt.figure()
-#for the_src in np.unique(fb.src):
-#    plt.plot(sadness[the_src])
-#plt.legend(np.unique(fb.src))
-#plt.title('Sad')
-##%%
-#plt.figure()
-#
-#gb2 = fb.groupby(['date'])
-#plt.plot(gb2.mean()['prop_angry'],'.-')
-#plt.plot(gb2.mean()['prop_sad'],'.-')
-#plt.legend(['angry','sad'])
-#
-#fb.loc[fb.datestr=='2016-09-25','link_name']
+print grid_search.best_params_

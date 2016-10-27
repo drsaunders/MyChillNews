@@ -1,6 +1,11 @@
 #!/usr/bin/env python2
 # -*- coding: utf-8 -*-
 """
+Code cells I used to explore optimizing my FB-reaction-prediction model.
+
+Disorganized rapid exploration code - what worked was incorporated into 
+model_fb_reactions.
+
 Created on Sun Oct  2 16:03:30 2016
 
 @author: dsaunder
@@ -20,29 +25,74 @@ Created on Sun Oct  2 16:03:30 2016
 def tokenizer(text):
     tokenized = [w for w in text.split() if w not in stop]
     return tokenized
+def plot_feature_importance(features, fitted_forest):
+    plt.figure()
+    vals = fitted_forest.feature_importances_
+    sortorder = np.flipud(np.argsort(vals))
+    features = np.array(features)
+    with sns.axes_style("whitegrid"):
+        sns.stripplot(y=features[sortorder], x=vals[sortorder], orient="h", color='red', size=10)
+    xl = plt.xlim()
+    plt.xlim(0,xl[1])
+    plt.grid(axis='y',linestyle=':')
+    plt.xlabel('Feature importance score')
 
+def print_feature_importances(clf):
+    ordering = np.argsort(clf.feature_importances_)
+    ordering = ordering[::-1]
+    words = [revocab[a] for a in ordering]
+    for i in range(20):
+        print "%.2f\t%s" % (clf.feature_importances_[ordering[i]], words[i])
+
+        
 from sklearn.ensemble import RandomForestRegressor
-from sklearn.feature_extraction.text import TfidfTransformer
+import nltk
+nltk.download('stopwords')
+from nltk.corpus import stopwords
+stop = stopwords.words('english')
+from sqlalchemy import create_engine
+from sklearn import preprocessing
+from sklearn import cross_validation
 
 
+dbname = 'frontpage'
+username = 'dsaunder'
+# prepare for database
+engine = create_engine('postgres://%s@localhost/%s'%(username,dbname))
 
+sql_query = 'SELECT * FROM fb_statuses;'
+fb = pd.read_sql_query(sql_query,engine)
 
 
 #%%
-# Try it with a binary outcome
+# Random forest with a binary outcome
+# Compute the proportion angry/sad/controversial
+fb.loc[:,'prop_angry'] = fb.num_angries/fb.num_reactions
+fb.loc[:,'prop_sad'] = fb.num_sads/fb.num_reactions
+fb.loc[:,'prop_contro'] = fb.num_comments/fb.num_reactions
+# Add src
+sql_query = 'SELECT * FROM srcs;'
+srcs = pd.read_sql_query(sql_query,engine)
+src_lookup = {a.prefix:a.loc['index'] for i,a in srcs.iterrows()}
+src_code = fb.src.map(src_lookup)
+revocab[X.shape[1]]= 'SOURCE'
+src_matrix = scipy.sparse.csr.csr_matrix(src_code.values.reshape(-1,1))
+X_with_src = hstack((X, src_matrix))
+
 y_binary = fb.prop_angry > 0
 from sklearn.ensemble import RandomForestClassifier
 clf = RandomForestClassifier(n_estimators=150, n_jobs=-1, verbose=1)
 cv = cross_validation.KFold(X_with_src.shape[0], n_folds=3, shuffle=True, random_state=0)
 scores = cross_validation.cross_val_score( clf, X_with_src, y_binary, cv=cv, n_jobs=-1, scoring='f1')
 print np.mean(scores)
-#%%
+
 clf.fit(X,y_binary)
 
 print_feature_importances(clf)
 
 
-#%%
+e#%%
+# Compare proportion angry across news sources 
 g = sns.FacetGrid(fb.loc[fb.src.isin(['fox','cnn','nbc']),:], row="src")
 g.map(sns.distplot,'prop_angry')
 
@@ -58,7 +108,7 @@ scores = cross_validation.cross_val_score( gnb, X.toarray(), y_binary, cv=5, n_j
 #print gnb.score(X.toarray(),y_binary)s
 
 #%%
-#
+# Distribution of angry reactions
 plt.figure()
 plt.subplot(1,2,1)
 sns.set(font_scale=1.5)
@@ -75,8 +125,7 @@ plt.xlabel('Log proportion of "Angry" reactions')
 plt.tight_layout()
 
 #%%
-#plt.figure()
-#sns.distplot(fb.prop_angry**(1/4.),kde=False)
+# Random forest regression with different root transforms
 
 y_root = fb.prop_angry# ** (1/4.)
 y_root = y_root[y_root > 0]
@@ -95,6 +144,9 @@ sns.regplot(y_root,y_cv)
 
 
 #%%
+############
+# Begin second exploring Word2Vec representations of headlines.
+
 start = time.time()
 model = Word2Vec.load_word2vec_format('~/GoogleNews-vectors-negative300.bin', binary= True)
 print (time.time()-start)/60.

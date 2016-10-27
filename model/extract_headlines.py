@@ -1,6 +1,17 @@
 #!/usr/bin/env python2
 # -*- coding: utf-8 -*-
 """
+Module to handle extracting headlines from downloaded news site front pages.
+
+Uses BeautifulSoup and a lot of custom selectors and post-processors to extract
+each website's main headlines (at least 10). Should be refactored, but the copy
+and paste worked when I was working quickly and not sure of the full set of 
+news sources, and almost each site seemed to have its own custom needs and quirks.
+
+Key function called from the outside: extract_all_headlines.
+
+Some helper functions and short code bits copied from stackoverflow.
+
 Created on Thu Sep  8 15:20:37 2016
 
 @author: dsaunder
@@ -14,9 +25,27 @@ import re
 #%%
 
 def read_frontpage_by_prefix(prefix, frontpagedir):
+    """Get a filename containing the news source prefix, e.g. 'bbc'
+
+    Args:
+        prefix: 2 or 3 letter news source prefix
+        frontpagedir: The dir where to find all the downloaded html archives
+        
+    Returns:
+        The full path to a single html file matching the prefix
+    """
     return glob.glob(frontpagedir + prefix + '*')[0]
     
 def get_url(tag, url_prefix=None):
+    """Get just the url part of an href html tag.
+    
+    Args:
+        tag: A beautifulsoup tag
+        url_prefix: If missing part of the url (e.g. because a relative link)
+            add this in front.
+    Returns:
+        The complete URL
+    """
     if not 'href' in tag.attrs:
         return None
     url = tag.attrs['href']
@@ -28,6 +57,15 @@ def get_url(tag, url_prefix=None):
     return url
     
 def get_contents(tag):
+    """Get the text contents within an html tag.
+    
+    Args:
+        tag: A beautifulsoup tag
+    
+    Returns:
+        A string that is the inner contents.
+    """
+    
     contents = tag.decode_contents()
     if not contents:
         return ''
@@ -40,11 +78,24 @@ def get_contents(tag):
     contents, dummy = re.subn('&amp;apos;','\'',contents)
     return contents
 
-
-    
-    
 def extract_all_headlines(fp_timestamp):
-    frontpagedir = '../current_frontpage/' 
+    """For all of the downloaded front pages, extract their headlines to a dataframe.
+    Assumes all the current downloaded html pages are stored in a directory,
+    just one file per news website.
+    
+    This function takes the form of a series of manually-created extractors,
+    one per news website, that do whatever steps are required to get the 
+    headlines, and append them to the growing output dataframe.
+    
+    Args: 
+        fp_timestamp: The time these headlines were downloaded, in a format
+            like '2016-10-23-2305'
+            
+    Returns:
+        A dataframe with each headline on a different row, and columns for the
+        text, the associated link, the source, etc.
+    """
+    frontpagedir = '../../current_frontpage/' 
     new_headlines = pd.DataFrame()
     
     #%%
@@ -67,7 +118,7 @@ def extract_all_headlines(fp_timestamp):
         new_rows = new_rows.loc[new_rows.headline != '', :]
         src_rows = src_rows.append(new_rows, ignore_index=True)
     
-    src_rows.loc[:,'article_order'] = range(1,len(src_rows)+1)
+    src_rows.loc[:,'article_order'] = range(1,len(src_rows)+1) # The order of the headline on the front page
     new_headlines = new_headlines.append(src_rows, ignore_index=True)
     
     #%%
@@ -96,7 +147,7 @@ def extract_all_headlines(fp_timestamp):
     new_headlines = new_headlines.append(src_rows, ignore_index=True)
         
     
-    ##%%
+    ##%%  Too hard to extract properly!
     ## Google News
     #prefix = 'goo'
     #url_prefix = None
@@ -317,7 +368,7 @@ def extract_all_headlines(fp_timestamp):
     src_rows.loc[:,'article_order'] = range(1,len(src_rows)+1)
     new_headlines = new_headlines.append(src_rows, ignore_index=True)
 
-#    #%%
+#    #%% Too hard to extract properly!
 #    # Boston Globe
 #    prefix = 'bos'
 #    url_prefix = 'http://www.dailymail.co.uk'
@@ -341,7 +392,12 @@ def extract_all_headlines(fp_timestamp):
 #    new_headlines = new_headlines.append(src_rows, ignore_index=True)
 
     #%%
+    
+    # Add the timestamp indicating when these headlines were downloaded 
     new_headlines.loc[:,'fp_timestamp'] = fp_timestamp
+
+    # Add an article id for each row, comprised of the timestamp and the order 
+    # in which the article appearedin that publication.
     new_headlines.loc[:,'article_id'] = [a.fp_timestamp+"-"+a.src+"-"+str(int(a.article_order)) for i,a in new_headlines.iterrows()]
 
 
