@@ -23,7 +23,6 @@ import seaborn as sns
 
 #timestamp = '2016-09-13-0730'
 timestamp = '2016-09-21-0842'
-frontpagedir = '../frontpages/%s/' % timestamp
 
 dbname = 'frontpage'
 username = 'dsaunder'
@@ -75,3 +74,41 @@ plt.axis('off')
 plt.xlabel('SIS score')
 plt.savefig('sisdist.png')
 
+
+#%%
+# Fun code to look at proportion of sad and angry reactions over time. Requires
+# Facebook statuses to be loaded into the dataframe fb.
+#
+##%%
+#dts = [dateutil.parser.parse(a) for a in fb.status_published]
+#fb.loc[:,'dt'] = dts
+#fb.loc[:,'date'] = [a.date() for a in fb.dt]
+#fb.loc[:,'datestr'] = [datetime.strftime(a,'%Y-%m-%d') for a in fb.date]
+#
+##%%
+#gb = fb.groupby(['src','date'])
+#anger = gb.mean()['prop_angry']
+#sadness = gb.mean()['prop_sad']
+#
+##%%
+#plt.figure()
+#for the_src in np.unique(fb.src):
+#    plt.plot(anger[the_src])
+#plt.legend(np.unique(fb.src))
+#plt.title('Anger')
+#
+##%%
+#plt.figure()
+#for the_src in np.unique(fb.src):
+#    plt.plot(sadness[the_src])
+#plt.legend(np.unique(fb.src))
+#plt.title('Sad')
+##%%
+#plt.figure()
+#
+#gb2 = fb.groupby(['date'])
+#plt.plot(gb2.mean()['prop_angry'],'.-')
+#plt.plot(gb2.mean()['prop_sad'],'.-')
+#plt.legend(['angry','sad'])
+#
+#fb.loc[fb.datestr=='2016-09-25','link_name']

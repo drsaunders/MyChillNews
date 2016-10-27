@@ -95,7 +95,7 @@ def extract_all_headlines(fp_timestamp):
         A dataframe with each headline on a different row, and columns for the
         text, the associated link, the source, etc.
     """
-    frontpagedir = '../current_frontpage/' 
+    frontpagedir = '../../current_frontpage/' 
     new_headlines = pd.DataFrame()
     
     #%%

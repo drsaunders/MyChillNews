@@ -96,7 +96,7 @@ def compute_sis_for_all(engine, suppress_db_write=False):
     src_lookup = {a.prefix:a.loc['index'] for i,a in srcs.iterrows()}
 
     # Load the stored model, generated with fb_model_reactions.py
-    headline_model = pickle.load( open( '../headline_model.pickle', "rb" ) )
+    headline_model = pickle.load( open( '../../headline_model.pickle', "rb" ) )
 
     print "Loading all articles..."
     sql_query = "SELECT * FROM frontpage" # WHERE fp_timestamp='%s' AND article_order <=10" % fp_timestamp

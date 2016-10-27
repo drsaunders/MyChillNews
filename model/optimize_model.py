@@ -18,8 +18,6 @@ import scipy
 import time
 import matplotlib.pyplot as plt
 import re
-import os
-from sklearn import preprocessing
 from sklearn import cross_validation
 from gensim.models.word2vec import Word2Vec
 import tqdm
@@ -334,7 +332,7 @@ print (time.time()-start)/60.
 
 #%%
 # Grid search over several hyperparameters using ridge regression
-# Actually did this a couple of times zooming in on the parameters by hand.
+# Actually did this a couple of times zooming in on the parameters to test
 y_cube = y_sis.values**(1./3)
 from sklearn.datasets import fetch_20newsgroups
 from sklearn.feature_extraction.text import CountVectorizer
@@ -368,4 +366,4 @@ parameters = {
 grid_search = GridSearchCV(pipeline, parameters, n_jobs=-1, verbose=1)
 grid_search.fit(fb.link_name, y_cube)
 
-
+print grid_search.best_params_

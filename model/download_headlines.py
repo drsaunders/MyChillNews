@@ -190,7 +190,7 @@ if __name__ == '__main__':
     fp_timestamp =  datetime.datetime.now().strftime("%Y-%m-%d-%H%M")
     print "Extracting headlines at timestamp %s" % fp_timestamp
     #fp_timestamp = '2016-09-22-0724'
-    frontpagedir = '../current_frontpage/'
+    frontpagedir = '../../current_frontpage/'
     if not os.path.exists(frontpagedir):
         os.makedirs(frontpagedir)
     

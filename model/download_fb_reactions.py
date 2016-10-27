@@ -41,7 +41,7 @@ engine = create_engine('postgres://%s@localhost/%s'%(username,dbname))
 
 #Get your app id and key here on facebook. Help here: https://goldplugins.com/documentation/wp-social-pro-documentation/how-to-get-an-app-id-and-secret-key-from-facebook/
 
-with open('../facebook_app_keys.dat','r') as f:
+with open('../../facebook_app_keys.dat','r') as f:
     app_id = next(f).strip()
     app_secret = next(f).strip()
 
@@ -75,12 +75,13 @@ def request_until_succeed(url):
     return response.read()
 
 
-# Needed to write tricky unicode correctly to csv; not present in tutorial
 def unicode_normalize(text):
-	return text.translate({ 0x2018:0x27, 0x2019:0x27, 0x201C:0x22, 0x201D:0x22, 0xa0:0x20 }).encode('utf-8')
+    """ Needed to write tricky unicode correctly to csv
+    """
+    return text.translate({ 0x2018:0x27, 0x2019:0x27, 0x201C:0x22, 0x201D:0x22, 0xa0:0x20 }).encode('utf-8')
 
 def getFacebookPageFeedData(page_id, access_token, num_statuses):
-    """Get a list of latest statuses from a particular page.
+    """Gets a list of latest statuses from a particular page.
     
     Args:
         page_id: The FB page to download from.
@@ -100,7 +101,7 @@ def getFacebookPageFeedData(page_id, access_token, num_statuses):
     return data
     
 def getFacebookPostData(page_id, access_token):
-    """Get the whole JSON of info about a particular post.
+    """Gets the whole JSON of info about a particular post.
     
     Args:
         page_id: The id of the particular post
@@ -127,7 +128,7 @@ def getFacebookPostData(page_id, access_token):
    
 
 def processFacebookPageFeedStatus(status):
-    """Take a single FB story and break it down into a row.
+    """Takes a single FB story and break it down into a row.
 
     Args:
         status: A facebook story retrieved from an API call

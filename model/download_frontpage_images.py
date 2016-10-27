@@ -147,7 +147,7 @@ def get_screen_shot(**kwargs):
     crop_path = thumbnail_path = screen_path
     
     if thumbnail and not crop:
-        raise Exception, 'Thumnail generation requires crop image, set crop=True'
+        raise Exception, 'Thumbnail generation requires crop image, set crop=True'
 
     do_screen_capturing(url, screen_path, width, height)
 
@@ -186,7 +186,7 @@ if __name__ == '__main__':
     srcs = pd.read_sql_query(sql_query,engine,index_col='index')
     
     # Download each currrent front page, making thumbnails as we go
-    frontpagedir = 'app/frontpage/static/current_frontpage_thumbnails/'
+    frontpagedir = '../app/frontpage/static/current_frontpage_thumbnails/'
     print "Downloading images of web pages... "
     for (i, src) in srcs.iterrows():
         url = src['front_page']
@@ -203,6 +203,6 @@ if __name__ == '__main__':
 
     # If running on my home computer, copy the new thumbnails to my web server, overwriting the old ones    
     if username != 'ubuntu':
-        execstr = 'scp -i ../insight2016.pem %sthumbnail*.png ubuntu@52.43.167.177:/home/ubuntu/FrontPage/app/frontpage/static/current_frontpage_thumbnails/' % frontpagedir
+        execstr = 'scp -i ../../insight2016.pem %sthumbnail*.png ubuntu@52.43.167.177:/home/ubuntu/FrontPage/app/frontpage/static/current_frontpage_thumbnails/' % frontpagedir
         print os.system(execstr)
     

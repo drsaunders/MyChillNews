@@ -108,7 +108,7 @@ def upload_new_model():
     """Upload the updated model to my web server, replacing the previous model.
     At the moment this is only run manually
     """
-    execstr = 'scp -i ../insight2016.pem ../headline_model.pickle ubuntu@52.43.167.177:/home/ubuntu/' 
+    execstr = 'scp -i ../../insight2016.pem ../../headline_model.pickle ubuntu@52.43.167.177:/home/ubuntu/' 
     print os.system(execstr)
 
     #%%
@@ -200,7 +200,7 @@ if __name__ == '__main__':
     
     import pickle
     headline_model = {'estimator':clf_r, 'vectorizer':headline_vectorizer, 'src_encoder':src_encoder, 'fb_sis':y}
-    filehandler = open('../headline_model.pickle', 'wb')
+    filehandler = open('../../headline_model.pickle', 'wb')
     pickle.dump(headline_model, filehandler)
     filehandler.close()
     
