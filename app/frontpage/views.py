@@ -1,12 +1,15 @@
+"""
+Flask module to render the main page of the app, using stored database info.
+
+Uses Stress Impact Scores (and percentiles) for today's new source front pages
+to set up the colours of the list of news sources, as well as the 
+"""
+
 from sqlalchemy import create_engine
-from sqlalchemy_utils import database_exists, create_database
 import pandas as pd
 import psycopg2
-import datetime
 import seaborn as sns
 import numpy as np
-import re
-import os
 import getpass
 
 from flask import render_template
@@ -17,35 +20,38 @@ from frontpage import app
 #%%
 
 def RGBToHTMLColor(rgb_tuple):
-    """ convert an (R, G, B) tuple to #RRGGBB """
+    """ Convert an (R, G, B) tuple to #RRGGBB """
     hexcolor = '#%02x%02x%02x' % rgb_tuple
-    # that's it! '%02x' means zero-padded, 2-digit hex values
+
     return hexcolor
 
+# Set up the range of colours to use for the source list, and convert to HTML hex colours
 color_range = sns.color_palette("coolwarm",n_colors=100) #sns.color_palette("RdBu_r",n_colors=151)
 color_range = [(a[0]*255, a[1]*255, a[2]*255) for a in color_range]
 hex_colors = np.array([RGBToHTMLColor(rgb_tuple) for rgb_tuple in color_range])
+
+# Prepare for the database
 user = getpass.getuser()
 if user == 'root':  # Hack just for my web server
     user = 'ubuntu'
- #add your username here (same as previous postgreSQL)
 host = 'localhost'
 dbname = 'frontpage'
 
 date_to_use = None
-#todays_date = '2016-09-28'
 #%%
-
 
 @app.route('/')
 @app.route('/index')
 def index():
+    # Can request to see a particular date by passing in the date in the url,
+    # e.g. http://www.mychillnews.co/index?date=2016-10-26'
     date_to_use = request.args.get('date')
 #%%
     db = create_engine('postgres://%s%s/%s'%(user,host,dbname))
     con = None
     con = psycopg2.connect(database = dbname, user = user)
-#     Use the most recent day that has sis data
+
+    # If no date specified, use the most recent day that has SIS data
     if date_to_use is None:
         date_query = """
             SELECT fp_timestamp
@@ -54,6 +60,7 @@ def index():
             ORDER BY frontpage.article_id DESC LIMIT 1;                """
         date_to_use = pd.read_sql_query(date_query,con).values[0][0]
 
+    # Get information about the articles and their SISs
     sql_query = """
                 SELECT article_order
                     , fp_timestamp
@@ -74,37 +81,45 @@ def index():
     frontpage_for_render = pd.read_sql_query(sql_query,con)
     con.close()
     #%%
+    # If nothing found, display error message
     if len(frontpage_for_render) == 0:
         return render_template_string('No data for date %s' % date_to_use)
         #%%
     frontpage_for_render.drop_duplicates(subset=['url'],inplace=True)
 
+    # For each news source, take the mean of the SIS percentiles to be the aggregate
+    # SIS.
     by_name = frontpage_for_render.groupby(['name','src'])
     mean_by_name = by_name.mean().reset_index()
     total_by_name = by_name.sum().reset_index()
     sis_for_frontpages = mean_by_name.sis_pct.values
 
-    # Adjust
+    # Rescale to try to make good use of the range, otherwise the means are too close to 0.5 
+    # and the colours are tepid.
+    # Important that this is a constant however, so days can be compared
     sis_for_frontpages = (sis_for_frontpages - 0.5)*2+0.5
     sis_for_frontpages[sis_for_frontpages>0.98] = 0.98
     sis_for_frontpages[sis_for_frontpages<0.02] = 0.02
 
-
-    row_colors = hex_colors[np.floor(sis_for_frontpages*100).astype(int)]
-
+    # Build the list of news sources, along with the colours they should be rendered in
     src_names_string = ','.join(['"%s"' % a for a in mean_by_name.name.values])
     sis_values_string = ','.join(['%.1f' % (a*1000) for a in sis_for_frontpages])
+    row_colors = hex_colors[np.floor(sis_for_frontpages*100).astype(int)]
 
+    # Build the list of news source URLS
     url_list = [frontpage_for_render.loc[frontpage_for_render.name ==a,'front_page'].iloc[0] for a in mean_by_name.name.values]
     url_string = ','.join('"%s"' % a for a in url_list)
 
+    # Build the list of thumbnail files
     thumbnail_paths = ['/static/current_frontpage_thumbnails/thumbnail_%s.png' % frontpage_for_render.loc[frontpage_for_render.name ==a,'src'].iloc[0] for a in mean_by_name.name.values]
     thumbnail_string = ','.join('"%s"' % a for a in thumbnail_paths)
 
+    # Write out info about individual article scores to help with debugging the scoring decisions
     with open("frontpage_scoring.txt",'w') as fid:
-
+        fid.write('Computation of Stress Impact Scores for today''s news sources')
+        
         for i in range(len(sis_for_frontpages)):
-            fid.write("\n\n%s  frontpage SIS:  %.1f (rescaled for color: %.2f)" % (mean_by_name.name.values[i], mean_by_name.sis_pct.values[i]*100, sis_for_frontpages[i]))
+            fid.write("\n\n%s  frontpage SIS:  %.1f (rescaled for color, 0-1: %.2f)" % (mean_by_name.name.values[i], mean_by_name.sis_pct.values[i]*100, sis_for_frontpages[i]))
             for_src = frontpage_for_render.loc[frontpage_for_render.src == mean_by_name.src.values[i],:].copy()
             for_src.sort_values(['src','sis'],inplace=True)
             for j,h in for_src.iterrows():
@@ -113,6 +128,7 @@ def index():
 #    frontpage_for_render.loc[:,['src','headline','sis','sis_pct']].sort_values(['src','sis']).to_csv('frontpage_scoring.csv',encoding='utf-8')
 
 #%%
+    # Build the web page from the index.html template
     return render_template("index.html"
        ,date_to_use = '%s %s:%s' % (date_to_use[:-5], date_to_use[-4:-2], date_to_use[-2:])
        ,total_num_tweets = 0
@@ -132,3 +148,10 @@ def about():
 @app.route('/contact')
 def contact():
     return render_template("contact.html")
+
+@app.route('/why')
+def why():
+    with open("frontpage_scoring.txt",'r') as fid:
+        why_text = fid.read().decode("utf8")
+        
+    return render_template("why.html", why_text=why_text)

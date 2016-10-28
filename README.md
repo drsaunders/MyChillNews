@@ -13,4 +13,4 @@ The purpose of the app is to assist people who like to read daily news with cons
 The codebase consists of two parts:
 
 * `model` This code relates to "behind the scenes" operations: downloading Facebook data, training the model, and updating the database with today's headlines and their predicted stress impacts.
-* `app` This is a Flask application, using Bootstrap, which accesses the database to render the MyChillNews app. It is normally running on an EC2 instance, the server being gunicorn managed by supervisord.
+* `app` This is a Flask application, using Bootstrap, which accesses the database to render the MyChillNews app. It is normally running on an EC2 instance, the server being gunicorn managed by supervisord. Most of the logic is contained in `app/frontpage/views.py`.
