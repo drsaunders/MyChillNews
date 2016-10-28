@@ -149,9 +149,39 @@ def about():
 def contact():
     return render_template("contact.html")
 
+# Feature to see where the day's score comes from
 @app.route('/why')
 def why():
     with open("frontpage_scoring.txt",'r') as fid:
         why_text = fid.read().decode("utf8")
         
     return render_template("why.html", why_text=why_text)
+    
+# Fun feature to query the most horrible headline of each day from the daily 
+# mail, mychillnews.co/dm
+@app.route('/dm')
+def dm():
+    #%%
+    sql_query = """
+    SELECT min(frontpage.fp_timestamp) as timestamp, to_char(AVG(sis_pct),'0.9999') as avg_sis, headline FROM frontpage 
+        JOIN sis_for_articles_model 
+        ON frontpage.article_id = sis_for_articles_model.article_id
+        JOIN 
+            (SELECT fp_timestamp, src, max(sis_pct) as max_sis FROM frontpage JOIN 		
+             sis_for_articles_model ON frontpage.article_id = sis_for_articles_model.article_id 	
+             WHERE frontpage.src='dm' GROUP BY fp_timestamp, src) as maxes
+        ON frontpage.src = maxes.SRC AND sis_for_articles_model.sis_pct = max_sis AND frontpage.fp_timestamp = maxes.fp_timestamp
+    GROUP BY headline
+    ORDER BY timestamp
+    """
+    con = psycopg2.connect(database = dbname, user = user)
+    dailymail_headlines = pd.read_sql_query(sql_query,con)
+    old_colwidth = pd.options.display.max_colwidth
+    pd.options.display.max_colwidth = 1000
+    outstr = "Date" + " "*13 + "SIS" + " "*4 + "Headline\n"
+    for i, row in dailymail_headlines.iterrows():
+        outstr = outstr + "%s\t%s\t%s\n" % (row['timestamp'], row['avg_sis'], row['headline'].decode("utf8"))
+    return render_template("dm.html", dm_text=outstr)
+    pd.options.display.max_colwidth = old_colwidth
+    con.close()
+    
